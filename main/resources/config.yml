@@ -1,0 +1,53 @@
+# Common numeric settings:
+#   -1: No limits / Follow server settings
+#   0: Disabled
+#   1 or above: Fixed amount
+
+### Change When Server is OFF
+
+Global:
+  # Language settings
+  # it loads language/EXAMPLE.yml
+  Language: english
+  # Preserved Names
+  # Prevent Clash with other configs
+  # Not case-sensitive
+  PreservedName:
+    - config
+    - lang
+    - permission
+    - flag
+  # How many Doll can a player create
+  # Not affect already created Doll
+  MaxDollPerPlayer: 10
+  # Adjust server MAX PLAYER according to the amount of Doll
+  # Ensure total amount of join-able real players unchanged
+  FlexibleServerMaxPlayer: true
+  # How many Doll can server hold
+  ServerMaxDoll: -1
+  # Allow Doll bypass Player Limit
+  BypassMaxPlayer: true
+  # Follow to GameRule KeepInventory
+  # Overlapps other KeepInventory settings
+  FollowKeepInventory: true
+  # Do Doll drop loots when die
+  # FollowKeepInventory has higher priority
+  DollKeepInventory: true
+  # Allow Doll ticking its surrounding
+  ChunkLoad: true
+  # How far can Doll chunk load
+  # This may impact server performance significantly
+  #  -1: Using server's view-distance (as players)
+  #  0 : No chunks loaded
+  ChunkLoadArea: -1
+  # Allow player set Doll's skin to any players
+  # Default skin: Player who spawned the Doll
+  # Mojang's default skin will be applied when Offline mode is true
+  RestrictSkin: false
+  # Apply prefix to Doll, default: 'BOT-'
+  # Prevent clash with real players
+  # Not recommended Signs/Space/Special/Non-latin Characters
+  # All players have name length of at most 16 (Include Prefix)
+  # Beware of doll name + prefix that will longer than 16 Characters
+  # Do not change frequently
+  DollPrefix: 'BOT-'

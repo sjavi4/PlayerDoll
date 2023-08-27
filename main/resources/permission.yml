@@ -1,0 +1,16 @@
+### NOT IMPLEMENTED
+### NOT IMPLEMENTED
+default:
+  permissionlevel: 0
+  Players: #Add players' uuid here
+    #- Player1
+    #- Player2
+
+#Example permission group
+admin:
+  permissionlevel: 100 # Show all setting that has lower Permission level
+  Players:
+    #- Admin1
+
+### NOT IMPLEMENTED
+### NOT IMPLEMENTED

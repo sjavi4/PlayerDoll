@@ -1,0 +1,169 @@
+#Generals
+
+
+#Commands
+RequirePlayer: '&cCommand must be performed by player.'
+NoPermission: '&cYou do not have permission to do that.'
+DollNotExist: '&cDoll does not exist.'
+ServerIsFull: '&cServer is full.'
+CapacityIsFull: '&cDoll capacity is full.'
+LongName: '&cDoll name should not exceed %length% letters.'
+RepeatName: '&cDoll name has been used.'
+IllegalName: '&cOnly accept alphabets and integers.'
+PreservedName: '&cDoll name cannot use preserved names'
+CopiedUUID: 'Copied Doll UUID: &a%uuid%'
+PlayerNotInShare: "&c%player% does not exist in %doll%'s Share list"
+PlayerAlreadyInShare: "&c%player% already existed in %doll%'s Share list"
+AddShare: "&aAppended %player% to %doll%'s Share list"
+DelShare: "&aRemoved %player% from %doll%'s Share list"
+NoDollOnline: "&No Doll is online"
+PlayerNotExist: '&cPlayer does not exist.'
+PlayerTooMuchDoll: '&cYou Reached Doll Creation Limit(%num%)'
+
+control:
+  back: '&fback'
+  hinta: '&2Left Click to Enable'
+  hintb: '&cRight Click to Disable'
+
+title:
+  setting: 'Doll setting'
+  main: 'Doll'
+  inventory: 'Doll inventory'
+  armor: "Doll's armor & off hand"
+  enderchest: "Doll's ender chest"
+  hotbar: "Doll's hot-bar"
+  backpack: "Doll's backpack"
+
+mainmenu:
+  uuid: '&eUUID:%uuid%'
+  owner: '&5Owner:%player%'
+  hp: '&4HP:%current%/%full%'
+  hunger: '&2Hunger:%current%/%full%'
+  gamemode: '&7Gamemode:%gamemode%'
+  copy: '&fClick to copy UUID to clipboard'
+
+  setting: '&9Setting'
+  inventory: '&9Inventory'
+  offline: '&cOffline'
+  remove: '&cRemove'
+
+settingmenu:
+  Inventory:
+    name: 'Inventory'
+    desc: '&fEnable Inventory Access for players'
+  'Ender Chest':
+    name: 'Ender Chest'
+    desc: '&fEnable Ender chest Access for players'
+  'Chunk Load':
+    name: 'Chunk Load'
+    desc: '&fEnable doll keeps ticking chunk'
+  Invulnerable:
+    name: 'Invulnerable'
+    desc: "&fSet doll immutable to damage and projectile"
+  Hostility:
+    name: 'Hostility'
+    desc: "&fSet doll being target by mobs"
+  Pushable:
+    name: 'Pushable'
+    desc: "&fEnable doll being push"
+  Gravity:
+    name: 'Gravity'
+    desc: "&fEnable falling from air"
+  Glow:
+    name: 'Glow'
+    desc: "&fEnable Highlighting effects"
+  'Large Step Size':
+    name: 'Large Step Size'
+    desc: "&fStep up to 1 block high"
+
+inventorymenu:
+  armor_offhand: '%3Armors&Off-hand'
+  hotbar: '&cHot-bar'
+  inventory: '&7Inventory'
+  enderchest: '&dEnder Chest'
+  levelUp: '&eEXP Point'
+  level: '&eLevel:%level%'
+  levelGet: "&aClick to retrieve EXP points of 1 Level"
+
+help:
+  limits:
+    desc: '&6show player permission'
+    usage: ''
+  helps:
+    desc: '&6show helps'
+    usage: ''
+  list:
+    desc: '&6list doll'
+    usage: ''
+  reload:
+    desc: '&6reload plugin'
+    usage: ''
+  spawn:
+    desc: '&6Create/Call New Doll at player position'
+    usage: '&e<DollName> &6spawn &f[skinName] [gridded]'
+  despawn:
+    desc: '&6Offline Doll without Data loss'
+    usage: '&e<DollName> &6despawn'
+  remove:
+    desc: '&6Remove Doll with Data loss'
+    usage: '&e<DollName> &6remove'
+  tp:
+    desc: '&6Teleport Doll to player'
+    usage: '&e<DollName> &6tp &f[gridded]'
+  set:
+    desc: "&6Open Doll's setting panel"
+    usage: '&e<DollName> &6set'
+  share:
+    desc: '&6Share Doll permission to player'
+    usage: '&e<DollName> &6share &e<PlayerName>'
+  unshare:
+    desc: '&6Take back Doll permission from player'
+    usage: '&e<DollName> &6unshare &e<PlayerName>'
+  attack:
+    desc: "&6Makes Target attacks towards it's line of sight"
+    usage: '&e<DollName> &6attack &f[interval/once/continuous] [interval] [offset]'
+  use:
+    desc: "&6Makes Target interacts towards it's line of sight"
+    usage: '&e<DollName> &6use &f[interval/once/continuous] [interval] [offset]'
+  copy:
+    desc: '&6Copy others action to doll'
+    usage: '&e<DollName> &6copy &e<DollName>'
+  stop:
+    desc: '&6Stop Doll Action'
+    usage: '&e<DollName> &6stop &f[all/movement]'
+  slot:
+    desc: '&6Set Holding Slot'
+    usage: '&e<DollName> &6slot &f[1-9]'
+  drop:
+    desc: '&6Drop Item in Slot'
+    usage: '&e<DollName> &6drop &f[1-9] [all]'
+  sneak:
+    desc: '&6Toggle Doll to (un)sneak'
+    usage: '&e<DollName> &6sneak &f[true/false]'
+  sprint:
+    desc: '&6Toggle Doll to (un)sprint'
+    usage: '&e<DollName> &6sprint &f[true/false]'
+  mount:
+    desc: '&6Set Doll rides on nearby vehicle/entity'
+    usage: '&e<DollName> &6mount'
+  dismount:
+    desc: '&6Set Doll gets off from current vehicle/entity'
+    usage: '&e<DollName> &6dismount'
+  turn:
+    desc: "&6Rotate Doll's camera by a certain degree of yaw(horizontal) and pitch(vertical)"
+    usage: '&e<DollName> &6turn &e<[+/-]yaw> <[+/-]pitch>'
+  look:
+    desc: "&6Set Doll's camera to specific orientation"
+    usage: '&e<DollName> &6look &e<[+/-]yaw/direction/player> <[+/-]pitch>'
+  lookat:
+    desc: "&6Set Doll's camera towards player/coordinates"
+    usage: '&e<DollName> &6lookat &e<X/player> <Y> <Z>'
+  jump:
+    desc: '&6Set Doll jump'
+    usage: '&e<DollName> &6jump &f[interval/once/continuous] [interval] [offset]'
+  strafe:
+    desc: '&6Set Doll strafe for specific blocks'
+    usage: '&e<DollName> &6strafe &f[blocks]'
+  move:
+    desc: '&6Set Doll move forwards for specific blocks'
+    usage: '&e<DollName> &6move &f[blocks]'

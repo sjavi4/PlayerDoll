@@ -1,0 +1,29 @@
+default:
+  #Default toggle for new doll
+  Inventory:
+    toggle: true
+    permissionlevel: 0
+  'Ender Chest':
+    toggle: true
+    permissionlevel: 0
+  'Chunk Load':
+    toggle: true
+    permissionlevel: 0
+  Invulnerable:
+    toggle: false
+    permissionlevel: 0
+  Hostility:
+    toggle: false
+    permissionlevel: 0
+  Pushable:
+    toggle: false
+    permissionlevel: 0
+  Gravity:
+    toggle: true
+    permissionlevel: 0
+  Glow:
+    toggle: false
+    permissionlevel: 0
+  'Large Step Size':
+    toggle: false
+    permissionlevel: 0
