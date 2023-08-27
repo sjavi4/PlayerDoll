@@ -1,5 +1,5 @@
 # PlayerDoll
-Fake Player Plugin for Spigot 1.20
+Simple Fake Player Plugin for Spigot 1.20
 
 
 Please add to test server and discover the plugin
