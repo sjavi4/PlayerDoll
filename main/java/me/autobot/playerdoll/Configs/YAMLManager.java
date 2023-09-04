@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.Configs;
 
+import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import javax.annotation.Nonnull;
@@ -42,13 +43,13 @@ public class YAMLManager {
         //return null;
         if (!file.exists()) {
             if (!force) {
-                System.out.println("Could NOT Load Config "+ file.getName() +" File NOT Found!");
+                System.out.println("Could NOT Load Config "+ file.getName() +", File NOT Found!");
                 return null;
             }
             try {
                 boolean success = file.createNewFile();
                 if (!success) {
-                    System.out.println("Could NOT FORCE Load Config "+ file.getName() +" File Creation Fail!");
+                    System.out.println("Could NOT FORCE Load Config "+ file.getName() +", File Creation Fail!");
                     return null;
                 }
             } catch (IOException ignored) {}
@@ -58,20 +59,58 @@ public class YAMLManager {
     }
 
     public static void reloadAllConfig() {
-        YAMLManager.configMap.values().forEach(YAMLManager::reloadConfig);
+        Map<File,String> ref = new HashMap<>();
+        YAMLManager.configMap.forEach((k,v) -> {
+            ref.put(v.file,k);
+            if (PlayerDoll.dollManagerMap.keySet().contains(PlayerDoll.getDollPrefix() + k)) {
+                v.saveConfig();
+            }
+        });
+        YAMLManager.configMap.clear();
+        ref.forEach((f,s) -> loadConfig(f,s,false));
+
+        //YAMLManager.configMap.values().forEach(YAMLManager::reloadConfig);
+    }
+
+    public static void unloadAllConfig() {
+        YAMLManager.configMap.clear();
+        //YAMLManager.configMap.values().forEach(YAMLManager::unloadConfig);
     }
     public static YAMLManager reloadConfig(String mapKey) {
         if (!YAMLManager.configMap.containsKey(mapKey)) {
             return null;
         }
         YAMLManager value = YAMLManager.configMap.get(mapKey);
-        value.saveConfig();
+        if (PlayerDoll.dollManagerMap.keySet().contains(PlayerDoll.getDollPrefix() + mapKey)) {
+            value.saveConfig();
+        }
+        //value.saveConfig();
+        value.unloadConfig();
         return loadConfig(value.file,mapKey,false);
     }
 
     private void reloadConfig() {
-        this.saveConfig();
+        //this.saveConfig();
+        if (PlayerDoll.dollManagerMap.keySet().contains(PlayerDoll.getDollPrefix() + this.mapKey)) {
+            this.saveConfig();
+        }
+        this.unloadConfig();
+
         loadConfig(this.file,this.mapKey,false);
+    }
+/*
+    public static boolean unloadConfig(String mapKey) {
+        if (!configMap.containsKey(mapKey)) {
+            return false;
+        }
+        configMap.remove(mapKey);
+        return true;
+    }
+
+
+ */
+    private void unloadConfig() {
+        YAMLManager.configMap.remove(this.mapKey);
     }
 
     public static boolean saveConfig(String mapKey, boolean unload) {

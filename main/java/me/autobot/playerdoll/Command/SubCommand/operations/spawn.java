@@ -70,35 +70,65 @@ public class spawn implements SubCommandHandler {
 
         File dollFile = new File(PlayerDoll.getDollDirectory(),dollName + ".yml");
         final boolean exist = dollFile.exists();
-        YAMLManager dollYAML = YAMLManager.loadConfig(dollFile,dollName,true);
+        YAMLManager dollYAML = YAMLManager.loadConfig(dollFile,dollName,false);
         if (dollYAML == null) {
-            System.out.println("Cannot Invoke YAML");
-            return;
-        }
-        YamlConfiguration dollData = dollYAML.getConfig();
-        boolean isRemove = dollData.getBoolean("Remove");
-        if (exist) {
-            if (!isRemove) {
-                if (!(player.isOp() || dollData.getString("Owner").equals(player.getUniqueId().toString()) || dollData.getStringList("Share").contains(player.getUniqueId().toString()))) {
-                    player.sendMessage(TranslateFormatter.stringConvert("NoPermission",'&'));
+            int count = 0;
+            if (YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer") != -1) {
+                if (PlayerDoll.playerDollCountMap.containsKey(player.getUniqueId().toString())) {
+                    count = PlayerDoll.playerDollCountMap.get(player.getUniqueId().toString());
+                } else {
+                    PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), 0);
+                }
+                if (count >= YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer")) {
+                    player.sendMessage(TranslateFormatter.stringConvert("PlayerTooMuchDoll", '&', "%num%", YAMLManager.getConfig("config").getString("Global.MaxDollPerPlayer")));
                     return;
                 }
-            } else {
-                if (YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer") != -1) {
-                    int count = 0;
-                    if (PlayerDoll.playerDollCountMap.containsKey(player.getUniqueId().toString())) {
-                        count = PlayerDoll.playerDollCountMap.get(player.getUniqueId().toString());
-                    } else {
-                        PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), 0);
+            }
+            YamlConfiguration dollData = YAMLManager.loadConfig(dollFile,dollName,true).getConfig();
+            PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), count + 1);
+
+            dollData.set("UUID", UUIDUtil.createOfflinePlayerUUID(dollName).toString());
+            dollData.set("Owner", player.getUniqueId().toString());
+            dollData.set("Share", new ArrayList<String>());
+            dollData.set("Remove", false);
+            Map<String, Object> settings = new HashMap<>();
+
+            YamlConfiguration flag = YAMLManager.getConfig("flag");
+            if (flag != null) {
+                flag.getConfigurationSection("default").getValues(true).forEach((k, v) -> {
+                    if (k.endsWith(".toggle")) {
+                        settings.put(k, v);
                     }
-                    if (!player.isOp() && count >= YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer")) {
-                        player.sendMessage(TranslateFormatter.stringConvert("PlayerTooMuchDoll", '&', "%num%", YAMLManager.getConfig("config").getString("Global.MaxDollPerPlayer")));
+                });
+            }
+            dollData.createSection("setting", settings);
+        } else {
+            YamlConfiguration dollData = dollYAML.getConfig();
+            boolean isRemove = dollData.getBoolean("Remove");
+            if (exist) {
+                if (!isRemove) {
+                    if (!(player.isOp() || dollData.getString("Owner").equals(player.getUniqueId().toString()) || dollData.getStringList("Share").contains(player.getUniqueId().toString()))) {
+                        player.sendMessage(TranslateFormatter.stringConvert("NoPermission", '&'));
                         return;
                     }
-                    PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), count + 1);
+                } else {
+                    if (YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer") != -1) {
+                        int count = 0;
+                        if (PlayerDoll.playerDollCountMap.containsKey(player.getUniqueId().toString())) {
+                            count = PlayerDoll.playerDollCountMap.get(player.getUniqueId().toString());
+                        } else {
+                            PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), 0);
+                        }
+                        if (!player.isOp() && count >= YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer")) {
+                            player.sendMessage(TranslateFormatter.stringConvert("PlayerTooMuchDoll", '&', "%num%", YAMLManager.getConfig("config").getString("Global.MaxDollPerPlayer")));
+                            return;
+                        }
+                        PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), count + 1);
+                    }
                 }
             }
         }
+        /*
         if (!exist) {
             if (YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer") != -1) {
                 int count = 0;
@@ -111,6 +141,7 @@ public class spawn implements SubCommandHandler {
                     player.sendMessage(TranslateFormatter.stringConvert("PlayerTooMuchDoll", '&', "%num%", YAMLManager.getConfig("config").getString("Global.MaxDollPerPlayer")));
                     return;
                 }
+                YAMLManager.loadConfig(dollFile,dollName,true);
                 PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), count + 1);
             }
 
@@ -130,6 +161,8 @@ public class spawn implements SubCommandHandler {
             }
             dollData.createSection("setting", settings);
         }
+
+         */
 
 
         DollManager doll = new DollManager(serverPlayer.server,serverPlayer.serverLevel(),new GameProfile(UUIDUtil.createOfflinePlayerUUID(dollName),PlayerDoll.getDollPrefix()+dollName), serverPlayer,dollSkin);

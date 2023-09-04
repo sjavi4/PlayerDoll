@@ -130,6 +130,10 @@ public class DollManager extends ServerPlayer {
         this.serverPlayerDoll.setPose(serverPlayer.getPose());
         this.dollChunkPos = this.serverPlayerDoll.chunkPosition();
 
+        //this.connection.send(new ClientboundSetChunkCacheCenterPacket(this.chunkPosition().x,this.chunkPosition().z));
+        //this.connection.send(new ClientboundSetSimulationDistancePacket(Bukkit.getSimulationDistance()));
+        //this.connection.send(new ClientboundSetChunkCacheRadiusPacket(Bukkit.getViewDistance()));
+
         if (this.enableChunkLoad) {
             if (this.chunkLoadSize > 0) {
                 this.serverLevel.getChunkSource().addRegionTicket(TicketType.PLAYER, this.chunkPosition(), this.chunkLoadSize, this.chunkPosition());
@@ -220,6 +224,8 @@ public class DollManager extends ServerPlayer {
                 this.serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
                 this.dollChunkPos = this.chunkPosition();
                 this.serverLevel.getChunkSource().addRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
+
+                //this.connection.send(new ClientboundSetChunkCacheCenterPacket(this.chunkPosition().x,this.chunkPosition().z));
             }
             if (serverLevel != this.serverLevel()) {
                 serverLevel = this.serverLevel();
@@ -299,7 +305,7 @@ public class DollManager extends ServerPlayer {
         this.setHealth(20.0f);
         super.disconnect();
         this.server.getPlayerList().broadcastAll(new ClientboundPlayerInfoRemovePacket(Collections.singletonList(this.getUUID())));
-        serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
+        //serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
         serverLevel.removePlayerImmediately(this, RemovalReason.DISCARDED);
         this.connection.onDisconnect(Component.literal("Disconnected"));
     }
@@ -318,6 +324,8 @@ public class DollManager extends ServerPlayer {
             connection.handleClientCommand(p);
         }
         if (connection.player.isChangingDimension()) {
+            //this.connection.send(new ClientboundSetChunkCacheCenterPacket(this.chunkPosition().x,this.chunkPosition().z));
+            //this.connection.send(new ClientboundSetChunkCacheRadiusPacket(Bukkit.getViewDistance()));
             serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
             connection.player.hasChangedDimension();
         }

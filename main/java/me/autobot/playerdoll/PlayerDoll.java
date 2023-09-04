@@ -11,6 +11,8 @@ import me.autobot.playerdoll.GUI.GUIManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -145,7 +148,6 @@ public final class PlayerDoll extends JavaPlugin {
                 }
             }
         }
-
     }
 
     @Override
@@ -153,7 +155,9 @@ public final class PlayerDoll extends JavaPlugin {
         if (YAMLManager.getConfig("config").getBoolean("Global.FlexibleServerMaxPlayer")) {
             Bukkit.setMaxPlayers(maxplayer);
         }
-        YAMLManager.saveAllConfig();
+        //dollManagerMap.values().forEach(d -> YAMLManager.saveConfig(d.getDollName(),true));
+        dollManagerMap.values().forEach(DollManager::disconnect);
+        //YAMLManager.unloadAllConfig();
     }
 
 
