@@ -48,7 +48,7 @@ public class spawn implements SubCommandHandler {
             return;
         }
 
-        if (!dollName.matches("^[a-zA-Z0-9]*$")) {
+        if (!dollName.matches("^[a-zA-Z0-9_]*$")) {
             player.sendMessage(TranslateFormatter.stringConvert("IllegalName",'&'));
             return;
         }
@@ -79,7 +79,7 @@ public class spawn implements SubCommandHandler {
                 } else {
                     PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), 0);
                 }
-                if (count >= YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer")) {
+                if (!player.isOp() && count >= YAMLManager.getConfig("config").getInt("Global.MaxDollPerPlayer")) {
                     player.sendMessage(TranslateFormatter.stringConvert("PlayerTooMuchDoll", '&', "%num%", YAMLManager.getConfig("config").getString("Global.MaxDollPerPlayer")));
                     return;
                 }
