@@ -167,3 +167,6 @@ help:
   move:
     desc: '&6Set Doll move forwards for specific blocks'
     usage: '&e<DollName> &6move &f[blocks]'
+  swap:
+    desc: '&6Swap Doll hands'
+    usage: '&e<DollName> &6 swap'

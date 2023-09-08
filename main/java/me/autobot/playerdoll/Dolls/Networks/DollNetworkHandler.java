@@ -26,6 +26,15 @@ public class DollNetworkHandler extends ServerGamePacketListenerImpl {
     }
 
     @Override
-    public void send(Packet<?> packet) {
+    public void send(Packet<?> packet) {}
+
+    @Override
+    public void teleport(double d, double e, double f, float g, float h, Set<RelativeMovement> set)
+    {
+        super.teleport(d, e, f, g, h, set);
+        if (player.serverLevel().getPlayerByUUID(player.getUUID()) != null) {
+            resetPosition();
+            player.serverLevel().getChunkSource().move(player);
+        }
     }
 }

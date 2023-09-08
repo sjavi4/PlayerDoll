@@ -11,19 +11,37 @@ import java.util.List;
 public class drop implements SubCommandHandler {
     @Override
     public void perform(Player player, String dollName, String[] args) {
-        String[] _args = Arrays.copyOf(args,4);
+        String[] _args = Arrays.copyOf(args,3);
 
         DollManager doll = SubCommandHandler.checkDoll(player, dollName);
         if (doll == null) {return;}
         //Check permission
-
-        int arg1 = _args[2] == null ? 1 : Integer.parseInt(_args[2]);
-        boolean arg2 = _args[3] != null && _args[3].equalsIgnoreCase("all");
+        int arg1 = -1;
+        if (_args[1] != null) {
+            if (_args[1].matches("\\d+")) {
+                int num = Integer.parseInt(_args[2]);
+                if (num < 1 && num > 36) {
+                    arg1 = -1;
+                } else {
+                    arg1 = num - 1;
+                }
+            } else {
+                switch (_args[1].toLowerCase()) {
+                    case "helmet" -> arg1 = 39;
+                    case "chestplate" -> arg1 = 38;
+                    case "leggings" -> arg1 = 37;
+                    case "boots" -> arg1 = 36;
+                    case "offhand" -> arg1 = 40;
+                    case "everything" -> arg1 = -2;
+                }
+            }
+        }
+        boolean arg2 = _args[2] != null && _args[2].equalsIgnoreCase("stack");
         doll.getActionPack().drop(arg1,arg2);
     }
 
     @Override
     public List<List<String>> commandList() {
-        return List.of(List.of(new String[]{"1","2","3","4","5","6","7","8","9"}), Collections.singletonList("all"));
+        return List.of(List.of(new String[]{"1-36","helmet","chestplate","leggings","boots","offhand","everything"}), Collections.singletonList("stack"));
     }
 }

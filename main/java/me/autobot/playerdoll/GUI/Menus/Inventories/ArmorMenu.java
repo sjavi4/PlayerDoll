@@ -34,6 +34,11 @@ public class ArmorMenu extends InventoryGUI {
     }
     @Override
     public void onClick(InventoryClickEvent event) {
+        ItemStack currentItem = event.getCurrentItem();
+        ItemStack[] armors = new ItemStack[4];
+        System.arraycopy(event.getInventory().getContents(),0,armors,0,3);
+        ArrayUtils.reverse(armors);
+
         Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(),() -> {
             super.onClick(event);
             Map<Integer, EquipmentSlot> slotTypes = new HashMap<>();
@@ -51,7 +56,20 @@ public class ArmorMenu extends InventoryGUI {
                 PlayerDoll.getGuiManager().openGUI(new InventoryMenu(this.doll), (Player) event.getWhoClicked());
             }
 
+
             if (event.getClickedInventory() == event.getView().getTopInventory()) {
+                if (event.getSlot() == 4) {
+                    if (currentItem != doll.getInventory().getItemInOffHand()) {
+                        event.setCancelled(true);
+                        Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(),() -> PlayerDoll.getGuiManager().openGUI(new ArmorMenu(this.doll), (Player) event.getWhoClicked()));
+                    }
+                } else {
+                    if (armors[event.getSlot()] != doll.getInventory().getArmorContents()[3 - event.getSlot()]) {
+                        event.setCancelled(true);
+                        Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(),() -> PlayerDoll.getGuiManager().openGUI(new ArmorMenu(this.doll), (Player) event.getWhoClicked()));
+                    }
+                }
+                /*
                 event.setCancelled(true);
 
                 EquipmentSlot eSlot = slotTypes.get(event.getSlot());
@@ -65,40 +83,37 @@ public class ArmorMenu extends InventoryGUI {
                     SetDollInventory.UpdateDollEquiptment(doll, event.getCurrentItem(), slotTypes.get(currentSlot));
                 }
 
+                 */
+                event.setCancelled(false);
+                int currentSlot = event.getSlot();
+                SetDollInventory.UpdateDollEquiptment(doll, event.getCurrentItem(), slotTypes.get(currentSlot));
             }
         });
 
     }
-/*
+
     @Override
     public void decorate(Player player) {
-        List<Pair<ItemStack,Runnable>> list = new ArrayList<>(Collections.nCopies(this.getInventory().getSize(),new Pair<>(null,()->{})));
-
-        ItemStack[] armor = doll.getInventory().getArmorContents();
+        //List<ItemStack> list = new ArrayList<>(Collections.nCopies(this.getInventory().getSize(),null));
+        ItemStack[] armor = new ItemStack[5];
+        System.arraycopy(doll.getInventory().getArmorContents(),0,armor,1,4);
         ArrayUtils.reverse(armor);
-        //Runnable openArmorMenu = ()-> {};//PlayerDoll.getGuiManager().openGUI(new ArmorMenu(this.doll), player);
-        list.set(0, new Pair<>(armor[0], ()-> {}));
-        list.set(1, new Pair<>(armor[1], ()-> {}));
-        list.set(2, new Pair<>(armor[2], ()-> {}));
-        list.set(3, new Pair<>(armor[3], ()-> {}));
+        armor[4] = doll.getInventory().getItemInOffHand();
+        //list.set(0, armor[0]);
+        //list.set(1, armor[1]);
+        //list.set(2, armor[2]);
+        //list.set(3, armor[3]);
+        //list.set(4, doll.getInventory().getItemInOffHand());
 
-
-        ItemStack slot4 = doll.getInventory().getItemInOffHand();
-        list.set(4,new Pair<>(slot4, ()-> PlayerDoll.getGuiManager().openGUI(new ArmorMenu(this.doll), player)));
-
-        for (int i = 0 ; i< list.size();i++) {
-            this.addButton(i,this.createMainMenuButton(list.get(i)));
+        for (int i = 0 ; i< armor.length;i++) {
+            this.addButton(i,this.createMainMenuButton(armor[i]));
         }
         super.decorate(player);
     }
-    private InventoryButton createMainMenuButton(Pair<ItemStack, Runnable> pair) {
+    private InventoryButton createMainMenuButton(ItemStack item) {
         return new InventoryButton()
-                .creator(player -> pair.getA())
-                .consumer(event -> {
-                    if (doll.isDead()) {
-                        event.getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(), p::closeInventory));
-                    }});
+                .creator(player -> item)
+                .consumer(event -> {});
     }
 
- */
 }

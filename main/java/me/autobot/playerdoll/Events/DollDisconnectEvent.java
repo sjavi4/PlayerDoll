@@ -21,6 +21,7 @@ public class DollDisconnectEvent implements Listener {
         if (!PlayerDoll.dollManagerMap.containsKey(event.getPlayer().getName())) {
             return;
         }
+        event.getPlayer().setFallDistance(0.0f);
         if (YAMLManager.getConfig("config").getBoolean("Global.FlexibleServerMaxPlayer")) {
             Bukkit.setMaxPlayers(Bukkit.getMaxPlayers() - 1);
         }
@@ -32,8 +33,9 @@ public class DollDisconnectEvent implements Listener {
         } else {
             System.out.println("Could Not Save Config for Doll " + event.getPlayer().getName());
         }
-        ((InventoryGUI)event.getPlayer().getMetadata("DollArmorMenu").get(0).value()).getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),p::closeInventory,0));
-        ((InventoryGUI)event.getPlayer().getMetadata("DollHotbarMenu").get(0).value()).getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),p::closeInventory,0));
+        //((InventoryGUI)event.getPlayer().getMetadata("DollArmorMenu").get(0).value()).getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),p::closeInventory,0));
+        //((InventoryGUI)event.getPlayer().getMetadata("DollHotbarMenu").get(0).value()).getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),p::closeInventory,0));
+        //((InventoryGUI)event.getPlayer().getMetadata("DollInvenMenu").get(0).value()).getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),p::closeInventory,0));
         ((InventoryGUI)event.getPlayer().getMetadata("DollInvenMenu").get(0).value()).getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),p::closeInventory,0));
         ((InventoryGUI)event.getPlayer().getMetadata("DollEnderChestMenu").get(0).value()).getInventory().getViewers().forEach(p -> Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),p::closeInventory,0));
     }

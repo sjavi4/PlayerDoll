@@ -8,10 +8,7 @@ import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.Dolls.Networks.DollNetworkHandler;
 import me.autobot.playerdoll.Dolls.Networks.DollNetworkManager;
-import me.autobot.playerdoll.GUI.Menus.Inventories.ArmorMenu;
-import me.autobot.playerdoll.GUI.Menus.Inventories.EnderChestMenu;
-import me.autobot.playerdoll.GUI.Menus.Inventories.HotbarMenu;
-import me.autobot.playerdoll.GUI.Menus.Inventories.BackpackMenu;
+import me.autobot.playerdoll.GUI.Menus.Inventories.*;
 import me.autobot.playerdoll.PlayerDoll;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -42,16 +39,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class DollManager extends ServerPlayer {
     private static final boolean onlinemode = Bukkit.getOnlineMode();
     public ChunkPos dollChunkPos;
     public boolean enableChunkLoad = true;
-    public boolean enableInventory = true;
+    //public boolean enableInventory = true;
     public boolean enableEnderChest = true;
     public boolean enableHostility = true;
     private int chunkLoadSize = YAMLManager.getConfig("config").getInt("ChunkLoadArea");
@@ -84,6 +78,7 @@ public class DollManager extends ServerPlayer {
         this.owner = (ServerPlayer) serverLevel.getPlayerByUUID(UUID.fromString(dollConfig.getString("Owner")));
         this.craftOwner = this.owner.getBukkitEntity();
 
+
         if (!dollConfig.getBoolean("Remove")) {
             this.server.getPlayerList().load(this);
         } else {
@@ -104,7 +99,7 @@ public class DollManager extends ServerPlayer {
         this.serverPlayerDoll.setDollSkin();
         this.serverPlayerDoll.connection = new DollNetworkHandler(minecraftServer, new DollNetworkManager(PacketFlow.CLIENTBOUND), serverPlayerDoll);
 
-
+        this.serverPlayerDoll.setHealth(20.0f);
         this.serverPlayerDoll.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(1.0D);
         this.serverPlayerDoll.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(4.0D);
 
@@ -133,6 +128,7 @@ public class DollManager extends ServerPlayer {
         //this.connection.send(new ClientboundSetChunkCacheCenterPacket(this.chunkPosition().x,this.chunkPosition().z));
         //this.connection.send(new ClientboundSetSimulationDistancePacket(Bukkit.getSimulationDistance()));
         //this.connection.send(new ClientboundSetChunkCacheRadiusPacket(Bukkit.getViewDistance()));
+
 
         if (this.enableChunkLoad) {
             if (this.chunkLoadSize > 0) {
@@ -165,8 +161,21 @@ public class DollManager extends ServerPlayer {
         if (!onlinemode) {
             return;
         }
-        String skin = dollSkin == null ? owner.displayName : dollSkin;
+        String skin = dollSkin;
+        YamlConfiguration dollConfig = YAMLManager.getConfig(this.dollName);
+        List<String> skinData = new ArrayList<>();
 
+
+
+        List<String> dollSkinData = dollConfig.getStringList("SkinData");
+
+
+        if (!dollSkinData.isEmpty() && (skin == null || dollConfig.getStringList("SkinData").get(0).equalsIgnoreCase(skin))) {
+            dollProfile.getProperties().put("textures", new Property("textures", dollSkinData.get(1), dollSkinData.get(2)));
+            this.dollSkin = dollSkinData.get(0);
+            return;
+        }
+        skin = dollSkin == null ? owner.displayName : dollSkin;
         try {
             URL url_playerName = new URL("https://api.mojang.com/users/profiles/minecraft/" + skin);
             InputStreamReader reader_playerName = new InputStreamReader(url_playerName.openStream());
@@ -179,16 +188,23 @@ public class DollManager extends ServerPlayer {
             String signature = textureProperty.get("signature").getAsString();
 
             dollProfile.getProperties().put("textures", new Property("textures", texture, signature));
+            skinData.add(skin);
+            skinData.add(texture);
+            skinData.add(signature);
+            dollConfig.set("SkinData", skinData);
+            this.dollSkin = skin;
         } catch (IOException e) {
             System.err.println("Could not get skin data from session servers!");
             e.printStackTrace();
         }
+
     }
 
     private void initialDollInventoryMetadata() {
-        craftPlayerDoll.setMetadata("DollArmorMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new ArmorMenu(craftPlayerDoll)));
-        craftPlayerDoll.setMetadata("DollHotbarMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new HotbarMenu(craftPlayerDoll)));
-        craftPlayerDoll.setMetadata("DollInvenMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new BackpackMenu(craftPlayerDoll)));
+        ////craftPlayerDoll.setMetadata("DollArmorMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new ArmorMenu(craftPlayerDoll)));
+        //craftPlayerDoll.setMetadata("DollHotbarMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new HotbarMenu(craftPlayerDoll)));
+        //craftPlayerDoll.setMetadata("DollInvenMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new BackpackMenu(craftPlayerDoll)));
+        craftPlayerDoll.setMetadata("DollInvenMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new BackpackMenu_(craftPlayerDoll)));
         craftPlayerDoll.setMetadata("DollEnderChestMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new EnderChestMenu(craftPlayerDoll)));
     }
 
@@ -347,7 +363,7 @@ public class DollManager extends ServerPlayer {
                 String[] split = k.split("\\.");
                 boolean bool = (boolean) v;
                 switch (split[0]) {
-                    case "Inventory" -> this.enableInventory = bool;
+                    //case "Inventory" -> this.enableInventory = bool;
                     case "Ender Chest" -> this.enableEnderChest = bool;
                     case "Chunk Load" -> this.enableChunkLoad = bool;
                     case "Invulnerable" -> craftPlayerDoll.setNoDamageTicks(bool? Integer.MAX_VALUE:0);
@@ -366,7 +382,7 @@ public class DollManager extends ServerPlayer {
             if (k.endsWith(".toggle")) {
                 String[] split = k.split("\\.");
                 switch (split[0]) {
-                    case "Inventory" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableInventory);
+                    //case "Inventory" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableInventory);
                     case "Ender Chest" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableEnderChest);
                     case "Chunk Load" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableChunkLoad);
                     case "Invulnerable" -> dollConfig.set("setting."+ split[0] +".toggle",craftPlayerDoll.getNoDamageTicks() > 20);

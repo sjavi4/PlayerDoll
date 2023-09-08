@@ -35,6 +35,7 @@ public class CommandManager implements CommandExecutor {
         subCommandMap.put("look", new look());
         subCommandMap.put("lookat", new lookat());
         subCommandMap.put("drop", new drop());
+        subCommandMap.put("swap", new swap());
         //subCommandMap.put("sprint", new sprint());
         //subCommandMap.put("strafe", new strafe());
         subCommandMap.put("jump", new jump());

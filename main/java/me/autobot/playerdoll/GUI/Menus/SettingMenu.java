@@ -75,12 +75,13 @@ public class SettingMenu extends InventoryGUI {
 
             ItemStack slot0 = ButtonSetter.setItem(Material.RESPAWN_ANCHOR,null, TranslateFormatter.stringConvert("control.back",'&'),null);
             list.set(0,new Pair<>(slot0,()-> PlayerDoll.getGuiManager().openGUI(new MainMenu(this.doll), player)));
-
+/*
             Map<String,Object> slot18Lang = langFile.getConfigurationSection("settingmenu.Inventory").getValues(true);
             ItemStack slot18 = ButtonSetter.setItem(Material.CHEST_MINECART,null,getToggle(serverPlayerDoll.enableInventory) + slot18Lang.get("name").toString(),List.of(TranslateFormatter.stringTranslate(slot18Lang.get("desc").toString(),'&'),desca,descb));
             list.set(18, new Pair<>(slot18,() -> {}));
             settings.put(slot18.getType(),()->serverPlayerDoll.enableInventory = onoff);
 
+ */
             Map<String,Object> slot19Lang = langFile.getConfigurationSection("settingmenu.Ender Chest").getValues(true);
             ItemStack slot19 = ButtonSetter.setItem(Material.ENDER_EYE,null,getToggle(serverPlayerDoll.enableEnderChest) + slot19Lang.get("name").toString(),List.of(TranslateFormatter.stringTranslate(slot19Lang.get("desc").toString(), '&'), desca,descb));
             list.set(19, new Pair<>(slot19,() -> {}));

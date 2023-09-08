@@ -323,7 +323,7 @@ public class EntityPlayerActionPack
                                         InteractionResult result = player.gameMode.useItemOn(player, world, player.getItemInHand(hand), hand, blockHit);
                                         if (result.consumesAction())
                                         {
-                                            if (result.shouldSwing()) player.swing(hand);
+                                            if (result.shouldAwardStats()) player.swing(hand);
                                             ap.itemUseCooldown = 3;
                                             return true;
                                         }
@@ -341,12 +341,14 @@ public class EntityPlayerActionPack
                                     if (entity.interactAt(player, relativeHitPos, hand).consumesAction())
                                     {
                                         ap.itemUseCooldown = 3;
+                                        player.swing(hand);
                                         return true;
                                     }
                                     // fix for SS itemframe always returns CONSUME even if no action is performed
                                     if (player.interactOn(entity, hand).consumesAction() && !(handWasEmpty && itemFrameEmpty))
                                     {
                                         ap.itemUseCooldown = 3;
+                                        player.swing(hand);
                                         return true;
                                     }
                                     break;
@@ -400,6 +402,7 @@ public class EntityPlayerActionPack
                         if (ap.currentBlock != null && player.level().getBlockState(ap.currentBlock).isAir())
                         {
                             ap.currentBlock = null;
+                            player.swing(InteractionHand.MAIN_HAND);
                             return false;
                         }
                         BlockState state = player.level().getBlockState(pos);
@@ -409,6 +412,7 @@ public class EntityPlayerActionPack
                             player.gameMode.handleBlockBreakAction(pos, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, side, player.level().getMaxBuildHeight(), -1);
                             ap.blockHitDelay = 5;
                             blockBroken = true;
+                            player.swing(InteractionHand.MAIN_HAND);
                         }
                         else  if (ap.currentBlock == null || !ap.currentBlock.equals(pos))
                         {

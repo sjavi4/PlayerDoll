@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -45,7 +46,7 @@ public class InventoryMenu extends InventoryGUI {
             ItemStack slot0 = ButtonSetter.setItem(Material.RESPAWN_ANCHOR,null,TranslateFormatter.stringConvert("control.back",'&'),null);
             list.set(0,new Pair<>(slot0,()-> PlayerDoll.getGuiManager().openGUI(new MainMenu(this.doll), player)));
 
-
+/*
             ItemStack slot2 = ButtonSetter.setItem(Material.LIME_SHULKER_BOX,null,TranslateFormatter.stringConvert("inventorymenu.armor_offhand",'%'),null);
             ItemStack[] slot2Preview = new ItemStack[27];
             slot2Preview[20] = new ItemStack(Material.LEATHER_HELMET);
@@ -53,6 +54,7 @@ public class InventoryMenu extends InventoryGUI {
             slot2Preview[22] = new ItemStack(Material.LEATHER_LEGGINGS);
             slot2Preview[23] = new ItemStack(Material.LEATHER_BOOTS);
             slot2Preview[24] = new ItemStack(Material.SHIELD);
+
             ItemStack[] armor = doll.getInventory().getArmorContents();
             ArrayUtils.reverse(armor);
             for (int i = 0; i<armor.length;i++) {
@@ -71,11 +73,14 @@ public class InventoryMenu extends InventoryGUI {
                 ButtonSetter.setShulkerBoxPreview(slot4, Arrays.copyOfRange(doll.getInventory().getContents(), 9, 36));
                 list.set(4, new Pair<>(slot4, () -> PlayerDoll.getGuiManager().openGUI((InventoryGUI) doll.getMetadata("DollInvenMenu").get(0).value(), player)));
             }
+             */
+            ItemStack slot2 = ButtonSetter.setItem(Material.OAK_CHEST_BOAT,null,TranslateFormatter.stringConvert("inventorymenu.inventory",'&'),null);
+            list.set(2,new Pair<>(slot2,()-> PlayerDoll.getGuiManager().openGUI((InventoryGUI) doll.getMetadata("DollInvenMenu").get(0).value(), player)));
 
             if (PlayerDoll.dollManagerMap.get(doll.getName()).enableEnderChest) {
-                ItemStack slot5 = ButtonSetter.setItem(Material.SHULKER_BOX,null,TranslateFormatter.stringConvert("inventorymenu.enderchest", '&'),null);
-                ButtonSetter.setShulkerBoxPreview(slot5, doll.getEnderChest().getContents());
-                list.set(5, new Pair<>(slot5, () -> PlayerDoll.getGuiManager().openGUI((InventoryGUI) doll.getMetadata("DollEnderChestMenu").get(0).value(), player)));
+                ItemStack slot3 = ButtonSetter.setItem(Material.SHULKER_BOX,null,TranslateFormatter.stringConvert("inventorymenu.enderchest", '&'),null);
+                ButtonSetter.setShulkerBoxPreview(slot3, doll.getEnderChest().getContents());
+                list.set(3, new Pair<>(slot3, () -> PlayerDoll.getGuiManager().openGUI((InventoryGUI) doll.getMetadata("DollEnderChestMenu").get(0).value(), player)));
             }
 
             ItemStack slot6 = ButtonSetter.setItem(Material.EXPERIENCE_BOTTLE,null,TranslateFormatter.stringConvert("inventorymenu.levelUp",'&')
