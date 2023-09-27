@@ -33,7 +33,7 @@ public class Dollinventory extends InvInitializer {
 
     @Override
     protected Inventory createInventory(Player player, Player doll) {
-        return Bukkit.createInventory(null, 45, TranslateFormatter.stringConvert("menuTitle.main",'&',"%a%",doll.getName()));
+        return Bukkit.createInventory(null, 45, TranslateFormatter.stringConvert("menuTitle.backpack",'&',"%a%",doll.getName()));
     }
 
     @Override

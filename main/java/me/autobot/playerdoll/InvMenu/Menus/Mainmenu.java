@@ -41,11 +41,11 @@ public class Mainmenu extends InvInitializer {
         List<ItemStack> buttons = new ArrayList<>(Collections.nCopies(this.getInventory().getSize(),defaultslot));
 
         ItemStack slot0 = ButtonSetter.setItem(Material.PLAYER_HEAD,null, ChatColor.GREEN+doll.getDisplayName(), Arrays.asList(
-                TranslateFormatter.stringConvert("mainmenu.uuid",'&', "%uuid%", doll.getUniqueId().toString()),
-                TranslateFormatter.stringConvert("mainmenu.owner", '&', "%player%", Bukkit.getPlayer(UUID.fromString(TranslateFormatter.getDollConfig(doll.getName().substring(PlayerDoll.getDollPrefix().length())).getString("Owner"))).getName()),
-                TranslateFormatter.stringConvert("mainmenu.hp", '&',"%current%",Double.toString(doll.getHealth()),"%full%",Double.toString(doll.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())),
-                TranslateFormatter.stringConvert("mainmenu.hunger", '&', "%current%", Integer.toString(doll.getFoodLevel()), "%full%", "20"),
-                TranslateFormatter.stringConvert("mainmenu.gamemode", '&', "%gamemode%", doll.getGameMode().toString()),
+                TranslateFormatter.stringConvert("mainmenu.uuid",'&', "%a%", doll.getUniqueId().toString()),
+                TranslateFormatter.stringConvert("mainmenu.owner", '&', "%a%", Bukkit.getPlayer(UUID.fromString(TranslateFormatter.getDollConfig(doll.getName().substring(PlayerDoll.getDollPrefix().length())).getString("Owner"))).getName()),
+                TranslateFormatter.stringConvert("mainmenu.hp", '&',"%a%",Double.toString(doll.getHealth()),"%b%",Double.toString(doll.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())),
+                TranslateFormatter.stringConvert("mainmenu.hunger", '&', "%a%", Integer.toString(doll.getFoodLevel()), "%b%", "20"),
+                TranslateFormatter.stringConvert("mainmenu.gamemode", '&', "%a%", doll.getGameMode().toString()),
                 TranslateFormatter.stringConvert("mainmenu.copy", '&')
         ));
         SkullMeta dollMeta = ((SkullMeta)slot0.getItemMeta());
@@ -55,7 +55,7 @@ public class Mainmenu extends InvInitializer {
         actionMap.put(slot0, () -> {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(doll.getUniqueId().toString()), null);
             player.closeInventory();
-            player.sendMessage(TranslateFormatter.stringConvert("CopiedUUID",'&',"%uuid%", doll.getUniqueId().toString()));
+            player.sendMessage(TranslateFormatter.stringConvert("CopiedUUID",'&',"%a%", doll.getUniqueId().toString()));
         });
         buttons.set(0,slot0);
 

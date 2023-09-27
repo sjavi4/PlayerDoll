@@ -25,7 +25,7 @@ public class Inventorymenu extends InvInitializer {
 
     @Override
     protected Inventory createInventory(Player player, Player doll) {
-        return Bukkit.createInventory(null, 9, TranslateFormatter.stringConvert("menuTitle.main",'&',"%a%",doll.getName()));
+        return Bukkit.createInventory(null, 9, TranslateFormatter.stringConvert("menuTitle.inventory",'&',"%a%",doll.getName()));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Inventorymenu extends InvInitializer {
 
         List<ItemStack> buttons = new ArrayList<>(Collections.nCopies(this.getInventory().getSize(),defaultslot));
 
-        ItemStack slot0 = ButtonSetter.setItem(Material.RESPAWN_ANCHOR,null,TranslateFormatter.stringConvert("control.back",'&'),null);
+        ItemStack slot0 = ButtonSetter.setItem(Material.RESPAWN_ANCHOR,null,TranslateFormatter.stringConvert("controlButton.back",'&'),null);
         buttons.set(0,slot0);
         actionMap.put(slot0,() -> {
             player.closeInventory();
@@ -60,7 +60,7 @@ public class Inventorymenu extends InvInitializer {
         }
 
         ItemStack slot6 = ButtonSetter.setItem(Material.EXPERIENCE_BOTTLE,null,TranslateFormatter.stringConvert("inventorymenu.levelUp",'&')
-                , Arrays.asList(TranslateFormatter.stringConvert("inventorymenu.level",'&',"%level%"
+                , Arrays.asList(TranslateFormatter.stringConvert("inventorymenu.level",'&',"%a%"
                         , Integer.toString(doll.getLevel())), TranslateFormatter.stringConvert("inventorymenu.levelGet",'&')));
         buttons.set(6,slot6);
         actionMap.put(slot6, ()-> {

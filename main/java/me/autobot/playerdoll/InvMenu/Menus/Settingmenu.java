@@ -69,7 +69,7 @@ public class Settingmenu extends InvInitializer {
         Map<String, Object> toggleMap = PlayerDoll.dollManagerMap.get(doll.getName()).configManager.getData();
 
         //ItemStack slot0 = ButtonSetter.setItem(Material.RESPAWN_ANCHOR,null, TranslateFormatter.stringConvert("control.back",'&'),null);
-        ItemStack slot0 = ButtonSetter.setItem(Material.RESPAWN_ANCHOR,null, TranslateFormatter.stringTranslate("controlButton.back",'&'), null);
+        ItemStack slot0 = ButtonSetter.setItem(Material.RESPAWN_ANCHOR,null, TranslateFormatter.stringConvert("controlButton.back",'&'), null);
         buttons.set(0,slot0);
         actionMap.put(slot0,(b)-> {
             player.closeInventory();
@@ -87,7 +87,7 @@ public class Settingmenu extends InvInitializer {
         //buttons.set(18,slot18);
         //actionMap.put(slot18, ()->{});
 
-        ItemStack slot19 = ButtonSetter.setItem(Material.ENDER_EYE,null,getToggle((Boolean) toggleMap.get("setting.Ender Chest")) + langFile.getString("settingmenu.Ender Chest.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Ender Chest.desc"),'&'),desca,descb));
+        ItemStack slot19 = ButtonSetter.setItem(Material.ENDER_EYE,null,getToggle((Boolean) toggleMap.get("setting.Ender Chest")) + langFile.getString("settingmenu.Ender Chest.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Ender Chest.desc",'&'),desca,descb));
         buttons.set(19,slot19);
         actionMap.put(slot19, (b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Ender Chest",b));
 
@@ -95,47 +95,47 @@ public class Settingmenu extends InvInitializer {
         //buttons.set(20, slot20);
         //actionMap.put(slot20,(b)-> {});
 
-        ItemStack slot21 = ButtonSetter.setItem(Material.TOTEM_OF_UNDYING,null,getToggle((Boolean) toggleMap.get("setting.Invulnerable")) + langFile.getString("settingmenu.Invulnerable.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Invulnerable.desc"),'&'),desca,descb));
+        ItemStack slot21 = ButtonSetter.setItem(Material.TOTEM_OF_UNDYING,null,getToggle((Boolean) toggleMap.get("setting.Invulnerable")) + langFile.getString("settingmenu.Invulnerable.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Invulnerable.desc",'&'),desca,descb));
         buttons.set(21, slot21);
         actionMap.put(slot21,(b)-> PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Invulnerable",b));//doll.setNoDamageTicks(onoff?Integer.MAX_VALUE:0));
 
-        ItemStack slot22 = ButtonSetter.setItem(Material.TARGET,null,getToggle((Boolean) toggleMap.get("setting.Hostility")) + langFile.getString("settingmenu.Hostility.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Hostility.desc"),'&'),desca,descb));
+        ItemStack slot22 = ButtonSetter.setItem(Material.TARGET,null,getToggle((Boolean) toggleMap.get("setting.Hostility")) + langFile.getString("settingmenu.Hostility.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Hostility.desc",'&'),desca,descb));
         buttons.set(22, slot22);
         actionMap.put(slot22,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Hostility",b));//serverPlayerDoll.enableHostility = onoff);
 
-        ItemStack slot23 = ButtonSetter.setItem(Material.ARMOR_STAND,null,getToggle((Boolean) toggleMap.get("setting.Pushable")) + langFile.getString("settingmenu.Pushable.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Pushable.desc"),'&'),desca,descb));
+        ItemStack slot23 = ButtonSetter.setItem(Material.ARMOR_STAND,null,getToggle((Boolean) toggleMap.get("setting.Pushable")) + langFile.getString("settingmenu.Pushable.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Pushable.desc",'&'),desca,descb));
         buttons.set(23, slot23);
         actionMap.put(slot23,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Pushable",b));//doll.setCollidable(onoff));
 
-        ItemStack slot24 = ButtonSetter.setItem(Material.GRAVEL,null,getToggle((Boolean) toggleMap.get("setting.Gravity")) + langFile.getString("settingmenu.Gravity.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Gravity.desc"),'&'),desca,descb));
+        ItemStack slot24 = ButtonSetter.setItem(Material.GRAVEL,null,getToggle((Boolean) toggleMap.get("setting.Gravity")) + langFile.getString("settingmenu.Gravity.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Gravity.desc",'&'),desca,descb));
         buttons.set(24, slot24);
         actionMap.put(slot24,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Gravity",b));//{doll.setGravity(onoff);});
 
-        ItemStack slot25 = ButtonSetter.setItem(Material.GLOW_INK_SAC,null,getToggle((Boolean) toggleMap.get("setting.Glow")) + langFile.getString("settingmenu.Glow.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Glow.desc"),'&'),desca,descb));
+        ItemStack slot25 = ButtonSetter.setItem(Material.GLOW_INK_SAC,null,getToggle((Boolean) toggleMap.get("setting.Glow")) + langFile.getString("settingmenu.Glow.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Glow.desc",'&'),desca,descb));
         buttons.set(25, slot25);
         actionMap.put(slot25,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Glow",b));//{doll.setGlowing(onoff);});
 
-        ItemStack slot26 = ButtonSetter.setItem(Material.STONE_STAIRS,null,getToggle((Boolean) toggleMap.get("setting.Large Step Size")) + langFile.getString("settingmenu.Large Step Size.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Large Step Size.desc"),'&'),desca,descb));
+        ItemStack slot26 = ButtonSetter.setItem(Material.STONE_STAIRS,null,getToggle((Boolean) toggleMap.get("setting.Large Step Size")) + langFile.getString("settingmenu.Large Step Size.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Large Step Size.desc",'&'),desca,descb));
         buttons.set(26, slot26);
         actionMap.put(slot26,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Large Step Size",b));//serverPlayerDoll.setMaxUpStep(onoff?1.0f:0.6f));
 
-        ItemStack slot27 = ButtonSetter.setItem(Material.WOODEN_SWORD,null,getToggle((Boolean) toggleMap.get("setting.Attack")) + langFile.getString("settingmenu.Attack.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Attack.desc"),'&'),desca,descb));
+        ItemStack slot27 = ButtonSetter.setItem(Material.WOODEN_SWORD,null,getToggle((Boolean) toggleMap.get("setting.Attack")) + langFile.getString("settingmenu.Attack.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Attack.desc",'&'),desca,descb));
         buttons.set(27, slot27);
         actionMap.put(slot27,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Attack",b));
 
-        ItemStack slot28 = ButtonSetter.setItem(Material.STONE_BUTTON,null,getToggle((Boolean) toggleMap.get("setting.Use")) + langFile.getString("settingmenu.Use.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Use.desc"),'&'),desca,descb));
+        ItemStack slot28 = ButtonSetter.setItem(Material.STONE_BUTTON,null,getToggle((Boolean) toggleMap.get("setting.Use")) + langFile.getString("settingmenu.Use.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Use.desc",'&'),desca,descb));
         buttons.set(28, slot28);
         actionMap.put(slot28,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Use",b));
 
-        ItemStack slot29 = ButtonSetter.setItem(Material.PAPER,null,getToggle((Boolean) toggleMap.get("setting.Copy")) + langFile.getString("settingmenu.Copy.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Copy.desc"),'&'),desca,descb));
+        ItemStack slot29 = ButtonSetter.setItem(Material.PAPER,null,getToggle((Boolean) toggleMap.get("setting.Copy")) + langFile.getString("settingmenu.Copy.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Copy.desc",'&'),desca,descb));
         buttons.set(29, slot29);
         actionMap.put(slot29,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Copy",b));
 
-        ItemStack slot30 = ButtonSetter.setItem(Material.MINECART,null,getToggle((Boolean) toggleMap.get("setting.Dismount")) + langFile.getString("settingmenu.Dismount.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Dismount.desc"),'&'),desca,descb));
+        ItemStack slot30 = ButtonSetter.setItem(Material.MINECART,null,getToggle((Boolean) toggleMap.get("setting.Dismount")) + langFile.getString("settingmenu.Dismount.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Dismount.desc",'&'),desca,descb));
         buttons.set(30, slot30);
         actionMap.put(slot30,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Dismount",b));
 
-        ItemStack slot31 = ButtonSetter.setItem(Material.ITEM_FRAME,null,getToggle((Boolean) toggleMap.get("setting.Mount")) + langFile.getString("settingmenu.Mount.name"),List.of(TranslateFormatter.stringTranslate(langFile.getString("settingmenu.Mount.desc"),'&'),desca,descb));
+        ItemStack slot31 = ButtonSetter.setItem(Material.ITEM_FRAME,null,getToggle((Boolean) toggleMap.get("setting.Mount")) + langFile.getString("settingmenu.Mount.name"),List.of(TranslateFormatter.stringConvert("settingmenu.Mount.desc",'&'),desca,descb));
         buttons.set(31, slot31);
         actionMap.put(slot31,(b)->PlayerDoll.dollManagerMap.get(doll.getName()).configManager.setData("setting.Mount",b));
 
