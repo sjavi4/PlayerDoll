@@ -3,7 +3,6 @@ package me.autobot.playerdoll.Command.SubCommand.actions;
 import me.autobot.playerdoll.Command.SubCommandHandler;
 import me.autobot.playerdoll.Dolls.DollManager;
 import net.minecraft.core.Direction;
-import net.minecraft.world.phys.Vec2;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

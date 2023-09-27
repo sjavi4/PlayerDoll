@@ -2,8 +2,9 @@ package me.autobot.playerdoll.Command;
 
 import me.autobot.playerdoll.Command.SubCommand.actions.*;
 import me.autobot.playerdoll.Command.SubCommand.operations.*;
-import me.autobot.playerdoll.Command.SubCommand.utils.*;
-import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.Command.SubCommand.utils.helps;
+import me.autobot.playerdoll.Command.SubCommand.utils.list;
+import me.autobot.playerdoll.Command.SubCommand.utils.reload;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

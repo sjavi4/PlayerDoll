@@ -1,12 +1,9 @@
 package me.autobot.playerdoll.Configs;
 
-import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import javax.annotation.Nullable;
-import java.io.File;
 
 public class TranslateFormatter {
     public static FileConfiguration getDollConfig(String dollName) {

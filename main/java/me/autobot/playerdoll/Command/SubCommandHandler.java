@@ -1,13 +1,12 @@
 package me.autobot.playerdoll.Command;
 
+import me.autobot.playerdoll.Configs.TranslateFormatter;
 import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Configs.TranslateFormatter;
 import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.List;
 
 public interface SubCommandHandler {

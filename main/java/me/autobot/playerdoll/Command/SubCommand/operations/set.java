@@ -2,7 +2,7 @@ package me.autobot.playerdoll.Command.SubCommand.operations;
 
 import me.autobot.playerdoll.Command.SubCommandHandler;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.GUI.Menus.MainMenu;
+import me.autobot.playerdoll.InvMenu.Menus.Mainmenu;
 import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.entity.Player;
 
@@ -16,7 +16,8 @@ public class set implements SubCommandHandler {
         if (doll == null) {return;}
         //Check permission
         doll.getActionPack().stopAll();
-        PlayerDoll.getGuiManager().openGUI(new MainMenu(doll.getBukkitEntity()),player);
+        PlayerDoll.getInvManager().openInv(new Mainmenu(player, doll.getBukkitEntity()),player);
+        //PlayerDoll.getGuiManager().openGUI(new MainMenu(doll.getBukkitEntity()),player);
     }
 
     @Override

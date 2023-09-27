@@ -2,13 +2,10 @@ package me.autobot.playerdoll.Command.SubCommand.actions;
 
 import me.autobot.playerdoll.Command.SubCommandHandler;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.PlayerDoll;
 import net.minecraft.server.level.ServerPlayer;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Arrays;
 import java.util.Collections;

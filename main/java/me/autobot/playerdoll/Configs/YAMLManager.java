@@ -3,9 +3,8 @@ package me.autobot.playerdoll.Configs;
 import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import javax.annotation.Nonnull;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,40 +23,55 @@ public class YAMLManager {
         configMap.put(mapKey, this);
     }
     public static YAMLManager loadConfig(File file, String mapKey , boolean force) {
-        File parent = file.getParentFile();
-        if (!parent.exists()) {
-            if (!force) {
-                System.out.println("Could NOT Load Config "+ parent.getName() +" Directory NOT Found!");
-                return null;
-            }
-            boolean success = parent.mkdirs();
-            if (!success) {
-                System.out.println("Could NOT FORCE Load Config "+ parent.getName() +" Directory Creation Fail!");
-                return null;
-            }
-        }
         if (!file.getName().contains(".yml")) {
             System.out.println("Not A YAML config");
             return null;
         }
-        //return null;
-        if (!file.exists()) {
-            if (!force) {
-                System.out.println("Could NOT Load Config "+ file.getName() +", File NOT Found!");
+        if (force) {
+            if (!createFile(file)) {
                 return null;
             }
+        }
+        return new YAMLManager(file,mapKey);
+    }
+
+    public static boolean createFile(File file) {
+        File parent = file.getParentFile();
+        if (!parent.exists()) {
+            boolean success = parent.mkdirs();
+            if (!success) {
+                System.out.println("Could NOT FORCE Load Config "+ parent.getName() +" Directory Creation Fail!");
+                return false;
+            }
+        }
+        if (!file.exists()) {
             try {
                 boolean success = file.createNewFile();
                 if (!success) {
                     System.out.println("Could NOT FORCE Load Config "+ file.getName() +", File Creation Fail!");
-                    return null;
+                    return false;
                 }
             } catch (IOException ignored) {}
         }
-        return new YAMLManager(file,mapKey);
-
+        return true;
     }
 
+    private boolean checkVersion() {
+        return this.config.contains("version") && this.config.getString("version").equalsIgnoreCase(PlayerDoll.getConfigVersion());
+    }
+    public void createFromResource(String resourceFile) {
+        if (this.file.length() == 0 || !checkVersion()) {
+            InputStream resource = PlayerDoll.getPlugin().getResource(resourceFile);
+            if (resource != null) {
+                this.saveToFile(YamlConfiguration.loadConfiguration(new InputStreamReader(resource, StandardCharsets.UTF_8)));
+                try {
+                    resource.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
     public static void reloadAllConfig() {
         Map<File,String> ref = new HashMap<>();
         YAMLManager.configMap.forEach((k,v) -> {
@@ -73,6 +87,13 @@ public class YAMLManager {
     }
 
     public static void unloadAllConfig() {
+        YAMLManager.configMap.keySet().forEach(s -> {
+            try {
+                new FileReader(YAMLManager.getFile(s)).close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         YAMLManager.configMap.clear();
         //YAMLManager.configMap.values().forEach(YAMLManager::unloadConfig);
     }
@@ -110,6 +131,11 @@ public class YAMLManager {
 
  */
     private void unloadConfig() {
+        try {
+            new FileReader(this.file).close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         YAMLManager.configMap.remove(this.mapKey);
     }
 
@@ -130,6 +156,7 @@ public class YAMLManager {
     public boolean saveToFile(YamlConfiguration yamlConfiguration) {
         try {
             yamlConfiguration.save(this.file);
+            //new FileReader(this.file).close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,6 +171,8 @@ public class YAMLManager {
             e.printStackTrace();
         }
     }
+
+
     public static YamlConfiguration getConfig(String mapKey) {
         return YAMLManager.configMap.containsKey(mapKey)? YAMLManager.configMap.get(mapKey).config : null;
     }

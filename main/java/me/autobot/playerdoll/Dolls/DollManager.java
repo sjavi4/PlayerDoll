@@ -8,7 +8,6 @@ import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.Dolls.Networks.DollNetworkHandler;
 import me.autobot.playerdoll.Dolls.Networks.DollNetworkManager;
-import me.autobot.playerdoll.GUI.Menus.Inventories.*;
 import me.autobot.playerdoll.PlayerDoll;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,11 +19,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.ChatVisiblity;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
@@ -35,20 +39,23 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.io.File;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class DollManager extends ServerPlayer {
     private static final boolean onlinemode = Bukkit.getOnlineMode();
     public ChunkPos dollChunkPos;
-    public boolean enableChunkLoad = true;
+
     //public boolean enableInventory = true;
-    public boolean enableEnderChest = true;
-    public boolean enableHostility = true;
-    private int chunkLoadSize = YAMLManager.getConfig("config").getInt("ChunkLoadArea");
+    //public boolean enableEnderChest = true;
+    //public boolean enableHostility = true;
+
     CraftPlayer craftOwner;
     ServerPlayer owner;
     ServerPlayer serverPlayer;
@@ -61,6 +68,8 @@ public class DollManager extends ServerPlayer {
     EntityPlayerActionPack actionPack;
     DollManager serverPlayerDoll;
     CraftPlayer craftPlayerDoll;
+    public DollConfigManager configManager;
+    Monitor monitor;
 
     public DollManager(MinecraftServer server, ServerLevel level, GameProfile profile, ServerPlayer player, String skinName) {
         super(server, level, profile);
@@ -71,8 +80,15 @@ public class DollManager extends ServerPlayer {
         this.dollName = profile.getName().substring(PlayerDoll.getDollPrefix().length());
         this.dollSkin = skinName;
 
+
+
         this.serverPlayer = player;
 
+        this.spawnIn(this.serverLevel);
+        //this.gameMode.setLevel((ServerLevel)this.level());
+
+
+        //configManager.addListener(monitor);
 
         YamlConfiguration dollConfig = YAMLManager.getConfig(this.dollName);
         this.owner = (ServerPlayer) serverLevel.getPlayerByUUID(UUID.fromString(dollConfig.getString("Owner")));
@@ -85,9 +101,6 @@ public class DollManager extends ServerPlayer {
             dollConfig.set("Remove", false);
         }
 
-        if (this.chunkLoadSize == -1) {
-            this.chunkLoadSize = Bukkit.getViewDistance()+1;
-        }
 
         this.serverPlayerDoll = this;
         this.craftPlayerDoll = serverPlayerDoll.getBukkitEntity();
@@ -96,8 +109,13 @@ public class DollManager extends ServerPlayer {
         double pitch = player.getRotationVector().x;
 
 
+        configManager = new DollConfigManager(YAMLManager.getConfig(this.dollName));
+        monitor = new Monitor();
+
         this.serverPlayerDoll.setDollSkin();
+
         this.serverPlayerDoll.connection = new DollNetworkHandler(minecraftServer, new DollNetworkManager(PacketFlow.CLIENTBOUND), serverPlayerDoll);
+
 
         this.serverPlayerDoll.setHealth(20.0f);
         this.serverPlayerDoll.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(1.0D);
@@ -106,15 +124,33 @@ public class DollManager extends ServerPlayer {
         this.craftPlayerDoll.setMetadata("NPC", new FixedMetadataValue(PlayerDoll.getPlugin(), "NPC")); //Residence identifier
         this.craftPlayerDoll.setMetadata("DOLL", new FixedMetadataValue(PlayerDoll.getPlugin(), "DOLL")); //Doll identifier
 
-        //this.craftPlayerDoll.getPersistentDataContainer().set(new NamespacedKey(PlayerDoll.getPlugin(), "DOLL"), PersistentDataType.STRING, serverPlayerDoll.displayName);
-        //this.craftPlayerDoll.getPersistentDataContainer().set(new NamespacedKey(PlayerDoll.getPlugin(), "OWNER"), PersistentDataType.STRING, owner.getStringUUID());
 
-        this.serverPlayerDoll.initialDollInventoryMetadata();
+
         this.serverPlayerDoll.updateServerPlayerList();
 
         this.server.getPlayerList().respawn(this, serverLevel, true, serverPlayer.getBukkitEntity().getLocation(), true, PlayerRespawnEvent.RespawnReason.PLUGIN);
 
         PlayerDoll.dollManagerMap.put(this.dollProfile.getName(), serverPlayerDoll);
+
+
+        this.connection.handleClientInformation(new ServerboundClientInformationPacket("en_US",Bukkit.getViewDistance(), ChatVisiblity.HIDDEN,false,0x00, HumanoidArm.RIGHT,false,false));
+
+
+        this.connection.send(new ClientboundLoginPacket(this.getId(), this.minecraftServer.isHardcore(), this.gameMode.getGameModeForPlayer(), this.gameMode.getPreviousGameModeForPlayer(), this.server.levelKeys(), this.minecraftServer.getPlayerList().getServer().registryAccess(), this.level().dimensionTypeId(), this.level().dimension(), BiomeManager.obfuscateSeed(this.serverLevel.getSeed()), this.minecraftServer.getMaxPlayers(), this.serverLevel.spigotConfig.viewDistance, this.serverLevel.spigotConfig.simulationDistance, this.getServer().getGameRules().getBoolean(GameRules.RULE_REDUCEDDEBUGINFO), !this.getServer().getGameRules().getBoolean(GameRules.RULE_DO_IMMEDIATE_RESPAWN), this.serverLevel.isDebug(), this.serverLevel.isFlat(), this.getLastDeathLocation(), this.getPortalCooldown()));
+
+
+
+        //this.getBukkitEntity().sendSupportedChannels();
+        this.connection.send(new ClientboundPlayerAbilitiesPacket(this.getAbilities()));
+        this.connection.send(new ClientboundSetCarriedItemPacket(this.getInventory().selected));
+        this.server.invalidateStatus();
+        //this.sendServerStatus(this.server.getStatus());
+
+        //this.sentListPacket = true;
+        //this.minecraftServer.getPlayerList().sendLevelInfo(this,this.serverLevel);
+
+        //this.level().getChunk(this.chunkPosition().x,this.chunkPosition().z);
+       // this.connection.send(new ClientboundLevelChunkWithLightPacket(this.serverLevel().getChunkIfLoaded(this.chunkPosition().x,this.chunkPosition().z), this.level().getLightEngine(),null,null));
 
 
         Bukkit.getPluginManager().callEvent(new PlayerJoinEvent(craftPlayerDoll, null));
@@ -130,31 +166,26 @@ public class DollManager extends ServerPlayer {
         //this.connection.send(new ClientboundSetChunkCacheRadiusPacket(Bukkit.getViewDistance()));
 
 
-        if (this.enableChunkLoad) {
-            if (this.chunkLoadSize > 0) {
-                this.serverLevel.getChunkSource().addRegionTicket(TicketType.PLAYER, this.chunkPosition(), this.chunkLoadSize, this.chunkPosition());
-            }
-        }
 
         serverPlayerDoll.getEntityData().refresh(serverPlayerDoll);
 
 
-        this.craftPlayerDoll.setNoDamageTicks(0);
+        //this.craftPlayerDoll.setNoDamageTicks(0);
         this.setHealth(20.0f);
         this.getFoodData().setFoodLevel(20);
         this.getFoodData().setExhaustion(0.0f);
         this.getFoodData().setSaturation(0.0f);
         this.craftPlayerDoll.setCollidable(false);
-        this.setMaxUpStep(0.6f);
+        //this.setMaxUpStep(0.6f);
         this.entityData.set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) 0x7f);
 
         this.serverPlayerDoll.setDollLookAt();
 
         this.actionPack = new EntityPlayerActionPack(serverPlayerDoll);
 
-        this.loadFlags();
+        //this.loadFlags();
+        this.serverLevel.getChunkSource().addRegionTicket(TicketType.PLAYER, this.chunkPosition(), Bukkit.getViewDistance(), this.chunkPosition());
 
-        System.out.println(serverPlayerDoll);
     }
 
     private void setDollSkin() {
@@ -200,16 +231,109 @@ public class DollManager extends ServerPlayer {
 
     }
 
-    private void initialDollInventoryMetadata() {
-        ////craftPlayerDoll.setMetadata("DollArmorMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new ArmorMenu(craftPlayerDoll)));
-        //craftPlayerDoll.setMetadata("DollHotbarMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new HotbarMenu(craftPlayerDoll)));
-        //craftPlayerDoll.setMetadata("DollInvenMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new BackpackMenu(craftPlayerDoll)));
-        craftPlayerDoll.setMetadata("DollInvenMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new BackpackMenu_(craftPlayerDoll)));
-        craftPlayerDoll.setMetadata("DollEnderChestMenu", new FixedMetadataValue(PlayerDoll.getPlugin(), new EnderChestMenu(craftPlayerDoll)));
+    /*
+    private void setDollSkin() {
+        if (!onlinemode) {
+            return;
+        }
+        String skinName = dollSkin;
+        YamlConfiguration dollConfig = YAMLManager.getConfig(this.dollName);
+        Map<String,String> skinData = new HashMap<>();
+
+
+
+        ConfigurationSection dollSkinData = dollConfig.getConfigurationSection("SkinData");
+
+
+        if (dollSkinData != null && (skinName == null || dollSkinData.getString("Name").equalsIgnoreCase(skinName))) {
+            System.out.println("get cache");
+
+            String model = "";
+            if (dollSkinData.getString("Model").equalsIgnoreCase("slim")) {
+                model = """
+                              "metadata" : {
+                                "model" : "slim"
+                              }
+                        """;
+            }
+            String cape = "";
+            if (!dollSkinData.getString("Cape").equalsIgnoreCase("")) {
+                cape = ",\n    \"CAPE\" : {\n" +
+                        "      \"url\" : \""+ new String(Base64.getDecoder().decode(dollSkinData.getString("Cape")),StandardCharsets.UTF_8) +"\"\n" +
+                        "    }";
+            }
+
+
+            String jsonData = "{\n" +
+                    "  \"timestamp\" : "+ dollSkinData.getString("timestamp") + ",\n" +
+                    "  \"profileId\" : \""+ dollSkinData.getString("profileId") +"\",\n" +
+                    "  \"profileName\" : \""+ dollSkinData.getString("Name") +"\",\n" +
+                    "  \"signatureRequired\" : true,\n" +
+                    "  \"textures\" : {\n" +
+                    "    \"SKIN\" : {\n" +
+                    "      \"url\" : \"" + new String(Base64.getDecoder().decode(dollSkinData.getString("Skin")),StandardCharsets.UTF_8) + "\",\n" +
+                            model +
+                    "    }" +
+                        cape + "\n" +
+                    "  }\n" +
+                    "}";
+
+            System.out.println(Base64.getEncoder().encodeToString(jsonData.getBytes(StandardCharsets.UTF_8)));
+
+            this.dollSkin = dollSkinData.getString("Name");
+
+            dollProfile.getProperties().put("textures", new Property("textures", Base64.getEncoder().encodeToString(jsonData.getBytes(StandardCharsets.UTF_8)), dollSkinData.getString("Signature")));
+
+            return;
+        }
+        skinName = dollSkin == null ? owner.displayName : dollSkin;
+        try {
+            URL url_playerName = new URL("https://api.mojang.com/users/profiles/minecraft/" + skinName);
+            String uuid = JsonParser.parseReader(new InputStreamReader(url_playerName.openStream())).getAsJsonObject().get("id").getAsString();
+
+            URL url_skinTexture = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
+            JsonObject textureProperty = JsonParser.parseReader(new InputStreamReader(url_skinTexture.openStream())).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
+            String texture = textureProperty.get("value").getAsString();
+            String signature = textureProperty.get("signature").getAsString();
+
+            JsonObject profile = JsonParser.parseReader(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(texture)))).getAsJsonObject();
+            JsonObject profileTexture = profile.getAsJsonObject("textures");
+            JsonObject profileSkin = profileTexture.getAsJsonObject("SKIN");
+
+
+            String skinImage = profileSkin.get("url").getAsString();
+            String model = profileSkin.has("metadata")? "slim" : "";
+            String capeImage = profileTexture.has("CAPE") ? profileTexture.getAsJsonObject("CAPE").get("url").getAsString() : null;
+            String profileId = profile.get("profileId").getAsString();
+            String timestamp = profile.get("timestamp").getAsString();
+
+            dollProfile.getProperties().put("textures", new Property("textures", texture, signature));
+            //dollProfile.getProperties().put("textures", new Property("textures", texture, null));
+            skinName = profile.get("profileName").getAsString();
+            skinData.put("Name",skinName);
+            skinData.put("Skin",Base64.getEncoder().encodeToString(skinImage.getBytes(StandardCharsets.UTF_8)));
+            if (capeImage != null) {
+                skinData.put("Cape", Base64.getEncoder().encodeToString(capeImage.getBytes(StandardCharsets.UTF_8)));
+            } else {
+                skinData.put("Cape", "");
+            }
+            skinData.put("Model",model);
+            skinData.put("Signature",signature);
+            skinData.put("profileId",profileId);
+            skinData.put("timestamp",timestamp);
+            this.dollSkin = skinName;
+            dollConfig.set("SkinData",skinData);
+
+        } catch (IOException e) {
+            System.err.println("Could not get skin data from session servers!");
+            e.printStackTrace();
+        }
+
     }
+     */
 
     public void setDollLookAt() {
-        craftPlayerDoll.setRotation(serverPlayer.getBukkitEntity().getLocation().getYaw(), serverPlayer.getBukkitEntity().getLocation().getPitch());
+        //craftPlayerDoll.setRotation(serverPlayer.getBukkitEntity().getLocation().getYaw(), serverPlayer.getBukkitEntity().getLocation().getPitch());
 
         float yaw = ((serverPlayer.getBukkitEntity().getLocation().getYaw() % 360) * 256 / 360);
         float pitch = ((serverPlayer.getBukkitEntity().getLocation().getPitch() % 360) * 256 / 360);
@@ -236,12 +360,10 @@ public class DollManager extends ServerPlayer {
             this.actionPack.onUpdate();
             super.tick();
             this.doTick();
-            if (this.serverPlayerDoll.chunkPosition() != this.dollChunkPos && this.enableChunkLoad && this.chunkLoadSize > 0) {
-                this.serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
+            if (this.serverPlayerDoll.chunkPosition() != this.dollChunkPos) {
+                this.serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, Bukkit.getViewDistance(), this.dollChunkPos);
                 this.dollChunkPos = this.chunkPosition();
-                this.serverLevel.getChunkSource().addRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
-
-                //this.connection.send(new ClientboundSetChunkCacheCenterPacket(this.chunkPosition().x,this.chunkPosition().z));
+                this.serverLevel.getChunkSource().addRegionTicket(TicketType.PLAYER, this.dollChunkPos, Bukkit.getViewDistance(), this.dollChunkPos);
             }
             if (serverLevel != this.serverLevel()) {
                 serverLevel = this.serverLevel();
@@ -305,7 +427,7 @@ public class DollManager extends ServerPlayer {
 
     @Override
     public boolean canBeSeenAsEnemy() {
-        return this.enableHostility && super.canBeSeenAsEnemy();
+        return YAMLManager.getConfig(this.dollName).getBoolean("setting.Hostility.toggle") && super.canBeSeenAsEnemy();
     }
 
 
@@ -317,13 +439,14 @@ public class DollManager extends ServerPlayer {
 
     @Override
     public void disconnect() {
-        this.saveFlags();
+        //this.saveFlags();
         this.setHealth(20.0f);
         super.disconnect();
         this.server.getPlayerList().broadcastAll(new ClientboundPlayerInfoRemovePacket(Collections.singletonList(this.getUUID())));
-        //serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
         serverLevel.removePlayerImmediately(this, RemovalReason.DISCARDED);
         this.connection.onDisconnect(Component.literal("Disconnected"));
+        monitor.property.removeListener(monitor);
+        //configManager.removeListener(monitor);
     }
 
     @Override
@@ -340,9 +463,7 @@ public class DollManager extends ServerPlayer {
             connection.handleClientCommand(p);
         }
         if (connection.player.isChangingDimension()) {
-            //this.connection.send(new ClientboundSetChunkCacheCenterPacket(this.chunkPosition().x,this.chunkPosition().z));
-            //this.connection.send(new ClientboundSetChunkCacheRadiusPacket(Bukkit.getViewDistance()));
-            serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, this.chunkLoadSize, this.dollChunkPos);
+            serverLevel.getChunkSource().removeRegionTicket(TicketType.PLAYER, this.dollChunkPos, Bukkit.getViewDistance(), this.dollChunkPos);
             connection.player.hasChangedDimension();
         }
         return this;
@@ -357,15 +478,35 @@ public class DollManager extends ServerPlayer {
     }
     public Player getOwner() {return this.craftOwner;}
 
+    class Monitor implements PropertyChangeListener {
+        private DollConfigManager property;
+        public Monitor() {
+            property = DollManager.this.configManager;
+            property.addListener(this);
+        }
+        final Map<String, Consumer<Boolean>> settings = new HashMap<>() {{
+           put("setting.Invulnerable", (b)->serverPlayerDoll.getBukkitEntity().setNoDamageTicks(b?Integer.MAX_VALUE:0));
+           put("setting.Glow", (b)->serverPlayerDoll.setGlowingTag(b));
+           put("setting.Large Step Size", (b)->serverPlayerDoll.setMaxUpStep(b?1.0f:0.6f));
+           put("setting.Pushable", (b)->serverPlayerDoll.getBukkitEntity().setCollidable(b));
+           put("setting.Gravity", (b)->serverPlayerDoll.setNoGravity(!b));
+        }};
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            //Trigger when changes
+            if (settings.containsKey(evt.getPropertyName())) {
+                settings.get(evt.getPropertyName()).accept((Boolean) evt.getNewValue());
+            }
+        }
+    }
+    /*
     private void loadFlags() {
         YAMLManager.getConfig(this.dollName).getConfigurationSection("setting").getValues(true).forEach((k,v) -> {
             if (k.endsWith(".toggle")) {
                 String[] split = k.split("\\.");
                 boolean bool = (boolean) v;
                 switch (split[0]) {
-                    //case "Inventory" -> this.enableInventory = bool;
                     case "Ender Chest" -> this.enableEnderChest = bool;
-                    case "Chunk Load" -> this.enableChunkLoad = bool;
                     case "Invulnerable" -> craftPlayerDoll.setNoDamageTicks(bool? Integer.MAX_VALUE:0);
                     case "Hostility" -> this.enableHostility = bool;
                     case "Pushable" -> craftPlayerDoll.setCollidable(bool);
@@ -382,9 +523,7 @@ public class DollManager extends ServerPlayer {
             if (k.endsWith(".toggle")) {
                 String[] split = k.split("\\.");
                 switch (split[0]) {
-                    //case "Inventory" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableInventory);
                     case "Ender Chest" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableEnderChest);
-                    case "Chunk Load" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableChunkLoad);
                     case "Invulnerable" -> dollConfig.set("setting."+ split[0] +".toggle",craftPlayerDoll.getNoDamageTicks() > 20);
                     case "Hostility" -> dollConfig.set("setting."+ split[0] +".toggle",this.enableHostility);
                     case "Pushable" -> dollConfig.set("setting."+ split[0] +".toggle",craftPlayerDoll.isCollidable());
@@ -395,4 +534,6 @@ public class DollManager extends ServerPlayer {
             }
         } );
     }
+
+     */
 }

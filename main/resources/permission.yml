@@ -1,16 +1,36 @@
 ### NOT IMPLEMENTED
 ### NOT IMPLEMENTED
-default:
-  permissionlevel: 0
-  Players: #Add players' uuid here
-    #- Player1
-    #- Player2
+version: 0.0.1
+# This will allow/disallow what player can see/use in SettingMenu and Command.
+PermissionGroup:
+  - default
+  - admin # You will be admin when you are OP
+  # - custom group
 
-#Example permission group
-admin:
-  permissionlevel: 100 # Show all setting that has lower Permission level
-  Players:
-    #- Admin1
+'Ender Chest':
+  - default
+Invulnerable:
+  - default
+Hostility:
+  - default
+Pushable:
+  - default
+Gravity:
+  - default
+Glow:
+  - default
+'Large Step Size':
+  - default
+Attack:
+  - default
+Use:
+  - default
+Copy:
+  - default
+Mount:
+  - default
+Dismount:
+  - default
 
 ### NOT IMPLEMENTED
 ### NOT IMPLEMENTED

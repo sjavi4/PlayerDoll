@@ -1,15 +1,13 @@
 package me.autobot.playerdoll.Command.SubCommand.operations;
 
 import me.autobot.playerdoll.Command.SubCommandHandler;
+import me.autobot.playerdoll.Configs.TranslateFormatter;
 import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Configs.TranslateFormatter;
 import me.autobot.playerdoll.PlayerDoll;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class remove implements SubCommandHandler {
@@ -23,8 +21,7 @@ public class remove implements SubCommandHandler {
             player.sendMessage(TranslateFormatter.stringConvert("NoPermission",'&'));
             return;
         }
-
-        YAMLManager.getConfig(dollName).set("Remove",true);
+        PlayerDoll.dollManagerMap.get(PlayerDoll.getDollPrefix() + dollName).configManager.getData().put("Remove",true);
         doll.kill();
     }
 

@@ -2,7 +2,6 @@ package me.autobot.playerdoll.Command.SubCommand.operations;
 
 import me.autobot.playerdoll.Command.SubCommandHandler;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Configs.TranslateFormatter;
 import org.bukkit.entity.Player;
 
 import java.util.List;

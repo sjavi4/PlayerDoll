@@ -2,14 +2,9 @@ package me.autobot.playerdoll.Events;
 
 import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.PlayerDoll;
-import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.persistence.PersistentDataType;
 
 public class DollDieEvent implements Listener {
     @EventHandler

@@ -2,7 +2,9 @@ package me.autobot.playerdoll.Command.SubCommand.actions;
 
 import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.Command.SubCommandHandler;
+import me.autobot.playerdoll.Configs.TranslateFormatter;
 import me.autobot.playerdoll.Dolls.DollManager;
+import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -15,6 +17,11 @@ public class use implements SubCommandHandler {
 
         DollManager doll = SubCommandHandler.checkDoll(player, dollName);
         if (doll == null) {return;}
+
+        if (!(Boolean) PlayerDoll.dollManagerMap.get(PlayerDoll.getDollPrefix() + dollName).configManager.getData().get("setting.Use")) {
+            player.sendMessage(TranslateFormatter.stringConvert("DisabledCommand",'&'));
+            return;
+        }
         //Check permission
         //use [once/interval/periodic/hold] [null/tick/tick/tick]
         int arg1 = _args[2] == null ? 20 : Integer.parseInt(_args[2]);

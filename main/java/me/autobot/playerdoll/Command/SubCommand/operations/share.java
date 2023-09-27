@@ -1,16 +1,14 @@
 package me.autobot.playerdoll.Command.SubCommand.operations;
 
 import me.autobot.playerdoll.Command.SubCommandHandler;
+import me.autobot.playerdoll.Configs.TranslateFormatter;
 import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Configs.TranslateFormatter;
 import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,15 +31,15 @@ public class share implements SubCommandHandler {
             player.sendMessage(TranslateFormatter.stringConvert("PlayerNotExist",'&'));
             return;
         }
-        YamlConfiguration dollConfig = YAMLManager.getConfig(dollName);
-        List<String> shareList = dollConfig.getStringList("Share");
+        //YamlConfiguration dollConfig = YAMLManager.getConfig(dollName);
+        List<String> shareList = (List<String>) PlayerDoll.dollManagerMap.get(PlayerDoll.getDollPrefix() + dollName).configManager.getData().get("Share");
         if (shareList.contains(arg1.getUniqueId().toString())) {
             player.sendMessage(TranslateFormatter.stringConvert("PlayerAlreadyInShare", '&', "%player%", arg1.getName(), "%doll%", PlayerDoll.getDollPrefix() + doll.getDollName()));
             return;
         }
         player.sendMessage(TranslateFormatter.stringConvert("AddShare", '&', "%player%", arg1.getName(), "%doll%", PlayerDoll.getDollPrefix() + doll.getDollName()));
         shareList.add(arg1.getUniqueId().toString());
-        dollConfig.set("Share", shareList);
+        PlayerDoll.dollManagerMap.get(PlayerDoll.getDollPrefix() + dollName).configManager.getData().put("Share",shareList);
 
     }
 

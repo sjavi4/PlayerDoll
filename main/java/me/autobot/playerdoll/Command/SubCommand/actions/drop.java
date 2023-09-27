@@ -19,7 +19,7 @@ public class drop implements SubCommandHandler {
         int arg1 = -1;
         if (_args[1] != null) {
             if (_args[1].matches("\\d+")) {
-                int num = Integer.parseInt(_args[2]);
+                int num = Integer.parseInt(_args[1]);
                 if (num < 1 && num > 36) {
                     arg1 = -1;
                 } else {
