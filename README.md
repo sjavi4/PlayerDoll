@@ -10,5 +10,3 @@ You can access doll's setting panel by using empty hand and shift + right click 
 
 same as /doll <dollname> set
 
-
-Need Help for Chunk loading method in NMS (vanilla player chunk loading)
