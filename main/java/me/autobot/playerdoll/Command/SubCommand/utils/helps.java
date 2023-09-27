@@ -19,7 +19,7 @@ public class helps implements SubCommandHandler {
         langFile.getConfigurationSection("helpCommand").getValues(false).forEach((k,v) -> {
             String desc = langFile.getString("helpCommand."+k+".desc");
             TextComponent hoverText = new TextComponent(ChatColor.GREEN + k + ": " + TranslateFormatter.stringTranslate(desc,'&'));
-            hoverText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TranslateFormatter.stringTranslate(langFile.getString("help."+k+".usage"),'&')).create()));
+            hoverText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(TranslateFormatter.stringTranslate(langFile.getString("helpCommand."+k+".usage"),'&')).create()));
             player.spigot().sendMessage(hoverText);
         });
     }
