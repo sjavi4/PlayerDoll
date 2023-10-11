@@ -133,10 +133,10 @@ public class DollManager extends ServerPlayer {
         PlayerDoll.dollManagerMap.put(this.dollProfile.getName(), serverPlayerDoll);
 
 
-        this.connection.handleClientInformation(new ServerboundClientInformationPacket("en_US",Bukkit.getViewDistance(), ChatVisiblity.HIDDEN,false,0x00, HumanoidArm.RIGHT,false,false));
+        //this.connection.handleClientInformation(new ServerboundClientInformationPacket("en_US",Bukkit.getViewDistance(), ChatVisiblity.HIDDEN,false,0x00, HumanoidArm.RIGHT,false,false));
 
 
-        this.connection.send(new ClientboundLoginPacket(this.getId(), this.minecraftServer.isHardcore(), this.gameMode.getGameModeForPlayer(), this.gameMode.getPreviousGameModeForPlayer(), this.server.levelKeys(), this.minecraftServer.getPlayerList().getServer().registryAccess(), this.level().dimensionTypeId(), this.level().dimension(), BiomeManager.obfuscateSeed(this.serverLevel.getSeed()), this.minecraftServer.getMaxPlayers(), this.serverLevel.spigotConfig.viewDistance, this.serverLevel.spigotConfig.simulationDistance, this.getServer().getGameRules().getBoolean(GameRules.RULE_REDUCEDDEBUGINFO), !this.getServer().getGameRules().getBoolean(GameRules.RULE_DO_IMMEDIATE_RESPAWN), this.serverLevel.isDebug(), this.serverLevel.isFlat(), this.getLastDeathLocation(), this.getPortalCooldown()));
+        //this.connection.send(new ClientboundLoginPacket(this.getId(), this.minecraftServer.isHardcore(), this.gameMode.getGameModeForPlayer(), this.gameMode.getPreviousGameModeForPlayer(), this.server.levelKeys(), this.minecraftServer.getPlayerList().getServer().registryAccess(), this.level().dimensionTypeId(), this.level().dimension(), BiomeManager.obfuscateSeed(this.serverLevel.getSeed()), this.minecraftServer.getMaxPlayers(), this.serverLevel.spigotConfig.viewDistance, this.serverLevel.spigotConfig.simulationDistance, this.getServer().getGameRules().getBoolean(GameRules.RULE_REDUCEDDEBUGINFO), !this.getServer().getGameRules().getBoolean(GameRules.RULE_DO_IMMEDIATE_RESPAWN), this.serverLevel.isDebug(), this.serverLevel.isFlat(), this.getLastDeathLocation(), this.getPortalCooldown()));
 
 
 
@@ -346,7 +346,7 @@ public class DollManager extends ServerPlayer {
     private void updateServerPlayerList() {
         this.server.getPlayerList().broadcastAll(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
         this.server.getPlayerList().broadcastAll(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
-        this.server.getPlayerList().broadcastAll(new ClientboundAddPlayerPacket(this));
+        //this.server.getPlayerList().broadcastAll(new ClientboundAddPlayerPacket(this));
     }
 
 
