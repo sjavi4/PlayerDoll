@@ -1,0 +1,36 @@
+### NOT IMPLEMENTED
+### NOT IMPLEMENTED
+version: 0.0.3
+# This will allow/disallow what player can see/use in SettingMenu and Command.
+PermissionGroup:
+  - default
+  - admin # You will be admin when you are OP
+  # - custom group
+
+'Ender Chest':
+  - default
+Invulnerable:
+  - default
+Hostility:
+  - default
+Pushable:
+  - default
+Gravity:
+  - default
+Glow:
+  - default
+'Large Step Size':
+  - default
+Attack:
+  - default
+Use:
+  - default
+Copy:
+  - default
+Mount:
+  - default
+Dismount:
+  - default
+
+### NOT IMPLEMENTED
+### NOT IMPLEMENTED
