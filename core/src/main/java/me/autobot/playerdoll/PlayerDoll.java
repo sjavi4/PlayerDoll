@@ -165,18 +165,7 @@ public final class PlayerDoll extends JavaPlugin {
         String mod = config.getString("Global.Mod");
         if (mod == null || mod.isEmpty() || mod.isBlank()) {
             System.out.println("Auto-detecting Server Mod:" +getServer().getName());
-            if (isFolia()) {
-                PlayerDoll.isFolia = true;
-                return;
-            }
-            switch (getServer().getName().toLowerCase()) {
-                case "craftbukkit" -> PlayerDoll.isSpigot = true;
-                case "purpur", "paper" -> PlayerDoll.isPaperSeries = true;
-                default -> {
-                    System.out.println("Unknown mod, Disabled Plugin.");
-                    getPluginLoader().disablePlugin(this);
-                }
-            }
+            modCheck();
         } else {
             switch (mod.toLowerCase()) {
                 case "spigot" -> PlayerDoll.isSpigot = true;
@@ -206,12 +195,21 @@ public final class PlayerDoll extends JavaPlugin {
             }
         });
     }
-    private boolean isFolia() {
+    private boolean getClass(String className) {
         try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            Class.forName(className);
             return true;
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ignored) {
             return false;
+        }
+    }
+    private void modCheck() {
+        if (getClass("io.papermc.paper.threadedregions.RegionizedServer")) {
+            isFolia = true;
+        } else if (getClass("com.destroystokyo.paper.PaperConfig") || getClass("io.papermc.paper.configuration.Configuration")) {
+            isPaperSeries = true;
+        } else if (getClass(("org.spigotmc.SpigotConfig"))) {
+            isSpigot = true;
         }
     }
 }
