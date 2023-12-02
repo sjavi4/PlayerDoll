@@ -1,0 +1,26 @@
+### NOT IMPLEMENTED
+### NOT IMPLEMENTED
+version: 0.0.9
+# This will allow/disallow what player can see/use in SettingMenu and Command.
+PermissionGroup:
+  - default
+# admin bypass all permission
+  # - custom group
+
+default:
+  MaxDoll: 5
+  Flags:
+    # add . to the start represent disable
+    # if not state, it will enable by default
+    - Ender Chest
+    - Pushable
+    - Glow
+    - Gravity
+    - Large Step Size
+    - Phantom
+    - ActionCommand
+    - .Invulnerable
+    - .Hostility
+
+### NOT IMPLEMENTED
+### NOT IMPLEMENTED

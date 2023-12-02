@@ -1,0 +1,230 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 0.0.9
+
+###
+# &0 black
+# &1 dark_blue
+# &2 dark_green
+# &3 dark_aqua
+# &4 dark_red
+# &5 dark_purple
+# &6 gold
+# &7 gray
+# &8 dark_gray
+# &9 blue
+# &a green
+# &b aqua
+# &c red
+# &d light_purple
+# &e yellow
+# &f white
+#
+# &k obfuscated
+# &l bold
+# &m strikethrough
+# &n underline
+# &o italic
+# &r reset
+#
+# $n new line (lang file only)
+###
+
+#Commands
+CommandRequirePlayer: '&cCommand must be performed by player.'
+PlayerNoPermission: '&cYou do not have permission to do that.'
+DollNotExist: '&cDoll does not exist.'
+ServerReachMaxPlayer: '&cOnline players reached max-player in server.'
+DollCapacityIsFull: '&cDoll capacity is full.'
+LongDollName: '&cDoll name should not exceed %a% letters.'
+InUseDollName: '&cDoll %a% is in use.'
+RepeatDollName: '&cDoll name %a% has been used.'
+IllegalDollName: '&cOnly accept &n[0-9;a-z;A-Z;_]&r as doll name.'
+PreservedDollName: '&cCannot use preserved names %a%.'
+CopiedDollUUID: 'Copied Doll UUID:&a %a%'
+PlayerNotInShareList: "&c%a% does not exist in %b%'s Share list."
+PlayerAlreadyInShareList: "&c%a% already existed in %b%'s Share list."
+AddShare: "&aAppended %a% to %b%'s Share list."
+DelShare: "&aRemoved %a% from %b%'s Share list."
+PlayerRenameSucceed: '&aDoll has been Renamed from %a% to %b%'
+PlayerRenameFailed: '&cDoll Rename failed.'
+PlayerNotExist: '&cPlayer does not exist.'
+PlayerCreateTooMuchDoll: '&cReached Doll Creation Limit &n(%a%)&r.'
+PlayerCreateSucceed: '&aDoll %a% create successfully.'
+PlayerSpawnRemovedDoll: '&cDoll has been Removed, please re-create the Doll.'
+PlayerExecuteOnlineDoll: '&cThis command cannot be performed when doll online.'
+PlayerExecuteRemovedDoll: '&cThis command cannot be performed when doll removed.'
+TargetPlayerInvalid: '&cDoll cannot be used as target.'
+CommandMissingTarget: '&cSpecify a target.'
+DollGiver: '&aDoll was given to %a%.'
+DollGetter: '&aDoll was gotten from %a%.'
+
+WrongArgument: '&cWrong Arguments'
+ReloadPlugin: 'Reload Configs'
+CommandNotExist: '&cCommand %a% not Exist.'
+InvokeCommandFail: '&cException while calling Command.'
+
+DisabledCommand: '&cThis command has been disabled.'
+
+controlButton:
+  back: '&fback'
+  hint: '&2Left Click to Enable$n&cRight Click to Disable'
+
+menuTitle:
+  setting: "&l&e%a%'s setting"
+  main: '&l&e%a%'
+  inventory: "&l&e%a%'s inventory"
+  backpack: "&l&e%a%'s backpack"
+
+mainmenu:
+  uuid: '&eUUID:%a%'
+  owner: '&5Owner:%a% (%b%)'
+  hp: '&4HP:%a%/%b%'
+  hunger: '&2Hunger:%a%/%b%'
+  gamemode: '&7Gamemode:%a%'
+  copy: '&fClick to copy UUID to clipboard'
+
+  setting: '&9Settings'
+  inventory: '&9Inventory'
+  offline: '&cOffline'
+  remove: '&cRemove'
+
+settingmenu:
+  'Ender Chest':
+    name: 'Ender Chest'
+    desc: '&fEnable Ender chest Access for players'
+  Invulnerable:
+    name: 'Invulnerable'
+    desc: "&fSet doll immutable to damage and projectile"
+  Hostility:
+    name: 'Hostility'
+    desc: "&fSet doll being target by mobs"
+  Pushable:
+    name: 'Pushable'
+    desc: "&fEnable doll being push"
+  Gravity:
+    name: 'Gravity'
+    desc: "&fEnable falling from air"
+  Glow:
+    name: 'Glow'
+    desc: "&fEnable Highlighting effects"
+  'Large Step Size':
+    name: 'Large Step Size'
+    desc: "&fStep up to 1 or 0.6 block high"
+  Attack:
+    name: 'Attack'
+    desc: "&fEnable Attack function"
+  Use:
+     name: 'Use'
+     desc: "&fEnable Use function"
+  Mount:
+    name: 'Mount'
+    desc: "&fEnable Mount function"
+  Dismount:
+    name: 'Dismount'
+    desc: "&fEnable Dismount function"
+  Copy:
+    name: 'Copy'
+    desc: "&fEnable Copy function"
+  Phantom:
+    name: 'Phantom Spawn'
+    desc: '&fEnable phantom spawn at Doll'
+  ActionCommand:
+    name: 'Action Command'
+    desc: '&fEnable perform actions through command'
+  Join At Start:
+    name: 'Join At Start'
+    desc: '&fWeather Doll will automatically join when server start'
+
+inventorymenu:
+  armor_offhand: '%3Armors&Off-hand'
+  hotbar: '&cHot-bar'
+  inventory: '&7Inventory'
+  enderchest: '&dEnder Chest'
+  levelUp: '&eEXP Point'
+  level: '&eLevel:%a%'
+  levelGet: "&aClick to retrieve EXP points of 1 Level"
+
+helpCommand:
+  create:
+    desc: '&6Register Doll to server'
+    usage: '&e<DollName> &6create &f[skinName]'
+  spawn:
+    desc: '&6Call registered Doll at player position'
+    usage: '&e<DollName> &6spawn &f[gridded]'
+  despawn:
+    desc: '&6Offline Doll without Data loss'
+    usage: '&e<DollName> &6despawn'
+  remove:
+    desc: '&6Remove Doll with Data loss'
+    usage: '&e<DollName> &6remove'
+  tp:
+    desc: '&6Teleport Doll to player'
+    usage: '&e<DollName> &6tp &f[gridded]'
+  menu:
+    desc: "&6Open Doll's menu"
+    usage: '&e<DollName> &6menu'
+  share:
+    desc: '&6Share Doll permission to player'
+    usage: '&e<DollName> &6share &e<PlayerName>'
+  unshare:
+    desc: '&6Take back Doll permission from player'
+    usage: '&e<DollName> &6unshare &e<PlayerName>'
+  attack:
+    desc: "&6Makes Doll attacks towards it's line of sight"
+    usage: '&e<DollName> &6attack &f[once/continuous]$n&e<DollName> &6attack &f[interval] [interval] [offset]'
+  use:
+    desc: "&6Makes Doll interacts towards it's line of sight"
+    usage: '&e<DollName> &6use &f[once/continuous]$n&e<DollName> &6use &f[interval] [interval] [offset]'
+  copy:
+    desc: "&6Copy other Doll's action to Doll"
+    usage: '&e<DollName> &6copy &e<DollName>'
+  stop:
+    desc: '&6Stop Doll Action'
+    usage: '&e<DollName> &6stop &f[all/movement]'
+  slot:
+    desc: '&6Set Handheld Slot'
+    usage: '&e<DollName> &6slot &f[1-9]'
+  drop:
+    desc: '&6Drop Item from Slot'
+    usage: '&e<DollName> &6drop &f[1-36/helmet/chestplate/leggings/boots/offhand/everything] [stack]$n&e<DollName> &6drop &f[once/continuous] [stack]$n&e<DollName> &6drop &f[interval] [stack] [interval] [offset]'
+  sneak:
+    desc: '&6Toggle Doll to (un)sneak'
+    usage: '&e<DollName> &6sneak &f[true/false]'
+  sprint:
+    desc: '&6Toggle Doll to (un)sprint'
+    usage: '&e<DollName> &6sprint &f[true/false]'
+  mount:
+    desc: '&6Set Doll rides on nearby vehicle/entity'
+    usage: '&e<DollName> &6mount'
+  dismount:
+    desc: '&6Set Doll gets off from current vehicle/entity'
+    usage: '&e<DollName> &6dismount'
+  turn:
+    desc: "&6Rotate Doll's camera by a certain degree of yaw(horizontal) and pitch(vertical)"
+    usage: '&e<DollName> &6turn &e<[+/-]yaw> <[+/-]pitch>'
+  look:
+    desc: "&6Set Doll's camera to specific orientation"
+    usage: '&e<DollName> &6look &e<[+/-]yaw> <[+/-]pitch>$n&e<DollName> &6look &e<direction/player>'
+  lookat:
+    desc: "&6Set Doll's camera towards player/coordinates"
+    usage: '&e<DollName> &6lookat &e<X> <Y> <Z>$n&e<DollName> &6lookat &e<player>'
+  jump:
+    desc: '&6Set Doll jump'
+    usage: '&e<DollName> &6jump &f[once/continuous]$n&e<DollName> &6jump &f[interval] [interval] [offset]'
+  strafe:
+    desc: '&6Set Doll move towards left or right'
+    usage: '&e<DollName> &6strafe &f[left/right]'
+  move:
+    desc: '&6Set Doll move forwards or backwards'
+    usage: '&e<DollName> &6move &f[forwards/backwards]'
+  swap:
+    desc: '&6Swap Doll hands'
+    usage: '&e<DollName> &6 swap'
+
+commandPage:
+  footer: '&e-----Page %a% / %b%'
+
+commandList:
+  creationDate: '&eCreation Date: %a%'
+  owner: '&eOwner: %a%'
+  skin: '&eSkin: %a%'

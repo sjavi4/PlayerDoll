@@ -1,0 +1,56 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 0.0.9
+
+# Follows Permission.yml - PermissionGroup
+# Location - Where to show the setting
+# Personal - Per player setting, Global - global doll setting
+# Permission - Admin > custom permission Group >/< Player
+GlobalFlags:
+  Ender Chest:
+    Item: ENDER_EYE
+    Default: true
+
+  Invulnerable:
+    Item: TOTEM_OF_UNDYING
+    Default: false
+
+  Hostility:
+    Item: TARGET
+    Default: false
+
+  Pushable:
+    Item: ARMOR_STAND
+    Default: false
+
+  Gravity:
+    Item: GRAVEL
+    Default: true
+
+  Glow:
+    Item: GLOW_INK_SAC
+    Default: false
+
+  Large Step Size:
+    Item: STONE_STAIRS
+    Default: false
+
+  Phantom:
+    Item: PHANTOM_MEMBRANE
+    Default: false
+
+  Join At Start:
+    Item: RECOVERY_COMPASS
+    Default: false
+
+PersonalFlags:
+  Admin:
+    Item: WOODEN_PICKAXE
+    Default: false
+
+  ActionCommand:
+    Item: SHEARS
+    Default: false
+
+  Ender Chest:
+    Item: ENDER_EYE
+    Default: true
