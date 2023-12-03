@@ -6,42 +6,38 @@ import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.DollSpawnHelper;
 import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.newCommand.Helper.DollDataValidator;
 import me.autobot.playerdoll.newCommand.SubCommand;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import oshi.util.tuples.Pair;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class spawn extends SubCommand {
     Player player;
     String dollName;
     boolean inGrid;
+    public spawn() {
+    }
     public spawn(CommandSender sender, Object doll, Object args) {
-        super(MinPermission.Share,false);
-        String dollName = checkDollName(doll);
+        setPermission(MinPermission.Share,false);
+        this.dollName = checkDollName(doll);
         player = (Player) sender;
         if (!checkPermission(sender, dollName)) return;
-        if (PlayerDoll.dollManagerMap.containsKey(dollName)) {
-            player.sendMessage(LangFormatter.YAMLReplace("InUseDollName",'&', new Pair<>("%a%",dollName)));
-            return;
-        }
-        File file = new File(PlayerDoll.getDollDirectory(),dollName+".yml");
-        if (!file.exists()) {
-            player.sendMessage(LangFormatter.YAMLReplace("DollNotExist",'&'));
-            return;
-        }
+
+        DollDataValidator validator = new DollDataValidator(player,dollName,dollName.substring(1));
+
+        if (validator.isDollAlreadyOnline()) return;
+        if (validator.isDollConfigNotExist()) return;
+
         var yaml = YAMLManager.loadConfig(dollName,false);
         if (yaml == null) return;
         var config = yaml.getConfig();
 
-        this.dollName = dollName;
 
         var map = config.getConfigurationSection("setting").getValues(false);
         var flag = ConfigManager.configs.get("flag");
@@ -82,7 +78,17 @@ public class spawn extends SubCommand {
             throw new RuntimeException(e);
         }
     }
-    public static List<Object> tabSuggestion() {
+
+    @Override
+    public final ArrayList<String> targetSelection(UUID uuid) {
+        Set<String> set = new HashSet<>();
+        set.addAll(getOwnedDoll(uuid));
+        set.addAll(getSharedDoll(uuid));
+        getOnlineDoll().forEach(set::remove);
+        return new ArrayList<>(){{addAll(set);}};
+    }
+    @Override
+    public List<Object> tabSuggestion() {
         return List.of("inGrid");
     }
 }

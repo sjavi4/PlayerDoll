@@ -3,11 +3,12 @@ package me.autobot.playerdoll.newCommand.Execute;
 import me.autobot.playerdoll.CarpetMod.IEntityPlayerActionPack;
 import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.newCommand.Helper.DollDataValidator;
 import me.autobot.playerdoll.newCommand.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.*;
 
 public class drop extends SubCommand {
     Player player;
@@ -16,13 +17,14 @@ public class drop extends SubCommand {
     boolean all = false;
     int interval = 0;
     int offset = 0;
-
+    public drop() {}
     public drop(CommandSender sender, Object doll, Object args) {
-        super(MinPermission.Share, false);
+        setPermission(MinPermission.Share, false);
         String dollName = checkDollName(doll);
         if (!checkPermission(sender, dollName)) return;
         player = (Player) sender;
-        if (!isOnline(dollName)) return;
+        DollDataValidator validator = new DollDataValidator(player, dollName, dollName.substring(1));
+        if (validator.isDollOffline()) return;
         this.doll = PlayerDoll.dollManagerMap.get(dollName);
         if (args != null) {
             String[] _args = (String[]) args;
@@ -76,8 +78,16 @@ public class drop extends SubCommand {
             doll.getActionPack().drop(slot, all);
         }
     }
-
-    public static List<Object> tabSuggestion() {
+    @Override
+    public final ArrayList<String> targetSelection(UUID uuid) {
+        Set<String> set = new HashSet<>();
+        set.addAll(getOwnedDoll(uuid));
+        set.addAll(getSharedDoll(uuid));
+        set.retainAll(getOnlineDoll());
+        return new ArrayList<>(){{addAll(set);}};
+    }
+    @Override
+    public List<Object> tabSuggestion() {
         return List.of(
                 List.of("{1..36}","helmet","chestplate","leggings","boots","offhand","everything","once","interval","continuous"),
                 List.of("stack"),

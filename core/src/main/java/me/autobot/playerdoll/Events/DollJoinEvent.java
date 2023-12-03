@@ -1,11 +1,8 @@
 package me.autobot.playerdoll.Events;
 
 import me.autobot.playerdoll.Configs.ConfigManager;
-import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.PlayerDoll;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

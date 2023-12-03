@@ -22,6 +22,9 @@ public interface IDoll {
     void disconnect();
     void foliaDisconnect(boolean force);
     void setNoPhantom(boolean b);
+
+    boolean getNoPhantom();
+
     OfflinePlayer getOwner();
     DollConfigManager getConfigManager();
     IEntityPlayerActionPack getActionPack();
@@ -32,6 +35,7 @@ public interface IDoll {
     void _disconnect();
     void _setPos(double x, double y, double z);
     void _setMaxUpStep(float h);
+    /*
     static void initialDoll(DollConfigManager configManager, String uuid) {
         if ((boolean)configManager.getData().get("Initial")) {
             configManager.setData("Initial", false);
@@ -41,6 +45,8 @@ public interface IDoll {
             dat_old.delete();
         }
     }
+
+     */
     static YamlConfiguration setConfigInformation(Player player) {
         YamlConfiguration dollConfig = YamlConfiguration.loadConfiguration(new File(PlayerDoll.getDollDirectory(),player.getName()+".yml"));
         //dollConfig = YAMLManager.getConfig(this.getGameProfile().getName());

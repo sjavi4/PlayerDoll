@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 0.0.7
+version: 0.0.9
 
 ###
 # &0 black
@@ -45,10 +45,19 @@ PlayerNotInShareList: "&c%a% does not exist in %b%'s Share list."
 PlayerAlreadyInShareList: "&c%a% already existed in %b%'s Share list."
 AddShare: "&aAppended %a% to %b%'s Share list."
 DelShare: "&aRemoved %a% from %b%'s Share list."
+PlayerRenameSucceed: '&aDoll has been Renamed from %a% to %b%'
+PlayerRenameFailed: '&cDoll Rename failed.'
 PlayerNotExist: '&cPlayer does not exist.'
-PlayerCreateTooMuchDoll: '&cYou Reached Doll Creation Limit &n(%a%)&r.'
+PlayerCreateTooMuchDoll: '&cReached Doll Creation Limit &n(%a%)&r.'
 PlayerCreateSucceed: '&aDoll %a% create successfully.'
 PlayerSpawnRemovedDoll: '&cDoll has been Removed, please re-create the Doll.'
+PlayerExecuteOnlineDoll: '&cThis command cannot be performed when doll online.'
+PlayerExecuteRemovedDoll: '&cThis command cannot be performed when doll removed.'
+TargetPlayerInvalid: '&cDoll cannot be used as target.'
+CommandMissingTarget: '&cSpecify a target.'
+DollGiver: '&aDoll was given to %a%.'
+DollGetter: '&aDoll was gotten from %a%.'
+
 WrongArgument: '&cWrong Arguments'
 ReloadPlugin: 'Reload Configs'
 CommandNotExist: '&cCommand %a% not Exist.'

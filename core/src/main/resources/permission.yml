@@ -1,6 +1,6 @@
 ### NOT IMPLEMENTED
 ### NOT IMPLEMENTED
-version: 0.0.7
+version: 0.0.9
 # This will allow/disallow what player can see/use in SettingMenu and Command.
 PermissionGroup:
   - default

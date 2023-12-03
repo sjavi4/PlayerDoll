@@ -33,11 +33,13 @@ public class DollConfigManager {
     public void removeListener(PropertyChangeListener l) {
         listener.removePropertyChangeListener(l);
         data.forEach((k,v) -> config.set(k,v));
+        dollConfigManagerMap.remove(this.player);
         //write config setting
     }
     public void removeListener() {
         listener.removePropertyChangeListener(listener.getPropertyChangeListeners()[0]);
         data.forEach((k,v) -> config.set(k,v));
+        dollConfigManagerMap.remove(this.player);
         //write config setting
     }
 

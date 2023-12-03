@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import me.autobot.playerdoll.Configs.ConfigManager;
 import me.autobot.playerdoll.Configs.YAMLManager;
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.newCommand.Helper.DollDataValidator;
 import me.autobot.playerdoll.newCommand.SubCommand;
 import me.autobot.playerdoll.Configs.LangFormatter;
 import org.bukkit.command.CommandSender;
@@ -29,9 +30,12 @@ public class create extends SubCommand {
     String dollName;
     String dollSkin;
     YAMLManager dollYAML;
+    public create() {
+    }
     public create(CommandSender sender, Object doll, Object args) {
-        super(MinPermission.Player,false);
-        if (!checkPermission(sender, (String) doll)) return;
+        setPermission(MinPermission.Player,false);
+        dollName = checkDollName(doll);
+        if (!checkPermission(sender, dollName)) return;
         
         player = (Player) sender;
 
@@ -44,7 +48,7 @@ public class create extends SubCommand {
             }
         }
 
-        dollName = PlayerDoll.dollIdentifier + doll;
+        //dollName = PlayerDoll.dollIdentifier + doll;
 
         int count = 0;
         int max = globalConfig.getInt("Global.MaxDollPerPlayer");
@@ -60,22 +64,12 @@ public class create extends SubCommand {
             }
         }
 
-        if (dollName.length() > 16) {
-            player.sendMessage(LangFormatter.YAMLReplace("LongDollName",'&', new Pair<>("%a%" , Integer.toString(16 - PlayerDoll.dollIdentifier.length()))));
-            return;
-        }
+        DollDataValidator validator = new DollDataValidator(player,dollName, dollName.substring(1));
 
-        if (!dollName.substring(1).matches("^[a-zA-Z0-9_]*$")) {
-            player.sendMessage(LangFormatter.YAMLReplace("IllegalDollName",'&'));
-            return;
-        }
-
-        for (String names : PlayerDoll.dollManagerMap.keySet()) {
-            if (names.equalsIgnoreCase(dollName)) {
-                player.sendMessage(LangFormatter.YAMLReplace("InUseDollName", '&', new Pair<>("%a%",dollName)));
-                return;
-            }
-        }
+        if (validator.isDollNameTooLong()) return;
+        if (validator.isDollNameIllegal()) return;
+        if (validator.isDollNamePreserved()) return;
+        if (validator.isDollAlreadyOnline()) return;
 
         dollSkin = args == null ? player.getName() : ((String[])args)[0];
 
@@ -86,11 +80,7 @@ public class create extends SubCommand {
 
         if (exist && dollFile.length() > 0) {
             YamlConfiguration dollData = dollYAML.getConfig();
-            if (!dollData.getBoolean("Remove")) {
-                player.sendMessage(LangFormatter.YAMLReplace("RepeatDollName", '&', new Pair<>("%a%", dollName)));
-                //dollYAML.unload();
-                return;
-            }
+            if (validator.isDollNameRepeat(dollData)) return;
         }
         PlayerDoll.playerDollCountMap.put(player.getUniqueId().toString(), count + 1);
         execute();
@@ -107,7 +97,6 @@ public class create extends SubCommand {
         dollData.set("Share", new ArrayList<String>());
         dollData.set("SkinData", new LinkedHashMap<String,String>());
         dollData.set("Remove", false);
-        dollData.set("Initial",true);
         Map<String, Object> settings = new LinkedHashMap<>();
 
         YamlConfiguration flag = ConfigManager.configs.get("flag");
@@ -154,7 +143,13 @@ public class create extends SubCommand {
         dollYAML.saveConfig();
         player.sendMessage(LangFormatter.YAMLReplace("PlayerCreateSucceed",'&', new Pair<>("%a%", dollName)));
     }
-    public static List<Object> tabSuggestion() {
+
+    @Override
+    public ArrayList<String> targetSelection(UUID uuid) {
+        return new ArrayList<>(Collections.singleton("?"));
+    }
+    @Override
+    public List<Object> tabSuggestion() {
         return List.of("<skin_name>");
     }
 }

@@ -8,12 +8,11 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.concurrent.*;
 
 
 public final class ConfigManager {
     private static Plugin plugin;
-    private static final String configVersion = "0.0.7";
+    private static final String configVersion = "0.0.9";
     private final HashMap<String, File> configMap = new HashMap<>();
     public static final HashMap<String, YamlConfiguration> configs = new HashMap<>();
     public ConfigManager(Plugin plugin) {
@@ -79,11 +78,7 @@ public final class ConfigManager {
                                 }
                             }
                         }
-                        case "Initial: false" -> {
-                            if (!PlayerDoll.pendingRespawnList.contains(files.getName())) {
-                                PlayerDoll.pendingRespawnList.add(files.getName());
-                            }
-                        }
+                        default -> PlayerDoll.pendingRespawnList.add(files.getName());
                     }
                 }
                 scanner.close();

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import oshi.util.tuples.Pair;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class CommandHandler implements CommandExecutor {
@@ -16,18 +16,35 @@ public class CommandHandler implements CommandExecutor {
         if (args == null || args.length == 0) {
             return false;
         }
-        Map<String,Object> commandMap = breakdown(args);
+        ArrayList<Object> commands = argumentBreakdown(args);
+
+        if (commands.size() == 0) return false;
+        //Map<String,Object> commandMap = argumentBreakdown(args);
+        /*
         if (commandMap == null) {
             return false;
         }
-        String success = execute(sender, commandMap);
+
+         */
+        String success = execute(sender, commands);
         if (!success.isEmpty()) sender.sendMessage(success);
         return true;
     }
-    private Map<String,Object> breakdown(String[] args) {
+    private ArrayList<Object> argumentBreakdown(String[] args) {
         if (args.length < 2) {
-            return null;
+            return new ArrayList<>();
         }
+        ArrayList<Object> commands = new ArrayList<>();
+        commands.add(args[0]); //command
+        commands.add(args[1].toLowerCase()); //target
+        String[] subArgs = null;
+        if (args.length >= 3) {
+            subArgs = new String[args.length - 2];
+            System.arraycopy(args, 2, subArgs, 0, subArgs.length);
+        }
+        commands.add(subArgs);
+        return commands;
+        /*
         Map<String,Object> commandMap = new HashMap<>();
         commandMap.put("target", args[0]);
         commandMap.put("command", args[1].toLowerCase());
@@ -37,8 +54,30 @@ public class CommandHandler implements CommandExecutor {
             System.arraycopy(args, 2, subArgs, 0, subArgs.length);
         }
         commandMap.put("args", subArgs);
+
+
         return commandMap;
+
+         */
     }
+    private String execute(CommandSender sender, ArrayList<Object> commands) {
+        try {
+            Class<?> clazz = Class.forName(this.getClass().getPackageName() + ".Execute." + commands.get(0));
+            //System.out.println(this.getClass().getPackageName() + ".Execute." + commandMap.get("command"));
+            clazz.getConstructor(CommandSender.class, Object.class, Object.class).newInstance(sender, commands.get(1), commands.get(2));
+        } catch (ClassNotFoundException ignored) {
+            return LangFormatter.YAMLReplace("CommandNotExist",'&', new Pair<>("%a%",(String)commands.get(0)));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return LangFormatter.YAMLReplace("WrongArgument",'&');
+        } catch (IllegalAccessException | InstantiationException ignored) {
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return LangFormatter.YAMLReplace("InvokeCommandFail",'&');
+        }
+        return "";
+    }
+    /*
     private String execute(CommandSender sender , Map<String,Object> commandMap) {
         try {
             Class<?> clazz = Class.forName(this.getClass().getPackageName() + ".Execute." + commandMap.get("command"));
@@ -56,4 +95,6 @@ public class CommandHandler implements CommandExecutor {
         }
         return "";
     }
+
+     */
 }

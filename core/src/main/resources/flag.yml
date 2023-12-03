@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 0.0.7
+version: 0.0.9
 
 # Follows Permission.yml - PermissionGroup
 # Location - Where to show the setting

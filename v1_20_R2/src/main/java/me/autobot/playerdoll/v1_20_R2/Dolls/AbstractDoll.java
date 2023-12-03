@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.*;
 
@@ -72,7 +71,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         if (IDoll.canSetSkin()) IDoll.setSkin(this.getBukkitEntity(),this);
         dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
 
-        IDoll.initialDoll(this.configManager,this.stringUUID);
+        //IDoll.initialDoll(this.configManager,this.stringUUID);
         //initDoll();
         spawnToWorld();
 
@@ -88,8 +87,9 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
 
  */
+        this.unsetRemoved();
         //this.connection.send(new ClientboundSetCarriedItemPacket(this.getInventory().selected));
-        this.server.invalidateStatus();
+        //this.server.invalidateStatus();
 
         TPYaw = this.player.getRotationVector().y;
         TPPitch = this.player.getRotationVector().x;
@@ -108,7 +108,6 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         this.actionPack = new EntityPlayerActionPack(this);
 
         teleportTo();
-
     }
     public void spawnToWorld() {
         this.server.getPlayerList().placeNewPlayer(this.dollNetworkManager,this, CommonListenerCookie.createInitial(this.getGameProfile()));
@@ -205,6 +204,10 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     @Override
     public void setNoPhantom(boolean b) {
         this.noPhantom = b;
+    }
+    @Override
+    public boolean getNoPhantom() {
+        return noPhantom;
     }
     @Override
     public OfflinePlayer getOwner() {

@@ -74,7 +74,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
 
-        IDoll.initialDoll(this.configManager,this.stringUUID);
+        //IDoll.initialDoll(this.configManager,this.stringUUID);
         //initDoll();
         spawnToWorld();
 
@@ -90,8 +90,9 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
 
  */
+        this.unsetRemoved();
         //this.connection.send(new ClientboundSetCarriedItemPacket(this.getInventory().selected));
-        this.server.invalidateStatus();
+        //this.server.invalidateStatus();
 
         TPYaw = this.player.getRotationVector().y;
         TPPitch = this.player.getRotationVector().x;
@@ -207,6 +208,10 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     @Override
     public void setNoPhantom(boolean b) {
         this.noPhantom = b;
+    }
+    @Override
+    public boolean getNoPhantom() {
+        return noPhantom;
     }
     @Override
     public OfflinePlayer getOwner() {

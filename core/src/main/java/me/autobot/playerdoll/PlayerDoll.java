@@ -30,7 +30,7 @@ public final class PlayerDoll extends JavaPlugin {
     public static String version = "";
     public static Map<String, IDoll> dollManagerMap = new HashMap<>();
     public static final HashMap<String,Integer> playerDollCountMap = new HashMap<>();
-    public static final List<String> pendingRespawnList = new ArrayList<>();
+    public static final Set<String> pendingRespawnList = new HashSet<>();
     private static InvManager invManager;
     private static int maxplayer;
 
@@ -113,15 +113,14 @@ public final class PlayerDoll extends JavaPlugin {
         if (invManager != null) {
             invManager.invManager.keySet().forEach(HumanEntity::closeInventory);
         }
-        DollConfigManager.dollConfigManagerMap.values().forEach(d -> {
-            d.save();
-            d.removeListener();
-        });
-
         if (isFolia) dollManagerMap.values().forEach(d -> {
             d.foliaDisconnect(false);
         });
         else dollManagerMap.values().forEach(IDoll::_disconnect);
+        DollConfigManager.dollConfigManagerMap.values().forEach(d -> {
+            d.save();
+            d.removeListener();
+        });
     }
     private void pluginVersionCheck() {
         new Thread(()->{

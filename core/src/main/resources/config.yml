@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 0.0.7
+version: 0.0.9
 
 # Common numeric settings:
 #   -1: No limits / Follow server settings
@@ -10,7 +10,7 @@ Global:
   # Custom Server Mod
   # if you are using Unknown Server Mod, you can manually set the Mod.
   # Leave it blank when you are already using main Branches, otherwise write a most suitable one
-  # Spigot / PaperSeries (Paper and Purpur) / Folia
+  # Spigot / PaperSeries (Paper/Purpur/...) / Folia
   Mod: ''
   # Language settings
   # it loads language/EXAMPLE.yml

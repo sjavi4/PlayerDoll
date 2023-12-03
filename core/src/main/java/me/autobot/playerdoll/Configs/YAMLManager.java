@@ -19,8 +19,12 @@ public class YAMLManager {
         if (!file.getName().contains(".yml")) {
             return null;
         }
-        if (force) {
-            if (!createFile(file)) {
+        if (!file.exists()) {
+            if (force) {
+                if (!createFile(file)) {
+                    return null;
+                }
+            } else {
                 return null;
             }
         }
