@@ -1,0 +1,162 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: "0.0.10"
+
+# Follows Permission.yml - PermissionGroup
+GlobalFlags:
+  Ender Chest:
+    Item: ENDER_EYE
+    Default: true
+
+  Invulnerable:
+    Item: TOTEM_OF_UNDYING
+    Default: false
+
+  Hostility:
+    Item: TARGET
+    Default: false
+
+  Pushable:
+    Item: ARMOR_STAND
+    Default: false
+
+  Gravity:
+    Item: GRAVEL
+    Default: true
+
+  Glow:
+    Item: GLOW_INK_SAC
+    Default: false
+
+  Large Step Size:
+    Item: STONE_STAIRS
+    Default: false
+
+  Phantom:
+    Item: PHANTOM_MEMBRANE
+    Default: false
+
+  Join At Start:
+    Item: RECOVERY_COMPASS
+    Default: false
+
+  Hide From List:
+    Item: TINTED_GLASS
+    Default: false
+
+
+PersonalFlags:
+  Admin:
+    Item: WOODEN_PICKAXE
+    Default: false
+
+  #ActionCommand:
+  #  Item: SHEARS
+  #  Default: false
+
+  Ender Chest:
+    Item: ENDER_EYE
+    Default: false
+
+  Inventory:
+    Item: CHEST_MINECART
+    Default: false
+
+  Info:
+    Item: BOOK
+    Default: true
+
+  Attack:
+    Item: WOODEN_SWORD
+    Default: false
+
+  Use:
+    Item: OAK_BUTTON
+    Default: false
+
+  Mount:
+    Item: MINECART
+    Default: false
+
+  Dismount:
+    Item: ACTIVATOR_RAIL
+    Default: false
+
+  Copy:
+    Item: RED_SAND
+    Default: false
+
+  Despawn:
+    Item: CRYING_OBSIDIAN
+    Default: false
+
+  Drop:
+    Item: DROPPER
+    Default: false
+
+  Exp:
+    Item: EXPERIENCE_BOTTLE
+    Default: false
+
+  Gset:
+    Item: CRAFTING_TABLE
+    Default: false
+
+  Jump:
+    Item: RABBIT_FOOT
+    Default: false
+
+  Look:
+    Item: SPYGLASS
+    Default: false
+
+  Lookat:
+    Item: OBSERVER
+    Default: false
+
+  Menu:
+    Item: BARREL
+    Default: false
+
+  Move:
+    Item: POWERED_RAIL
+    Default: false
+
+  Pset:
+    Item: FURNACE
+    Default: false
+
+  Set:
+    Item: LECTERN
+    Default: false
+
+  Slot:
+    Item: HOPPER
+    Default: false
+
+  Sneak:
+    Item: MAGMA_BLOCK
+    Default: false
+
+  Sprint:
+    Item: ICE
+    Default: false
+
+  Stop:
+    Item: BLAZE_POWDER
+    Default: false
+
+  Strafe:
+    Item: OAK_BOAT
+    Default: false
+
+  Swap:
+    Item: DAYLIGHT_DETECTOR
+    Default: false
+
+  Tp:
+    Item: ENDER_PEARL
+    Default: false
+
+  Turn:
+    Item: IRON_TRAPDOOR
+    Default: false
