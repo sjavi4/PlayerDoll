@@ -152,6 +152,7 @@ public final class PlayerDoll extends JavaPlugin {
         switch (version) {
             case "v1_20_R1" -> {}
             case "v1_20_R2" -> {}
+            case "v1_20_R3" -> {}
             default -> {
                 System.out.println("Unknown or Unsupported Versions, Please Use with Cautions.");
                 //getPluginLoader().disablePlugin(this);
