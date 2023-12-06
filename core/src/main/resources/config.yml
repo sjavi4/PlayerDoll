@@ -51,8 +51,8 @@ Global:
   # Folia have no support
   # Can be any text or empty
   # Color-able
-  DollScoreboardPrefix: '&l&e[BOT]&r'
-  DollScoreboardSuffix: ''
+  DollPrefix: '&l&e[BOT]&r'
+  DollSuffix: ''
   # Allow server broadcast message in these events
   DollDeathMessage: true
   DollJoinMessage: false
