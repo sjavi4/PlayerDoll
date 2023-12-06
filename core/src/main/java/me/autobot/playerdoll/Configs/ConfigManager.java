@@ -30,7 +30,7 @@ public final class ConfigManager {
 
         loadConfig();
 
-        YamlConfiguration globalConfig = configs.get("config");
+        YamlConfiguration globalConfig = configs.get(ConfigType.CONFIG);
         if (globalConfig != null) {
             String language = globalConfig.getString("Global.Language");
             if (!(language == null || language.isEmpty() || language.isBlank())) {
