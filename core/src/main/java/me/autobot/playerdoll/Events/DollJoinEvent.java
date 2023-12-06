@@ -3,6 +3,7 @@ package me.autobot.playerdoll.Events;
 import me.autobot.playerdoll.Configs.ConfigManager;
 import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +23,6 @@ public class DollJoinEvent implements Listener {
             Bukkit.setMaxPlayers(Bukkit.getMaxPlayers()+1);
         }
         player.setSleepingIgnored(globalConfig.getBoolean("Global.DollNotCountSleeping"));
-        if (!PlayerDoll.isFolia) PlayerDoll.getScoreboard().addMember(player);
 
         if (!globalConfig.getBoolean("Global.DollJoinMessage")) {
             event.setJoinMessage(null);
@@ -34,5 +34,11 @@ public class DollJoinEvent implements Listener {
         player.setSaturation(0.0f);
         player.setCollidable(false);
         player.setHealth(20);
+
+        String configPrefix = globalConfig.getString("Global.DollPrefix");
+        String prefix = configPrefix == null? "" : configPrefix;
+        String configSuffix = globalConfig.getString("Global.DollSuffix");
+        String suffix = configSuffix == null? "" : configSuffix;
+        player.setPlayerListName(ChatColor.translateAlternateColorCodes('&',prefix) + player.getName() + ChatColor.translateAlternateColorCodes('&',suffix));
     }
 }

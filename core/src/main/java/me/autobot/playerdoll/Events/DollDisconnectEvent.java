@@ -43,7 +43,6 @@ public class DollDisconnectEvent implements Listener {
             }, 1, TimeUnit.SECONDS);
         }
         dollConfigManager.removeListener();
-        if (!PlayerDoll.isFolia) PlayerDoll.getScoreboard().removeMember(event.getPlayer());
         if (!globalConfig.getBoolean("Global.DollDisconnectMessage")) {
             event.setQuitMessage(null);
         }

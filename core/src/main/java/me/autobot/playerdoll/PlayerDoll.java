@@ -53,11 +53,6 @@ public final class PlayerDoll extends JavaPlugin {
     public static boolean isSpigot = false;
     public static boolean isPaperSeries = false;
     public static boolean isFolia = false;
-    private static ScoreboardHelper scoreboard;
-    public static ScoreboardHelper getScoreboard() {
-        return scoreboard;
-    }
-
     @Override
     public void onEnable() {
         gameVersionCheck();
@@ -99,7 +94,6 @@ public final class PlayerDoll extends JavaPlugin {
         if (countMap != null && countMap.size() != 0) playerDollCountMap.putAll(configManager.countPlayerDoll());
 
         //Folia not support
-        if (!isFolia) scoreboard = new ScoreboardHelper();
 
         prepareDollSpawn();
     }
