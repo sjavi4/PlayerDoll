@@ -1,0 +1,59 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: "0.0.11"
+
+# Common numeric settings:
+#   -1: No limits / Follow server settings
+#   0: Disabled
+#   1 or above: Fixed amount
+
+Global:
+  # Custom Server Mod
+  # If plugin has detected the Mod wrongly,
+  # or you are using Unknown Server Mod, you can manually set the Mod.
+  # Leave it blank when you are already using main Branches, otherwise write a most suitable one
+  # Spigot / PaperSeries (include Paper/Purpur/...) / Folia
+  Mod: ''
+  # Language settings
+  # it loads language/EXAMPLE.yml
+  Language: english
+  # Preserved Names
+  # You can Set names that is disallowed
+  # Not case-sensitive
+  PreservedName:
+    - ''
+  # How many Doll can a player create
+  # Not affect already created Doll
+  MaxDollPerPlayer: 10
+  # Adjust server MAX PLAYER according to the amount of Doll
+  # Ensure capacity of real players unchanged
+  FlexibleServerMaxPlayer: true
+  # How many Online Doll can server hold
+  ServerMaxDoll: -1
+  # Allow Doll bypass Player Capacity
+  BypassMaxPlayer: true
+  # Follow to GameRule KeepInventory
+  # Override DollKeepInventory
+  FollowKeepInventory: true
+  # Do Doll drop loots when die
+  # FollowKeepInventory has higher priority
+  DollKeepInventory: true
+  # Allow Doll bypasses Sleeping count
+  # It will not disturb the percentage of skipping night
+  DollNotCountSleeping: true
+  # Allow Doll join automatically when server start.
+  # Need to have both Global and per Doll setting enabled to work.
+  # This will not apply to Doll whose removed or not initialized.
+  DollJoinAtStart: false
+  # Allow player set Doll's skin to any players
+  # Default skin: Player who spawned the Doll
+  # Mojang's default skin will be applied when Offline mode is true
+  RestrictSkin: false
+  # Use customize text to Tab-list name
+  # Can be any text or empty
+  # Color-able
+  DollPrefix: '&l&e[BOT]&r'
+  DollSuffix: ''
+  # Allow server broadcast message in these events
+  DollDeathMessage: true
+  DollJoinMessage: false
+  DollDisconnectMessage: false
