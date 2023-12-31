@@ -1,0 +1,89 @@
+package me.autobot.playerdoll.Command.Execute;
+
+import me.autobot.playerdoll.Configs.LangFormatter;
+import me.autobot.playerdoll.Configs.YAMLManager;
+import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.Command.Helper.DollDataValidator;
+import me.autobot.playerdoll.Command.SubCommand;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import oshi.util.tuples.Pair;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+public class rename extends SubCommand {
+    Player player;
+    String dollName;
+    File dollFile;
+    String[] args;
+    public rename() {}
+    public rename(CommandSender sender, Object doll, Object args) {
+        setPermission(MinPermission.Owner,false);
+        dollName = checkDollName(doll);
+        player = (Player) sender;
+        if (!checkPermission(sender, dollName,"Rename")) return;
+
+        DollDataValidator oldNameValidator = new DollDataValidator(player, dollName, dollName.substring(1));
+
+        if (oldNameValidator.isOfflineOperationWhenDollOnline()) return;
+        dollFile = new File(PlayerDoll.getDollDirectory(),dollName+".yml");
+
+        if (oldNameValidator.isDollConfigNotExist(dollFile)) return;
+
+        /*
+        if (!dollFile.exists()) {
+            player.sendMessage(LangFormatter.YAMLReplaceMessage("DollNotExist",'&'));
+            return;
+        }
+
+         */
+        var yaml = YAMLManager.loadConfig(dollName,false);
+        if (yaml == null) return;
+        var config = yaml.getConfig();
+        if (oldNameValidator.isExecutionWhenDollRemoved(config)) return;
+        this.args = args == null? new String[]{""} : (String[]) args;
+        this.args[0] = checkDollName(this.args[0]);
+        DollDataValidator newNameValidator = new DollDataValidator(player, this.args[0], this.args[0].substring(1));
+
+        if (newNameValidator.isDollNameIllegal()) return;
+        if (newNameValidator.isDollNamePreserved()) return;
+        if (newNameValidator.isDollNameTooLong()) return;
+
+        if (new File(PlayerDoll.getDollDirectory(),this.args[0]+".yml").exists()) {
+            player.sendMessage(LangFormatter.YAMLReplaceMessage("RepeatDollName",'&', new Pair<>("%a%",this.args[0].substring(1))));
+            return;
+        }
+        execute();
+    }
+    @Override
+    public void execute() {
+        var oldConfig = new File(PlayerDoll.getDollDirectory(), this.dollName+".yml");
+        var newConfig = new File(PlayerDoll.getDollDirectory(), this.args[0]+".yml");
+        if (oldConfig.exists() && !newConfig.exists()) {
+            String oldUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + this.dollName).getBytes(StandardCharsets.UTF_8)).toString();
+            String newUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + this.args[0]).getBytes(StandardCharsets.UTF_8)).toString();
+            File dat = new File(Bukkit.getServer().getWorldContainer()+File.separator+"world"+File.separator+"playerdata"+File.separator+oldUUID+".dat");
+            File dat_old = new File(Bukkit.getServer().getWorldContainer()+File.separator+"world"+File.separator+"playerdata"+File.separator+oldUUID+".dat_old");
+
+            boolean flag1 = dat.renameTo(new File(dat.getParentFile(),newUUID+".dat"));
+            boolean flag2 = dat_old.renameTo(new File(dat.getParentFile(),newUUID+".dat"));
+            boolean flag3 = dollFile.renameTo(new File(PlayerDoll.getDollDirectory(), this.args[0]+".yml"));
+            if (flag1 && flag2 && flag3) {
+                var config = YAMLManager.loadConfig(newConfig.getName().substring(0, newConfig.getName().lastIndexOf(".")),false);
+                config.getConfig().set("UUID", newUUID);
+                config.saveConfig();
+                player.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerRenameSucceed",'&', new Pair<>("%a%",this.dollName.substring(1)), new Pair<>("%b%",this.args[0].substring(1))));
+            } else {
+                player.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerRenameFailed",'&'));
+                if (!flag3) new File(dat.getParentFile(),newUUID+".dat").renameTo(dat);
+                if (!flag2) new File(dat.getParentFile(),newUUID+".dat_old").renameTo(dat_old);
+                if (!flag1) new File(PlayerDoll.getDollDirectory(),this.args[0]+".yml").renameTo(dollFile);
+            }
+        } else {
+            player.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerRenameFailed",'&'));
+        }
+    }
+}
