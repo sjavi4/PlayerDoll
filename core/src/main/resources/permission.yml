@@ -1,0 +1,171 @@
+version: 13
+
+# Please update this when any new Group was added
+# If using a group that mirror another group, Please put the group after
+permissionGroup:
+  - default
+  - default2
+
+
+default: # Show as Permission Group Name
+  Mirror: ''
+  # Mirror any Permission Group by name
+  # Override mirrored settings if stated specifically
+  # Must not miss any permissions from default if you have an independent group
+  # Not Implemented
+  NextGroup: default2
+  # Unused
+  # For upgrade
+
+  # Settings below will be mirrored
+  canCreateDoll: true
+  # Can this group create Doll
+  maxDollCreation: 1
+  # How many Doll can be created by a player
+  # -1 = no limit
+  maxDollSpawn: 1
+  # How many Doll can be spawned by a player
+  # -1 = no limit
+  canGiveDoll: true
+  # Can owner Give Doll to others
+  canRenameDoll: true
+  # Can owner Rename Doll
+  canJoinAtStart: true
+  # Can doll auto Join when server Start
+  minUseInterval: 1
+  # The minimum interval of Use command in Tick
+  # The faster, the more resource will use
+  # It could affect some farms
+  minAttackInterval: 1
+  # The minimum interval of Attack command in Tick
+  # The faster, the more resource will use
+  # It could affect some farms
+  minSwapInterval: 1
+  # The minimum interval of Swap command in Tick
+  # The faster, the more resource will use
+  # It could affect some farms
+  minDropInterval: 1
+  # The minimum interval of Drop command in Tick
+  # The faster, the more resource will use
+  # It could affect some farms
+  minJumpInterval: 1
+  # The minimum interval of Jump command in Tick
+  # The faster, the more resource will use
+  # It could affect some farms
+  minLookatInterval: 1
+  # The minimum interval of Lookat command in Tick
+  # The faster, the more resource will use
+  # It could affect some farms
+  restrictSkin: false
+  # Force Doll using owner's skin
+  bypassMaxPlayer: true
+  # Allow Doll spawn when server is full
+  keepInventory: true
+  # Do Doll keep inventory when die
+  notCountSleeping: true
+  # Do Doll count on sleeping percentage
+  prefix: '&l&e[BOT]&r'
+  # Set prefix in tab list
+  suffix: ''
+  # Set suffix in tab list
+  GlobalFlag:
+    # Set what can be seen in GUI
+    # This also controls the ability to use the command
+    Display:
+      Echest: true
+      Glow: true
+      Gravity: false
+      Hide_From_List: false
+      Hostility: false
+      Inv: true
+      Invulnerable: false
+      Join_At_Start: true
+      Large_Step_Size: true
+      Phantom: true
+      Pickupable: true
+      Pushable: true
+    # Set default on/off when spawn
+    Toggle:
+      Echest: true
+      Glow: false
+      Gravity: true
+      Hide_From_List: false
+      Hostility: true
+      Inv: true
+      Invulnerable: false
+      Join_At_Start: false
+      Large_Step_Size: false
+      Phantom: true
+      Pickupable: true
+      Pushable: false
+  PersonalFlag:
+    # Set what can be seen in GUI
+    # This also controls the ability to use the command
+    Display:
+      Admin: true
+      Attack: true
+      Copy: true
+      Despawn: true
+      Dismount: true
+      Drop: true
+      Echest: true
+      Exp: true
+      Gset: true
+      Info: false
+      Inv: true
+      Jump: true
+      Look: true
+      Lookat: true
+      Menu: true
+      Mount: true
+      Move: true
+      Pset: true
+      Set: true
+      Slot: true
+      Sneak: true
+      Spawn: true
+      Sprint: true
+      Stop: true
+      Strafe: true
+      Swap: true
+      Tp: true
+      Turn: true
+      Use: true
+    # Set default on/off when spawn
+    Toggle:
+      Admin: false
+      Attack: false
+      Copy: false
+      Despawn: false
+      Dismount: false
+      Drop: false
+      Echest: false
+      Exp: false
+      Gset: false
+      Info: false
+      Inv: false
+      Jump: false
+      Look: false
+      Lookat: false
+      Menu: false
+      Mount: false
+      Move: false
+      Pset: false
+      Set: false
+      Slot: false
+      Sneak: false
+      Spawn: false
+      Sprint: false
+      Stop: false
+      Strafe: false
+      Swap: false
+      Tp: false
+      Turn: false
+      Use: false
+
+default2:
+  Mirror: default
+  NextGroup: ''
+  CanCreateDoll: true
+  MaxDollCreation: 2
+  MaxDollSpawn: 2
