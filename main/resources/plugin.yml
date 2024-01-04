@@ -1,9 +1,0 @@
-name: PlayerDoll
-version: '${project.version}'
-main: me.autobot.playerdoll.PlayerDoll
-api-version: '1.20'
-commands:
-  doll:
-    description: "Execution along with PlayerDoll plugins"
-    usage: /<command> <Doll> <action>
-    
