@@ -180,7 +180,7 @@ continuous : Continuously repeat the action
     <td>gridded: Align at nearest line/quarter center</td>
   </tr>
   <tr>
-    <td>turn <yaw> <pitch></td>
+    <td>turn &lt;yaw&gt; &lt;pitch&gt;</td>
     <td>Rotate Doll's head by yaw(horizontal) and pitch(vertical)</td>
     <td>[yaw pitch]In +/-ve decimal</td>
   </tr>
