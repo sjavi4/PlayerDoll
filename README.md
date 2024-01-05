@@ -197,7 +197,7 @@ continuous : Continuously repeat the action
 
 Put items to Doll : Drop item and let Doll pick up
 
-Take items to Doll : Command Drop or perform actions through Doll inventory navigation GUI
+Take items from Doll : Command Drop or perform actions through Doll inventory navigation GUI
 
 There is an in-direct solution to let players to interact with Doll inventory (upper inventory navigation action)
 ```
