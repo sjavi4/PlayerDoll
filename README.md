@@ -191,6 +191,9 @@ continuous : Continuously repeat the action
   </tr>
 </table>
 
+## Shortcut
+- Player sneaks and right click Doll can open Doll status GUI (same as Menu)
+
 ## Doll inventories
 - Players with permission can access Doll's ender chest directly (put&take)
 - Doll inventory are not supported to do so base on some technological reasons (no direct api for open-up player inventory)
