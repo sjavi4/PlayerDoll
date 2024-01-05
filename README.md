@@ -11,6 +11,8 @@ Spigot, Paper, Purpur, Folia (maybe more)
 ### Cautions
 Things like SQL, multiverse, bungeecords might went wrong (not tested or coded to handle)
 
+Welcome to report any issues (performance, bugs, suggestions, feedback, compatibility tests)
+
 ## Functionalities
 - Do most as player does
 - Able to make changes to the world
