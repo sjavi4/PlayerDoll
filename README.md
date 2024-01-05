@@ -200,6 +200,8 @@ Put items to Doll : Drop item and let Doll pick up
 Take items from Doll : Command Drop or perform actions through Doll inventory navigation GUI
 
 There is an in-direct solution to let players to interact with Doll inventory (upper inventory navigation action)
+
+Similar to vanilla player backpack shortcuts
 ```
 Left Click slots in hotbar -> Set slot to target slot
 Right Click slots in hotbar -> Set slot and perform <use> command (not placing block)
