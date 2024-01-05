@@ -185,7 +185,7 @@ continuous : Continuously repeat the action
     <td>[yaw pitch]In +/-ve decimal</td>
   </tr>
   <tr>
-    <td>use [action</td>
+    <td>use [action]</td>
     <td>Doll uses/interacts(right click) towards it's line of sight</td>
     <td></td>
   </tr>
