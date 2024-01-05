@@ -141,7 +141,7 @@ public enum CommandType {
         void execute(Player sender, String dollName, String[] args) {
             new Give(sender, CommandType.getDollName(dollName,true), args);
         }
-    }, GSET(true, OnlineStatus.ONLINE_OFFLINE) {
+    }, GSET(true, OnlineStatus.MUST_ONLINE) {
         @Override
         void buildSuggestion() {
             SuggestionBuilder.create(this).addChild(ArgumentType.ALL_DOLL);
@@ -277,7 +277,7 @@ public enum CommandType {
         void execute(Player sender, String dollName, String[] args) {
             new Move(sender, CommandType.getDollName(dollName,true), args);
         }
-    }, PSET(true, OnlineStatus.ONLINE_OFFLINE) {
+    }, PSET(true, OnlineStatus.MUST_ONLINE) {
         @Override
         void buildSuggestion() {
             SuggestionBuilder.create(this).addChild(ArgumentType.ALL_DOLL).addChild(ArgumentType.ONLINE_PLAYER);
@@ -298,7 +298,7 @@ public enum CommandType {
         }
         @Override
         boolean checkPermission(Player sender, String dollName) {
-            return checkSenderPermission(sender, dollName, this);
+            return onlineStatus.valid(dollName); // checkSenderPermission(sender, dollName, this);
         }
 
         @Override
@@ -319,7 +319,7 @@ public enum CommandType {
         void execute(Player sender, String dollName, String[] args) {
             new Rename(sender, CommandType.getDollName(dollName,true), args);
         }
-    }, SET(true, OnlineStatus.ONLINE_OFFLINE) {
+    }, SET(true, OnlineStatus.MUST_ONLINE) {
         @Override
         void buildSuggestion() {
             SuggestionBuilder.create(this).addChild(ArgumentType.ALL_DOLL);
@@ -533,13 +533,15 @@ public enum CommandType {
         if (permissionManager == null) {
             return false;
         }
+
         // 1. check owner's permission group settings
         // 2. check is owner
         // 3. check has pset permission (has set before)
         // 4. check has gset permission (has set before)
         // 5. check permission group default permission toggle
-        String playerSettingPath = "playerSetting."+senderUUID+"."+commandName;
-        String generalSettingPath = "generalSetting."+commandName;
+
+        String playerSettingPath = "playerSetting." + senderUUID + "." + commandName;
+        String generalSettingPath = "generalSetting." + commandName;
         if (!permissionManager.flagPersonalDisplays.get(commandName)) {
             return false;
         } else if (dollConfig.getString("Owner.UUID", "").equals(senderUUID)) {

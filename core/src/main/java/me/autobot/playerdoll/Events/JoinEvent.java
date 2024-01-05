@@ -39,7 +39,9 @@ public class JoinEvent implements Listener {
             event.setJoinMessage(null);
         }
 
-        player.setMetadata("NPC", new FixedMetadataValue(PlayerDoll.getPlugin(), "NPC")); //Residence identifier
+        if (permissionManager.bypassResidence) {
+            player.setMetadata("NPC", new FixedMetadataValue(PlayerDoll.getPlugin(), "NPC")); //Residence identifier
+        }
         player.setFoodLevel(20);
         player.setExhaustion(0.0f);
         player.setSaturation(0.0f);

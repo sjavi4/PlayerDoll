@@ -41,7 +41,7 @@ public class PermissionManager {
     public boolean notCountSleeping;
     public String prefix;
     public String suffix;
-
+    public boolean bypassResidence;
     public static void newInstance() {
         List<String> groups = permissionFile.getStringList("permissionGroup");
         groups.forEach(s -> {
@@ -90,6 +90,7 @@ public class PermissionManager {
         getPermission("notCountSleeping");
         getPermission("prefix");
         getPermission("suffix");
+        getPermission("bypassResidence");
         getPermissionMap("GlobalFlag.Display");
         getPermissionMap("PersonalFlag.Display");
         getPermissionMap("GlobalFlag.Toggle");
@@ -147,6 +148,7 @@ public class PermissionManager {
         this.notCountSleeping = mirror.notCountSleeping;
         this.prefix = mirror.prefix;
         this.suffix = mirror.suffix;
+        this.bypassResidence = mirror.bypassResidence;
         this.flagGlobalDisplays.putAll(mirror.flagGlobalDisplays);
         this.flagGlobalToggles.putAll(mirror.flagGlobalToggles);
         this.flagPersonalDisplays.putAll(mirror.flagPersonalDisplays);

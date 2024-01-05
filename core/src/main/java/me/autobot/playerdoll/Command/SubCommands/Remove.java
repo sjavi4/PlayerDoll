@@ -12,6 +12,9 @@ public class Remove extends SubCommand {
 
     public Remove(Player sender, String dollName) {
         super(sender, dollName);
+        if (!dollConfig.getString("Owner.UUID").equalsIgnoreCase(sender.getUniqueId().toString())) {
+            return;
+        }
         if (doll != null) {
             dollConfigManager.config.set("Remove", true);
             if (PlayerDoll.isFolia) {
@@ -20,8 +23,8 @@ public class Remove extends SubCommand {
                 doll._kill();
             }
         } else {
-            String uuid = sender.getUniqueId().toString();
-            File config = new File(PlayerDoll.getDollDirectory(),player.getName()+".yml");
+            String uuid = dollConfig.getString("UUID");
+            File config = new File(PlayerDoll.getDollDirectory(),dollName+".yml");
             File dat = new File(Bukkit.getServer().getWorldContainer()+File.separator+"world"+File.separator+"playerdata"+File.separator+uuid+".dat");
             File dat_old = new File(Bukkit.getServer().getWorldContainer()+File.separator+"world"+File.separator+"playerdata"+File.separator+uuid+".dat_old");
             config.delete();

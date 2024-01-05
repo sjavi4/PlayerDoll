@@ -68,6 +68,18 @@ default: # Show as Permission Group Name
   # Set prefix in tab list
   suffix: ''
   # Set suffix in tab list
+
+  # Other Plugins
+  # Testing
+  bypassResidence: false
+  # true -> treats doll as NPC
+  # Some events will not apply to Doll
+  # (allow portal TP into Res, not restricted PVP..)
+  # false -> treats doll as real players
+  # (check Perm byfore portal TP into Res, restricted PVP..)
+  # Some Res settings will still apply to Doll regardless this setting
+
+
   GlobalFlag:
     # Set what can be seen in GUI
     # This also controls the ability to use the command
