@@ -195,9 +195,11 @@ continuous : Continuously repeat the action
 - Players with permission can access Doll's ender chest directly (put&take)
 - Doll inventory are not supported to do so base on some technological reasons (no direct api for open-up player inventory)
 
-There is an in-direct solution to let players to interact with Doll inventory (upper inventory navigation action)
+Put items to Doll : Drop item and let Doll pick up
 
-The normal way to put items into Doll's inventory is to throw item to Doll and let them pick
+Take items to Doll : Command Drop or perform actions through Doll inventory navigation GUI
+
+There is an in-direct solution to let players to interact with Doll inventory (upper inventory navigation action)
 ```
 Left Click slots in hotbar -> Set slot to target slot
 Right Click slots in hotbar -> Set slot and perform <use> command (not placing block)
