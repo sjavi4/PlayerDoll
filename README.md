@@ -190,3 +190,19 @@ continuous : Continuously repeat the action
     <td></td>
   </tr>
 </table>
+
+## Doll inventories
+- Players with permission can access Doll's ender chest directly (put&take)
+- Doll inventory are not supported to do so base on some technological reasons (no direct api for open-up player inventory)
+
+There is an in-direct solution to let players to interact with Doll inventory (upper inventory navigation action)
+
+The normal way to put items into Doll's inventory is to throw item to Doll and let them pick
+```
+Left Click slots in hotbar -> Set slot to target slot
+Right Click slots in hotbar -> Set slot and perform <use> command (not placing block)
+Q (Shift + Q) -> Perform Drop (Drop stack) command on target slot
+F -> Swap between target slot and offhand slot
+Shift Click slots -> Move hotbar/backpack slot to merge or put to the last empty backpack/hotbar slot (if avaliable)
+Number keys -> Move / Swap target slot to the corresponding number key slot in hotbar
+```
