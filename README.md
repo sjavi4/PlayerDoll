@@ -35,7 +35,7 @@ continuous : Continuously repeat the action
 
 <table>
   <tr>
-    <th>Command (/doll &lt;target&gt; ?)</th>
+    <th>Command<br>(/doll &lt;target&gt; ?)</th>
     <th>Description</th>
     <th>Note</th>
   </tr>
