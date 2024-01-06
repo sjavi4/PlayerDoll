@@ -22,8 +22,8 @@ Welcome to report any issues (performance, bugs, suggestions, feedback, compatib
 1. Once Doll has spawned, playerdata will be created
 2. Once Doll has created, config data will be created
 3. All doll have "-" prefix as identifier to distinguish Real players and Doll
-4. Doll data are expected to not to clash with Real players (maybe there are players with "-" on their name)
-5. Based on the previous, Doll name has only 15 letters to choose (obey real player name rule)
+4. Doll data are expected to not to clash with Real players data (maybe there are players with "-" at the start on their name)
+5. Based on the previous, Doll name has only 15 of name length (obey real player name rule)
 
 ## Commands
 ### Note
