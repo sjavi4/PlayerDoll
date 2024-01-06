@@ -208,8 +208,8 @@ There is an in-direct solution to let players to interact with Doll inventory (u
 
 Similar to vanilla player backpack shortcuts
 ```
-Left Click slots in hotbar -> Set slot to target slot
-Right Click slots in hotbar -> Set slot and perform <use> command (not placing block)
+Left Click slots in hotbar -> Set handheld slot to target slot
+Right Click slots in hotbar -> Set handheld slot and perform <use> command (not placing block)
 Q (Shift + Q) -> Perform Drop (Drop stack) command on target slot
 F -> Swap between target slot and offhand slot
 Shift Click slots -> Move hotbar/backpack slot to merge or put to the last empty backpack/hotbar slot (if avaliable)
