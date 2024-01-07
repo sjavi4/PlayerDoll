@@ -9,7 +9,7 @@ Release avaliable on Modrinth.
 Spigot, Paper, Purpur, Folia (maybe more)
 - 1.20.1 - 1.20.4
 ### Cautions
-Things like SQL, multiverse, bungeecord might went wrong (not tested or coded to handle)
+Things like database, multiverse, bungeecord might went wrong (not tested or coded to handle)
 
 Welcome to report any issues (performance, bugs, suggestions, feedback, compatibility tests)
 
