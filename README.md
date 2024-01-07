@@ -24,6 +24,7 @@ Welcome to report any issues (performance, bugs, suggestions, feedback, compatib
 3. All doll have "-" prefix as identifier to distinguish Real players and Doll
 4. Doll data are expected to not to clash with Real players data (maybe there are players with "-" at the start on their name)
 5. Based on the previous, Doll name has only 15 of name length (obey real player name rule)
+6. Doll are not gaining crafing recipes to reduce storage.
 
 ## Commands
 ### Note
