@@ -51,7 +51,10 @@ public class Create extends SubCommand {
         if (validator.preservedName()) return;
         if (validator.repeatName()) return;
 
-        PlayerDoll.getVaultHelper().dollCreation(sender);
+        boolean success = PlayerDoll.getVaultHelper().dollCreation(sender);
+        if (!success) {
+            return;
+        }
 
         File dollFile = new File(PlayerDoll.getDollDirectory(), dollName+".yml");
         dollFile.delete();
