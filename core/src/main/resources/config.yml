@@ -1,0 +1,47 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 14
+
+# Common numeric settings:
+#   -1: No limits / Follow server settings
+#   0: Disabled
+#   1 or above: Fixed amount
+
+Global:
+  # Custom Server Mod
+  # If plugin has detected the Mod wrongly,
+  # or you are using Unknown Server Mod, you can manually set the Mod.
+  # Leave it blank when you are already using main Branches, otherwise write a most suitable one
+  # Spigot / PaperSeries (include Paper/Purpur/...) / Folia
+  Mod: ''
+  # Language settings
+  # it loads language/EXAMPLE.yml
+  Language: english
+  # Enable start up checking
+  # Check for new Plugin version
+  CheckUpdate: true
+  # Do backup for Doll config directory
+  Backup:
+    StartUp: false
+    ShutDown: false
+  # Remove doll data (with player-data) when Server startup
+  # When Doll not online for certain days
+  # Only doll owner spawning Doll will reset counter
+  # Data will lose permanently
+  Remove:
+    InactiveDoll: false
+    # in Days
+    Time: 30
+  # Preserved Names
+  # You can Set names that is disallowed
+  # Not case-sensitive
+  PreservedName:
+    - ''
+  # Adjust server MAX PLAYER according to the amount of Doll
+  # Ensure capacity of real players unchanged
+  FlexibleServerMaxPlayer: true
+  # How many Online Doll can server hold
+  ServerMaxDoll: -1
+  # Allow server broadcast message in these events
+  DollDeathMessage: true
+  DollJoinMessage: false
+  DollDisconnectMessage: false

@@ -1,0 +1,51 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 14
+
+# Follows Permission.yml - PermissionGroup
+# Do not Duplicate Items
+GlobalFlag:
+  # Do not use the same item more than once
+  Echest: ENDER_EYE
+  Glow: GLOW_INK_SAC
+  Gravity: GRAVEL
+  Hide_From_List: TINTED_GLASS
+  Hostility: TARGET
+  Inv: CHEST_MINECART
+  Invulnerable: TOTEM_OF_UNDYING
+  Join_At_Start: RECOVERY_COMPASS
+  Large_Step_Size: STONE_STAIRS
+  Phantom: PHANTOM_MEMBRANE
+  Pickupable: HOPPER
+  Pushable: ARMOR_STAND
+
+PersonalFlag:
+  # Do not use the same item more than once
+  Admin: WOODEN_PICKAXE
+  Attack: WOODEN_SWORD
+  Copy: RED_SAND
+  Despawn: CRYING_OBSIDIAN
+  Dismount: ACTIVATOR_RAIL
+  Drop: DROPPER
+  Echest: ENDER_EYE
+  Exp: EXPERIENCE_BOTTLE
+  Gset: CRAFTING_TABLE
+  Info: BOOK
+  Inv: CHEST_MINECART
+  Jump: RABBIT_FOOT
+  Look: SPYGLASS
+  Lookat: OBSERVER
+  Menu: BARREL
+  Mount: MINECART
+  Move: POWERED_RAIL
+  Pset: FURNACE
+  Set: LECTERN
+  Slot: HOPPER
+  Sneak: MAGMA_BLOCK
+  Spawn: RED_BED
+  Sprint: ICE
+  Stop: BLAZE_POWDER
+  Strafe: OAK_BOAT
+  Swap: DAYLIGHT_DETECTOR
+  Tp: ENDER_PEARL
+  Turn: IRON_TRAPDOOR
+  Use: OAK_BUTTON
