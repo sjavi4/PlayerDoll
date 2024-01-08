@@ -31,20 +31,22 @@ public class VaultHelper {
         return econ != null;
     }
 
-    public void dollCreation(Player player) {
+    public boolean dollCreation(Player player) {
         if (this.econ == null) {
             //player.sendMessage(LangFormatter.YAMLReplaceMessage("VaultNotFound"));
-            return;
+            return true;
         }
-        withdraw(player, PermissionManager.getInstance(player).costPerCreation);
+        return withdraw(player, PermissionManager.getInstance(player).costPerCreation);
     }
 
-    private void withdraw(Player player, double cost) {
+    private boolean withdraw(Player player, double cost) {
         EconomyResponse response = econ.withdrawPlayer(player, cost);
         if (response.transactionSuccess()) {
             player.sendMessage(LangFormatter.YAMLReplaceMessage("TradeSuccess",new Pair<>("%a%",Double.toString(response.balance))));
+            return true;
         } else {
             player.sendMessage(LangFormatter.YAMLReplaceMessage("NotEnoughBalance",new Pair<>("%a%",Double.toString(response.amount))));
+            return false;
         }
     }
 }
