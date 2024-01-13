@@ -1,0 +1,19 @@
+name: PlayerDoll
+version: '${project.version}'
+main: me.autobot.playerdoll.PlayerDoll
+api-version: '1.20'
+folia-supported: true
+load: POSTWORLD
+commands:
+  doll:
+    usage: /<command> <Doll> <action>
+  dollReload:
+
+  dollHelp:
+
+  dollList:
+
+  dollLimit:
+softdepend:
+  - Residence
+  - Vault
