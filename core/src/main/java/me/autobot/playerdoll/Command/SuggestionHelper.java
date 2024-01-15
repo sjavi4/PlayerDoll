@@ -97,7 +97,7 @@ public class SuggestionHelper {
             return list;
         }
         ArrayList<String> arrayList = new ArrayList<>(list);
-        arrayList.removeIf(s -> !CommandType.checkHasPermission(null, sender, s, false));
+        arrayList.removeIf(s -> !CommandType.checkHasPermission(null, sender, CommandType.getDollName(s,true), false));
         return arrayList;
     }
 
