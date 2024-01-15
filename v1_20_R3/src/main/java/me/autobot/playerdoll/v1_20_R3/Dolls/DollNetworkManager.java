@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.v1_20_R3.Dolls;
 
 import io.netty.channel.embedded.EmbeddedChannel;
+import me.autobot.playerdoll.Dolls.FakeChannel;
 import net.minecraft.network.Connection;
 import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.PacketFlow;
@@ -11,7 +12,7 @@ import java.net.SocketAddress;
 public class DollNetworkManager extends Connection {
     public DollNetworkManager(PacketFlow enumprotocoldirection) {
         super(enumprotocoldirection);
-        channel = new EmbeddedChannel();
+        channel = new FakeChannel();
     }
 
 

@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
@@ -26,6 +27,8 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.Collections;
 import java.util.UUID;
+
+import static net.minecraft.network.protocol.common.ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED;
 
 public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     DollConfigManager configManager;
@@ -71,7 +74,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         if (IDoll.canSetSkin()) IDoll.setSkin(this.getBukkitEntity(),this);
 
-        dollNetworkManager = new DollNetworkManager(PacketFlow.SERVERBOUND);
+        dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
 
         spawnToWorld();
 

@@ -68,7 +68,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         if (IDoll.canSetSkin()) IDoll.setSkin(this.getBukkitEntity(),this);
 
-        dollNetworkManager = new DollNetworkManager(PacketFlow.SERVERBOUND);
+        dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
 
         spawnToWorld();
 
