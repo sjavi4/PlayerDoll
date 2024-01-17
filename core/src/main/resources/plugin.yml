@@ -4,7 +4,7 @@ main: me.autobot.playerdoll.PlayerDoll
 api-version: '1.20'
 folia-supported: true
 loadbefore:
-  - spark
+  - ViaVersion
 load: POSTWORLD
 commands:
   doll:
