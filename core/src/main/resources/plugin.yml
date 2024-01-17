@@ -3,6 +3,8 @@ version: '${project.version}'
 main: me.autobot.playerdoll.PlayerDoll
 api-version: '1.20'
 folia-supported: true
+loadbefore:
+  - spark
 load: POSTWORLD
 commands:
   doll:
