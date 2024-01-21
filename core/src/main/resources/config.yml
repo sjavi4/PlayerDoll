@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 15
+version: 16
 
 # Common numeric settings:
 #   -1: No limits / Follow server settings

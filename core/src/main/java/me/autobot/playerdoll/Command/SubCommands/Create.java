@@ -92,9 +92,21 @@ public class Create extends SubCommand {
             URL url_skinTexture = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + skinUUID + "?unsigned=false");
             textureProperty = JsonParser.parseReader(new InputStreamReader(url_skinTexture.openStream())).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
         } catch (IOException e) {
-            System.err.println("Could not get skin data from session servers!");
-            dollFile.delete();
-            e.printStackTrace();
+            System.out.println("Could not get skin data from session servers!");
+            //dollFile.delete();
+            //e.printStackTrace();
+            Map<String,String> skinData = new HashMap<>();
+            skinData.put("Name", "");
+            skinData.put("Skin", "");
+            skinData.put("Cape", "");
+            skinData.put("Model", "");
+            skinData.put("Signature", "");
+            skinData.put("profileId", "");
+            skinData.put("timestamp", "");
+
+            dollConfig.set("SkinData",skinData);
+
+            sender.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateInvalidSkin"));
         }
         if (textureProperty != null) {
             String texture = textureProperty.get("value").getAsString();

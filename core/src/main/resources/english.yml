@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 15
+version: 16
 
 ###
 # &0 black
@@ -47,6 +47,7 @@ Message:
   PlayerNotExist: '&cPlayer does not exist.'
   PlayerSpawnTooMuchDoll: '&cReached Doll Spawn Limit &n(%a%)&r.'
   PlayerCreateTooMuchDoll: '&cReached Doll Creation Limit &n(%a%)&r.'
+  PlayerCreateInvalidSkin: "&cUnavailable Skin. Default skins will be used."
   PlayerCreateSucceed: '&aDoll %a% create successfully.'
   DollGiver: '&aDoll was given to %a%.'
   DollGetter: '&aDoll was gotten from %a%.'
@@ -78,6 +79,10 @@ Message:
   VaultNotFound: '&cCannot perform action due to Vault not found.'
   NotEnoughBalance: '&cNot enough balance. Target amount:%a%.'
   TradeSuccess: '&aTrade Success. You have balance %a% left.'
+  # Upgrade Permission
+  upgradeConfirm: '&6Are you sure to promote to the next Group? $:%a%'
+  noFurtherUpgrade: '&cThere is no group to Upgrade.'
+  upgradeSuccess: '&aYou have promoted to the next group.'
 
 controlButton:
   back: '&fback'

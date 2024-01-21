@@ -1,10 +1,7 @@
 package me.autobot.playerdoll;
 
 import me.autobot.playerdoll.Command.CommandHelper;
-import me.autobot.playerdoll.Command.Utils.CommandHelp;
-import me.autobot.playerdoll.Command.Utils.CommandLimit;
-import me.autobot.playerdoll.Command.Utils.CommandList;
-import me.autobot.playerdoll.Command.Utils.CommandReload;
+import me.autobot.playerdoll.Command.Utils.*;
 import me.autobot.playerdoll.Dolls.DollConfigManager;
 import me.autobot.playerdoll.Dolls.DollHelper;
 import me.autobot.playerdoll.Dolls.IDoll;
@@ -84,6 +81,8 @@ public final class PlayerDoll extends JavaPlugin {
         permissionKey = new NamespacedKey(getPlugin(),"permission");
         PermissionManager.newInstance(this);
 
+        getServerBranch();
+
         GUIEventListener guiEventListener = new GUIEventListener(new GUIManager());
         pluginManager.registerEvents(guiEventListener, this);
 
@@ -99,6 +98,7 @@ public final class PlayerDoll extends JavaPlugin {
         getCommand("dollList").setTabCompleter(list);
         CommandLimit limit = new CommandLimit();
         getCommand("dollLimit").setExecutor(limit);
+        getCommand("dollUpgrade").setExecutor(new CommandUpgrade());
         pluginManager.registerEvents(new DollDisconnectEvent(), this);
         pluginManager.registerEvents(new JoinEvent(), this);
         pluginManager.registerEvents(new PlayerInteractDollEvent(), this);
@@ -108,7 +108,7 @@ public final class PlayerDoll extends JavaPlugin {
         //pluginManager.registerEvents(new DollTargetEvent(),this);
         pluginManager.registerEvents(new DollKickEvent(), this);
         pluginManager.registerEvents(new DollDamageEvent(), this);
-        getServerBranch();
+
         pluginVersionCheck();
 
         if (ConfigManager.getConfig().getBoolean("Global.Backup.StartUp")) {
@@ -121,7 +121,6 @@ public final class PlayerDoll extends JavaPlugin {
 
 
         prepareDollSpawn();
-
     }
 
     @Override

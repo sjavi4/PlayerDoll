@@ -5,6 +5,7 @@ import me.autobot.playerdoll.FoliaSupport;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
 import me.autobot.playerdoll.Util.PermissionManager;
+import me.autobot.playerdoll.YAMLManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import org.bukkit.Bukkit;
@@ -66,13 +67,6 @@ public interface IDoll {
         //configManager.addListener(dollSettingMonitor);
 
     }
-    static boolean canSetSkin() {
-        YamlConfiguration globalConfig = ConfigManager.getConfig();
-        if (globalConfig != null) {
-            return !globalConfig.getBoolean("Global.RestrictSkin");
-        }
-        return false;
-    }
     static void setSkin(Player player, IDoll iDoll) {
         if (!Bukkit.getOnlineMode()) {
             return;
@@ -82,6 +76,9 @@ public interface IDoll {
             return;
         }
         String skinName = dollConfig.getString("SkinData.Name");
+        if (skinName == null || skinName.isBlank()) {
+            return;
+        }
         var dollSkinData = dollConfig.getConfigurationSection("SkinData");
         if (dollSkinData != null && (skinName == null || dollSkinData.getString("Name").equalsIgnoreCase(skinName))) {
             String model = "";

@@ -12,21 +12,71 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.RegisteredListener;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
+@SuppressWarnings("unchecked")
 public class JoinEvent implements Listener {
+
+    private static final Map<RegisteredListener, EventExecutor> backupMap = new HashMap<>();
+    static {
+        Runnable task = () -> {
+            HandlerList handlerList = PlayerJoinEvent.getHandlerList();
+
+            EnumMap<EventPriority,ArrayList<RegisteredListener>> modifiedMap = new EnumMap<>(EventPriority.class);
+            ArrayList<RegisteredListener> modifiedList = new ArrayList<>();
+            try {
+                Field handlerslots = handlerList.getClass().getDeclaredField("handlerslots");
+                handlerslots.setAccessible(true);
+                EnumMap<EventPriority,ArrayList<RegisteredListener>> map = (EnumMap<EventPriority, ArrayList<RegisteredListener>>) handlerslots.get(handlerList);
+                ArrayList<RegisteredListener> list = map.get(EventPriority.LOWEST);
+
+                modifiedMap.putAll(map);
+                modifiedList.addAll(list);
+
+                for (RegisteredListener r : list) {
+                    if (r.getPlugin() == PlayerDoll.getPlugin()) {
+                        Collections.swap(modifiedList, modifiedList.indexOf(r), 0);
+                    }
+                };
+                modifiedMap.put(EventPriority.LOWEST,modifiedList);
+                handlerslots.set(handlerList,modifiedMap);
+
+                RegisteredListener[] modifiedHandlers = modifiedList.toArray(new RegisteredListener[0]);
+
+                Field handlers = handlerList.getClass().getDeclaredField("handlers");
+                handlers.setAccessible(true);
+                handlers.set(handlerList,modifiedHandlers);
+
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+            handlerList = PlayerJoinEvent.getHandlerList();
+            final RegisteredListener[] registeredListeners = handlerList.getRegisteredListeners();
+            for (RegisteredListener listener : registeredListeners) {
+                try {
+                    Class<?> listenerClass = listener.getClass();
+                    Field executorField = listenerClass.getDeclaredField("executor");
+                    executorField.setAccessible(true);
+                    backupMap.put(listener, (EventExecutor) executorField.get(listener));
+
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+
+        if (PlayerDoll.isFolia) {
+            FoliaSupport.globalTask(task);
+        } else {
+            Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(), task, 0);
+        }
+    }
     @EventHandler(priority = EventPriority.LOWEST)
     public void OnDollJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -45,7 +95,7 @@ public class JoinEvent implements Listener {
         if (globalConfig.getBoolean("Global.FlexibleServerMaxPlayer")) {
             Bukkit.setMaxPlayers(Bukkit.getMaxPlayers()+1);
         }
-        //player.setSleepingIgnored(globalConfig.getBoolean("Global.DollNotCountSleeping"));
+
         player.setSleepingIgnored(permissionManager.notCountSleeping);
 
         if (!globalConfig.getBoolean("Global.DollJoinMessage")) {
@@ -78,43 +128,37 @@ public class JoinEvent implements Listener {
 
         new DollInvStorage(player);
 
-        Map<RegisteredListener, EventExecutor> backupMap = new HashMap<>();
-
-        HandlerList handlerList = event.getHandlers();
-        final RegisteredListener[] registeredListeners = handlerList.getRegisteredListeners();
-        for (RegisteredListener listener : registeredListeners) {
+        backupMap.forEach((r,e) ->{
             try {
-                Class<?> listenerClass = listener.getClass();
+                Class<?> listenerClass = r.getClass();
                 Field executorField = listenerClass.getDeclaredField("executor");
                 executorField.setAccessible(true);
 
-                backupMap.put(listener, (EventExecutor) executorField.get(listener));
+                executorField.set(r, (EventExecutor) (listener1, event1) -> {});
 
-                executorField.set(listener, (EventExecutor) (listener1, event1) -> {});
-
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException(e);
+            } catch (NoSuchFieldException | IllegalAccessException ignored) {
+                throw new RuntimeException(ignored);
             }
+        });
 
-            Runnable task = () -> {
-                backupMap.forEach((r,e) -> {
-                    try {
-                        Class<?> listenerClass = r.getClass();
-                        Field executorField = listenerClass.getDeclaredField("executor");
-                        executorField.setAccessible(true);
+        Runnable task = () -> {
+            backupMap.forEach((r,e) -> {
+                try {
+                    Class<?> listenerClass = r.getClass();
+                    Field executorField = listenerClass.getDeclaredField("executor");
+                    executorField.setAccessible(true);
 
-                        executorField.set(r, e);
+                    executorField.set(r, e);
 
-                    } catch (NoSuchFieldException | IllegalAccessException ignored) {
-                        throw new RuntimeException(ignored);
-                    }
-                });
-            };
-            if (PlayerDoll.isFolia) {
-                FoliaSupport.globalTask(task);
-            } else {
-                Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(), task, 0);
-            }
+                } catch (NoSuchFieldException | IllegalAccessException ignored) {
+                    throw new RuntimeException(ignored);
+                }
+            });
+        };
+        if (PlayerDoll.isFolia) {
+            FoliaSupport.globalTask(task);
+        } else {
+            Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(), task, 0);
         }
     }
     private void playerJoin(PlayerJoinEvent event) {
