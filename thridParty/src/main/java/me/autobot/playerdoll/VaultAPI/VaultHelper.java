@@ -38,7 +38,13 @@ public class VaultHelper {
         }
         return withdraw(player, PermissionManager.getInstance(player).costPerCreation);
     }
-
+    public boolean playerUpgrade(Player player) {
+        if (this.econ == null) {
+            player.sendMessage(LangFormatter.YAMLReplaceMessage("VaultNotFound"));
+            return false;
+        }
+        return withdraw(player, PermissionManager.getInstance(player).costForUpgrade);
+    }
     private boolean withdraw(Player player, double cost) {
         EconomyResponse response = econ.withdrawPlayer(player, cost);
         if (response.transactionSuccess()) {

@@ -53,9 +53,7 @@ public class PermissionManager {
             playerUUIDs.addDefault(s,new ArrayList<>());
             //playerPermissionGroup.put(s,null);
         });
-        Bukkit.getOnlinePlayers().forEach(p -> {
-            checkPlayerPermission(p);
-        });
+        Bukkit.getOnlinePlayers().forEach(PermissionManager::checkPlayerPermission);
     }
     public static PermissionManager getInstance(Player player) {
         return permissionGroupMap.get(playerPermissionGroup.get(player));
@@ -215,5 +213,22 @@ public class PermissionManager {
             return getOfflinePlayerPermission(player.getUniqueId());
         }
         return null;
+    }
+
+    public static boolean upgrade(Player player) {
+        PermissionManager permissionManager = PermissionManager.getInstance(player);
+        if (permissionManager.nextGroup == null || permissionManager.nextGroup.isBlank()) {
+            return false;
+        } else {
+            ArrayList<String> oldList = new ArrayList<>(permissionFile.getStringList(permissionManager.groupName));
+            oldList.remove(player.getUniqueId().toString());
+            permissionFile.set(permissionManager.groupName,oldList);
+            ArrayList<String> newList = new ArrayList<>(permissionFile.getStringList(permissionManager.nextGroup));
+            newList.add(player.getUniqueId().toString());
+            permissionFile.set(permissionManager.nextGroup,newList);
+
+            playerPermissionGroup.put(player, permissionManager.nextGroup);
+        }
+        return true;
     }
 }

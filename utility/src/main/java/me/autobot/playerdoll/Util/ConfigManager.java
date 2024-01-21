@@ -10,7 +10,7 @@ import java.util.*;
 
 public final class ConfigManager {
     private static Plugin plugin;
-    private static final String configVersion = "15";
+    private static final String configVersion = "16";
     private final EnumMap<ConfigType, File> configMap = new EnumMap<>(ConfigType.class);
     private static final EnumMap<ConfigType, YamlConfiguration> configs = new EnumMap<>(ConfigType.class);
 
