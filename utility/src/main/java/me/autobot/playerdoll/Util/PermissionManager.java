@@ -1,234 +1,165 @@
 package me.autobot.playerdoll.Util;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
 
 public class PermissionManager {
-    public static final HashMap<String,PermissionManager> permissionGroupMap = new HashMap<>();
-    public static final HashMap<Player, String> playerPermissionGroup = new HashMap<>();
-    public static final YamlConfiguration permissionFile = ConfigManager.getPermission();
-    private static File uuidDirectory;
-    public static YamlConfiguration playerUUIDs;
-    public Map<String, Boolean> flagGlobalDisplays = new HashMap<>();
-    public Map<String, Boolean> flagGlobalToggles = new HashMap<>();
-    public Map<String, Boolean> flagPersonalDisplays = new HashMap<>();
-    public Map<String, Boolean> flagPersonalToggles = new HashMap<>();
-    public String groupName;
-    public String mirror;
-    public String nextGroup;
-    public boolean canCreateDoll;
-    public int maxDollCreation;
-    public int maxDollSpawn;
-    public boolean canJoinAtStart;
-    public int minUseInterval;
-    public int minAttackInterval;
-    public int minSwapInterval;
-    public int minDropInterval;
-    public int minJumpInterval;
-    public int minLookatInterval;
-    public boolean restrictSkin;
-    public boolean bypassMaxPlayer;
-    public boolean keepInventory;
-    public boolean notCountSleeping;
-    public String prefix;
-    public String suffix;
-    public boolean bypassResidence;
+    public static final Set<String> permissionGroups = new HashSet<>();
+    public static final Map<String, String> attachments = new HashMap<>(); //ExternName, PermName
+    public static YamlConfiguration permissionYAML;
+    private static File offlinePlayerPermFile;
+    private static YamlConfiguration offlinePlayerPerm;
+    public static final Map<UUID, String> playerPermissions = new HashMap<>();
+    public final Map<String, Object> groupProperties = new LinkedHashMap<>();
+    public final Map<String, Object> dollProperties = new LinkedHashMap<>();
+    public final Map<String, Boolean> dollDefaultSettings = new LinkedHashMap<>();
+    public final Map<String, Boolean> dollAvailableFlags = new LinkedHashMap<>();
+    public final Map<String, Boolean> playerDefaultSettings = new LinkedHashMap<>();
+    public final Map<String, Boolean> playerAvailableFlags = new LinkedHashMap<>();
+    public final String mirror;
+    public final String groupName;
+    public final String nextGroup;
+    public final List<String> attachedGroup;
+    public static boolean externalPerm;
 
-    public double costPerCreation;
-    public double costForUpgrade;
-    public static void newInstance(Plugin plugin) {
-        uuidDirectory = new File(plugin.getDataFolder() + File.separator + "player","uuids.yml");
-        playerUUIDs = YamlConfiguration.loadConfiguration(uuidDirectory);
-        List<String> groups = permissionFile.getStringList("permissionGroup");
-        groups.forEach(s -> {
-            permissionGroupMap.put(s, new PermissionManager(s));
-            playerUUIDs.addDefault(s,new ArrayList<>());
-            //playerPermissionGroup.put(s,null);
-        });
-        Bukkit.getOnlinePlayers().forEach(PermissionManager::checkPlayerPermission);
-    }
-    public static PermissionManager getInstance(Player player) {
-        return permissionGroupMap.get(playerPermissionGroup.get(player));
-    }
-    public static PermissionManager getInstance(String group) {
-        return permissionGroupMap.get(group);
-    }
-    private PermissionManager(String permissionGroup) {
-        if (!permissionFile.contains(permissionGroup)) return;
-        this.groupName = permissionGroup;
-        this.mirror = permissionFile.getString(this.groupName + ".Mirror");
-        this.nextGroup = permissionFile.getString(this.groupName + ".NextGroup");
-        
-        if (hasMirror() && hasPermissionGroup()) {
-            mirrorPermission();
+    public static void initialize(Plugin plugin, boolean useExtern) {
+        externalPerm = useExtern;
+        if (!externalPerm) {
+            offlinePlayerPermFile = new File(plugin.getDataFolder(), "playerPerm.yml");
+            offlinePlayerPerm = YamlConfiguration.loadConfiguration(offlinePlayerPermFile);
+            offlinePlayerPerm.getConfigurationSection("").getKeys(false).forEach(k -> {
+                if (k.contains(".")) {
+                    String[] split = k.split("\\.");
+                    String name = split[0];
+                    UUID uuid = UUID.fromString(split[1]);
+                    playerPermissions.put(uuid, name);
+                } else {
+                    permissionGroups.add(k);
+                }
+            });
         }
+        permissionGroups.forEach(g -> {
+            permissionYAML.getStringList("group."+g+".Attach").forEach(r -> {
+                if (!r.isBlank()) attachments.put(r,g);
+            });
+        });
+    }
+    public static void save() {
+        if (!externalPerm) {
+            // Not save default group
+            offlinePlayerPerm.set("default", null);
+            try {
+                offlinePlayerPerm.save(offlinePlayerPermFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static PermissionManager getPermByExternalGroup(String groupName) {
+        if (!externalPerm) return null;
+        return getPermissionGroup(attachments.get(groupName));
+    }
+    public static PermissionManager getPermissionGroup(String groupName) {
+        if (permissionGroups.contains(groupName)) {
+            return new PermissionManager(groupName);
+        } else {
+            permissionYAML = ConfigManager.getPermission();
+            if (permissionYAML.contains("group."+groupName)) {
+                permissionGroups.add(groupName);
+                permissionYAML.getStringList("group."+groupName+".Attach").forEach(r -> {
+                    if (!r.isBlank()) attachments.put(r,groupName);
+                });
+                return new PermissionManager(groupName);
+            } else {
+                return null;
+            }
+        }
+    }
+    private PermissionManager(String name) {
+        this.groupName = name;
+        this.attachedGroup = permissionYAML.getStringList( "group." + groupName + ".Attach");
+        this.mirror = permissionYAML.getString( "group." + groupName + ".Mirror");
+        this.nextGroup = permissionYAML.getString( "group." + groupName + ".NextGroup");
+
+        mirrorPermission();
         loadPermission();
     }
 
-    private void loadPermission() {
-        getPermission("canCreateDoll");
-        getPermission("maxDollCreation");
-        getPermission("maxDollSpawn");
-        getPermission("canJoinAtStart");
-        getPermission("minUseInterval");
-        getPermission("minAttackInterval");
-        getPermission("minSwapInterval");
-        getPermission("minDropInterval");
-        getPermission("minJumpInterval");
-        getPermission("minLookatInterval");
-        getPermission("restrictSkin");
-        getPermission("bypassMaxPlayer");
-        getPermission("keepInventory");
-        getPermission("notCountSleeping");
-        getPermission("prefix");
-        getPermission("suffix");
-
-        getPermission("bypassResidence");
-        getPermission("costPerCreation");
-        getPermission("costForUpgrade");
-
-        getPermissionMap("GlobalFlag.Display");
-        getPermissionMap("PersonalFlag.Display");
-        getPermissionMap("GlobalFlag.Toggle");
-        getPermissionMap("PersonalFlag.Toggle");
-    }
-
-    private void getPermission(String key) {
-        String path = groupName + "." + key;
-        if (permissionFile.contains(path)) {
-            try {
-                Field f = this.getClass().getField(key);
-                f.set(this, permissionFile.get(path));
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            //value = permissionFile.get(path);
-        }
-    }
-    private void getPermissionMap(String key) {
-        String path = groupName + "." + key;
-        if (!permissionFile.contains(path)) return;
-        String[] splitText = key.split("\\.");
-        Map<String, Object> map = permissionFile.getConfigurationSection(path).getValues(true);
-        if (splitText[0].equals("GlobalFlag")) {
-            if (splitText[1].equals("Display")) {
-                map.forEach( (s,o) -> this.flagGlobalDisplays.put(s,(boolean) o));
-            } else if (splitText[1].equals("Toggle")) {
-                map.forEach( (s,o) -> this.flagGlobalToggles.put(s,(boolean) o));
-            }
-        } else if (splitText[0].equals("PersonalFlag")) {
-            if (splitText[1].equals("Display")) {
-                map.forEach( (s,o) -> this.flagPersonalDisplays.put(s,(boolean) o));
-            } else if (splitText[1].equals("Toggle")) {
-                map.forEach( (s,o) -> this.flagPersonalToggles.put(s,(boolean) o));
-            }
-        }
-    }
     private void mirrorPermission() {
-        PermissionManager mirror = permissionGroupMap.get(this.mirror);
-        this.canCreateDoll = mirror.canCreateDoll;
-        this.maxDollCreation = mirror.maxDollCreation;
-        this.maxDollSpawn = mirror.maxDollSpawn;
-        this.canJoinAtStart = mirror.canJoinAtStart;
-        this.minUseInterval = mirror.minUseInterval;
-        this.minAttackInterval = mirror.minAttackInterval;
-        this.minSwapInterval = mirror.minSwapInterval;
-        this.minDropInterval = mirror.minDropInterval;
-        this.minJumpInterval = mirror.minJumpInterval;
-        this.minLookatInterval = mirror.minLookatInterval;
-        this.restrictSkin = mirror.restrictSkin;
-        this.bypassMaxPlayer = mirror.bypassMaxPlayer;
-        this.keepInventory = mirror.keepInventory;
-        this.notCountSleeping = mirror.notCountSleeping;
-        this.prefix = mirror.prefix;
-        this.suffix = mirror.suffix;
-
-        this.bypassResidence = mirror.bypassResidence;
-        this.costPerCreation = mirror.costPerCreation;
-        this.costForUpgrade = mirror.costForUpgrade;
-
-        this.flagGlobalDisplays.putAll(mirror.flagGlobalDisplays);
-        this.flagGlobalToggles.putAll(mirror.flagGlobalToggles);
-        this.flagPersonalDisplays.putAll(mirror.flagPersonalDisplays);
-        this.flagPersonalToggles.putAll(mirror.flagPersonalToggles);
-    }
-
-    private boolean hasMirror() {
-        return !(mirror == null || mirror.isBlank()) && permissionFile.contains(mirror);
-    }
-    private boolean hasPermissionGroup() {
-        return permissionFile.contains(mirror);
-    }
-
-    public static void savePlayerUUIDs() {
-        try {
-            playerUUIDs.save(uuidDirectory);
-        } catch (IOException ignored) {
-        }
-
-    }
-    public static void checkPlayerPermission(Player player) {
-        if (player.getName().startsWith("-")) {
+        if (mirror.isBlank()) return;
+        PermissionManager mirrorGroup = getPermissionGroup(mirror);
+        if (mirrorGroup == null) {
             return;
         }
-        permissionGroupMap.keySet().forEach(s -> {
-            if (playerUUIDs.contains(s+"."+player.getUniqueId())) {
-                playerPermissionGroup.put(player,s);
-                return;
-            }
-            playerPermissionGroup.put(player,"default");
-            List<String> list = playerUUIDs.getStringList("default");
-            if (list.contains(player.getUniqueId().toString())) {
-                return;
-            }
-            list.add(player.getUniqueId().toString());
-            playerUUIDs.set("default", list);
+        groupProperties.putAll(mirrorGroup.groupProperties);
+        dollProperties.putAll(mirrorGroup.dollProperties);
+        dollDefaultSettings.putAll(mirrorGroup.dollDefaultSettings);
+        dollAvailableFlags.putAll(mirrorGroup.dollAvailableFlags);
+        playerDefaultSettings.putAll(mirrorGroup.playerDefaultSettings);
+        playerAvailableFlags.putAll(mirrorGroup.playerAvailableFlags);
+    }
+
+    private void loadPermission() {
+        groupProperties.putAll(permissionYAML.getConfigurationSection("group." + groupName + ".groupProperty").getValues(false));
+        dollProperties.putAll(permissionYAML.getConfigurationSection("group." + groupName + ".dollProperty").getValues(false));
+        addToMap(dollDefaultSettings,"group." + groupName + ".dollDefaultSetting");
+        addToMap(dollAvailableFlags,"group." + groupName + ".dollAvailableFlag");
+        addToMap(playerDefaultSettings,"group." + groupName + ".playerDefaultSetting");
+        addToMap(playerAvailableFlags,"group." + groupName + ".playerAvailableFlag");
+    }
+
+    private void addToMap(Map<String,Boolean> map, String path) {
+        permissionYAML.getConfigurationSection(path).getValues(false).forEach((k,o)->{
+            map.put(k,(boolean)o);
         });
     }
-    private static PermissionManager getPlayerPermission(String uuid) {
-        for (String s : permissionGroupMap.keySet()) {
-            if (playerUUIDs.contains(s+"."+uuid)) {
-                return permissionGroupMap.get(s);
-            }
+    public static void addPlayerExtern(Player player, String groupName) {
+        if (!externalPerm) return;
+        if (groupName.isBlank()) return;
+        PermissionManager perm = getPermByExternalGroup(groupName);
+        if (perm == null) {
+            return;
         }
-        return null;
-    }
-    public static PermissionManager getOfflinePlayerPermission(OfflinePlayer player) {
-        return getOfflinePlayerPermission(player.getUniqueId());
-    }
-    public static PermissionManager getOfflinePlayerPermission(UUID uuid) {
-        return getPlayerPermission(uuid.toString());
-    }
-    public static PermissionManager getOfflinePlayerPermission(String name) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
-        if (!player.hasPlayedBefore()) {
-            return getOfflinePlayerPermission(player.getUniqueId());
+        if (perm.groupName.equalsIgnoreCase("default")) {
+            return;
         }
-        return null;
+        playerPermissions.put(player.getUniqueId(),perm.groupName);
     }
-
-    public static boolean upgrade(Player player) {
-        PermissionManager permissionManager = PermissionManager.getInstance(player);
-        if (permissionManager.nextGroup == null || permissionManager.nextGroup.isBlank()) {
+    public static void removePlayer(Player player) {
+        playerPermissions.remove(player.getUniqueId());
+    }
+    public static PermissionManager getPlayerPermission(UUID uuid) {
+        return getPermissionGroup(playerPermissions.getOrDefault(uuid, "default"));
+    }
+    public static PermissionManager getPlayerPermission(Player player) {
+        return getPlayerPermission(player.getUniqueId());
+    }
+    public static String[] getAttached(String groupName) {
+        PermissionManager group = getPermissionGroup(groupName);
+        return group == null ? null : group.attachedGroup.toArray(String[]::new);
+    }
+    public String[] getAttached(PermissionManager group) {
+        return group.attachedGroup.toArray(String[]::new);
+    }
+    public static boolean upgradePerm(Player player) {
+        if (externalPerm) return false;
+        PermissionManager perm = getPlayerPermission(player);
+        if (perm == null || perm.nextGroup == null || perm.nextGroup.isBlank()) {
             return false;
-        } else {
-            ArrayList<String> oldList = new ArrayList<>(permissionFile.getStringList(permissionManager.groupName));
-            oldList.remove(player.getUniqueId().toString());
-            permissionFile.set(permissionManager.groupName,oldList);
-            ArrayList<String> newList = new ArrayList<>(permissionFile.getStringList(permissionManager.nextGroup));
-            newList.add(player.getUniqueId().toString());
-            permissionFile.set(permissionManager.nextGroup,newList);
-
-            playerPermissionGroup.put(player, permissionManager.nextGroup);
         }
+        playerPermissions.put(player.getUniqueId(), perm.nextGroup);
+        List<String> oldList = offlinePlayerPerm.getStringList(perm.groupName);
+        oldList.remove(player.getUniqueId().toString());
+        offlinePlayerPerm.set(perm.groupName,oldList);
+        List<String> nextList = offlinePlayerPerm.getStringList(perm.nextGroup);
+        nextList.add(player.getUniqueId().toString());
+        offlinePlayerPerm.set(perm.nextGroup,nextList);
         return true;
     }
 }

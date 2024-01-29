@@ -15,14 +15,16 @@ public class SpigotDollImpl extends AbstractDoll {
     public void spawnToWorld() {
         //this.connection = new DollNetworkHandler(server,dollNetworkManager,this);
         super.spawnToWorld();
-        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
-        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
+        spawnPacketTask.run();
     }
+    /*
     @Override
     public void tick() {
         nonFoliaTickCount = this.getServer().getTickCount();
         super.tick();
     }
+
+     */
     @Override
     public void disconnect() {
         super.disconnect();

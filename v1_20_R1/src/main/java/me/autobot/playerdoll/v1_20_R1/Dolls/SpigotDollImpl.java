@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import org.bukkit.Bukkit;
 
 public class SpigotDollImpl extends AbstractDoll {
     public SpigotDollImpl(MinecraftServer minecraftserver, ServerLevel worldserver, GameProfile gameprofile, ServerPlayer player) {
@@ -15,15 +16,11 @@ public class SpigotDollImpl extends AbstractDoll {
     public void spawnToWorld() {
         //this.connection = new DollNetworkHandler(server,dollNetworkManager,this);
         super.spawnToWorld();
-        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
-        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
+        spawnPacketTask.run();
+        //sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
+        //sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
         //this.server.getPlayerList().broadcastAll(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
         //this.server.getPlayerList().broadcastAll(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
-    }
-    @Override
-    public void tick() {
-        nonFoliaTickCount = this.getServer().getTickCount();
-        super.tick();
     }
     @Override
     public void disconnect() {

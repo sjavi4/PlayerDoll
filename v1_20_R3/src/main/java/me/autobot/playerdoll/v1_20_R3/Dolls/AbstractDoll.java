@@ -41,9 +41,16 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     boolean noPhantom;
     DollSettingMonitor dollSettingMonitor;
     NMSPlayerEntityActionPack actionPack;
-    static long foliaTickCount = -1;
-    static int nonFoliaTickCount = -1;
-    public static IDoll callSpawn(Object _player, String name) {
+    final Runnable spawnPacketTask = () -> {
+        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
+        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
+    };
+    final Runnable lookAtPacketTask = () -> {
+        sendPacket(new ClientboundRotateHeadPacket(this, PacketYaw));
+        sendPacket(new ClientboundMoveEntityPacket.Rot(this.getId(), PacketYaw, PacketPitch, true));
+    };
+    static int dollTickCount = -1;
+    public static IDoll callSpawn(Object _player, String name, UUID uuid) {
         ServerPlayer player = (ServerPlayer) _player;
         MinecraftServer server;
         ServerLevel serverLevel;
@@ -54,7 +61,8 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
             server = player.server;
             serverLevel = player.serverLevel();
         }
-        GameProfile profile = new GameProfile(UUIDUtil.createOfflinePlayerUUID(name),name);
+        GameProfile profile = new GameProfile(uuid,name);
+        //GameProfile profile = new GameProfile(UUIDUtil.createOfflinePlayerUUID(name),name);
         if (PlayerDoll.isSpigot) return new SpigotDollImpl(server, serverLevel, profile, player);
         else if (PlayerDoll.isPaperSeries) return new PaperDollImpl(server, serverLevel, profile, player);
         else if (PlayerDoll.isFolia) return new FoliaDollImpl(server, serverLevel, profile, player);
@@ -68,7 +76,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         //setConfigInformation();
 
         IDoll.setConfigInformation(this.getBukkitEntity());
-        configManager = DollConfigManager.dollConfigManagerMap.get(this.getBukkitEntity());
+        configManager = DollConfigManager.dollConfigManagerMap.get(this.getBukkitEntity().getUniqueId());
         dollSettingMonitor = new DollSettingMonitor(this.getBukkitEntity(),this);
         configManager.addListener(dollSettingMonitor);
 
@@ -117,28 +125,35 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     }
     @Override
     public void setDollLookAt() {
-        Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),()->{
-            sendPacket(new ClientboundRotateHeadPacket(this, PacketYaw));
-            sendPacket(new ClientboundMoveEntityPacket.Rot(this.getId(), PacketYaw, PacketPitch, true));
-        },2);
+        Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),lookAtPacketTask,2);
     }
 
     @Override
     public void tick() {
+        if (PlayerDoll.isFolia) {
+            dollTickCount = PlayerDoll.getFoliaHelper().getTick();
+        } else {
+            dollTickCount = this.getServer().getTickCount();
+        }
         try {
             this.actionPack.onUpdate();
             super.tick();
             this.doTick();
-            if (checkTick()) {
+            if (dollTickCount % 10 == 0) {
+                //if (checkTick()) {
                 connection.resetPosition();
                 this.serverLevel().getChunkSource().move(this);
                 if (noPhantom) IDoll.resetPhantomStatistic(this.getBukkitEntity());
+                //}
             }
         } catch (NullPointerException ignored) {}
     }
+    /*
     private boolean checkTick() {
         return (foliaTickCount % 10 == 0) || (nonFoliaTickCount % 10 == 0);
     }
+
+     */
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
         return IDoll.executeHurt(this,getBukkitEntity(),super.hurt(damageSource,f));

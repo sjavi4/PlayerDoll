@@ -7,7 +7,7 @@
     <parent>
         <groupId>me.autobot</groupId>
         <artifactId>PlayerDoll-parent</artifactId>
-        <version>1.21</version>
+        <version>1.22</version>
     </parent>
     <artifactId>dist</artifactId>
     <version>${project.parent.version}</version>
@@ -27,6 +27,11 @@
         <dependency>
             <groupId>me.autobot</groupId>
             <artifactId>utility</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.autobot</groupId>
+            <artifactId>folia</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
