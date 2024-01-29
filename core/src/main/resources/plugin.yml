@@ -1,0 +1,49 @@
+name: PlayerDoll
+version: '${project.version}'
+main: me.autobot.playerdoll.PlayerDoll
+api-version: '1.20'
+folia-supported: true
+load: POSTWORLD
+softdepend:
+  - Residence
+  - Vault
+  - LuckPerms
+commands:
+  doll:
+    usage: /<command> <subcommand> <doll> <args>
+    permission: playerdoll.doll
+  dollReload:
+    description: Reload
+    permission: playerdoll.reload
+  dollHelp:
+    description: Show Help
+    permission: playerdoll.help
+  dollList:
+    description: List Dolls
+    permission: playerdoll.list
+  dollLimit:
+    description: List Permission Info
+    permission: playerdoll.limit
+  dollUpgrade:
+    description: Upgrade Player Permission
+    permission: playerdoll.upgrade
+# Most of them are not used
+permissions:
+  playerdoll.doll:
+    description: Ability to use /doll subCommands
+    default: true
+  playerdoll.reload:
+    description: /dollReload command
+    default: op
+  playerdoll.help:
+    description: /dollHelp command
+    default: true
+  playerdoll.list:
+    description: /dollList command
+    default: true
+  playerdoll.limit:
+    description: /dollLimit command
+    default: true
+  playerdoll.upgrade:
+    description: /dollUpgrade command
+    default: true

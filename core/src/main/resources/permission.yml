@@ -1,0 +1,150 @@
+version: 17
+
+group:
+  default:
+    # A Group Name that being copied (settings)
+    # Can be override if stated specifically
+    # GroupName must be present in this config
+    Mirror: ''
+    # For external Permission Plugin
+    # Player under External Permission Group having this Attachment will assign automatically
+    # Group should use once only
+    Attach:
+      - ''
+    # Permission Group Name For upgrade
+    # Can be used if no Other Permission Plugin is used
+    # GroupName must be present in this config
+    NextGroup: ''
+
+    # Player properties
+    # Can be Mirrored
+    groupProperty:
+      canCreateDoll: true
+      maxDollCreation: 1
+      maxDollSpawn: 1
+      bypassMaxPlayer: true
+      costPerCreation: 0.0
+      costForUpgrade: 999999.0
+
+    # Doll properties
+    # Can be Mirrored
+    dollProperty:
+      # Allow Player Set skin freely
+      restrictSkin: false
+      # Keep Inventory when Die
+      keepInventory: true
+      # Count Doll into Skin Night Percentage
+      notCountSleeping: true
+      # Doll actions being controlled by Residence
+      bypassResidence: false
+      # Immune to PlayerDamage
+      playerImmune: false
+      # Prefix on TabList
+      prefix: '&l&e[BOT]&r'
+      # Suffix on TabList
+      suffix: ''
+
+    # Default toggle of behavior
+    # Can be Mirrored
+    dollDefaultSetting:
+      echest: true
+      glow: false
+      gravity: true
+      hide_from_list: false
+      hostility: true
+      inv: true
+      invulnerable: false
+      join_at_start: false
+      large_step_size: false
+      phantom: true
+      pickupable: true
+      pushable: false
+
+    # Can Player switch the on/off state
+    # Can be Mirrored
+    dollAvailableFlag:
+      echest: true
+      glow: true
+      gravity: false
+      hide_from_list: false
+      hostility: false
+      inv: true
+      invulnerable: false
+      join_at_start: true
+      large_step_size: true
+      phantom: true
+      pickupable: true
+      pushable: true
+
+    # Default toggle of behavior
+    # Can be Mirrored
+    playerDefaultSetting:
+      admin: false
+      attack: false
+      copy: false
+      despawn: false
+      dismount: false
+      drop: false
+      echest: false
+      exp: false
+      gset: false
+      info: false
+      inv: false
+      jump: false
+      look: false
+      lookat: false
+      menu: false
+      mount: false
+      move: false
+      pset: false
+      set: false
+      slot: false
+      sneak: false
+      spawn: false
+      sprint: false
+      stop: false
+      strafe: false
+      swap: false
+      tp: false
+      turn: false
+      use: false
+
+    # Can Player switch the on/off state
+    # Can be Mirrored
+    playerAvailableFlag:
+      admin: true
+      attack: true
+      copy: true
+      despawn: true
+      dismount: true
+      drop: true
+      echest: true
+      exp: true
+      gset: true
+      info: false
+      inv: true
+      jump: true
+      look: true
+      lookat: true
+      menu: true
+      mount: true
+      move: true
+      pset: true
+      set: true
+      slot: true
+      sneak: true
+      spawn: true
+      sprint: true
+      stop: true
+      strafe: true
+      swap: true
+      tp: true
+      turn: true
+      use: true
+
+  # Create other Groups here
+  otherGroup:
+    Mirror: default
+    Attach:
+      - ''
+    NextGroup: ''
