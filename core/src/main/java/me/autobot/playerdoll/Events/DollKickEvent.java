@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.Events;
 
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,8 +11,9 @@ public class DollKickEvent implements Listener {
     @EventHandler
     public void onDollKick(PlayerKickEvent event) {
         Player player = event.getPlayer();
-        if (PlayerDoll.dollManagerMap.containsKey(player.getName())) {
+        if (DollManager.ONLINE_DOLL_MAP.containsKey(player.getUniqueId())) {
             if (PlayerDoll.isFolia) {
+                //PlayerDoll.getFoliaHelper().kickPlayer(player);
                 event.setCancelled(true);
             }
         }

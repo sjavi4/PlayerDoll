@@ -3,6 +3,7 @@ package me.autobot.playerdoll.Command;
 
 import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.PermissionManager;
@@ -27,12 +28,12 @@ public abstract class SubCommand {
     public SubCommand(Player sender, String dollName) {
         this.player = sender;
         this.dollName = dollName;
-        this.doll = getOnlineDoll();
-
-        if (this.doll == null) {
+        this.dollPlayer = Bukkit.getPlayer(dollName);
+        if (dollPlayer == null) {
             dollConfig = getOfflineDollConfig();
-
         } else {
+            this.doll = DollManager.ONLINE_DOLL_MAP.get(dollPlayer.getUniqueId());
+
             this.actionPack = doll.getActionPack();
             this.dollPlayer = Bukkit.getPlayer(dollName);
             dollConfigManager = doll.getConfigManager();
@@ -45,9 +46,6 @@ public abstract class SubCommand {
         if (sender != null) {
             validator = new DollDataValidator(sender, dollName);
         }
-    }
-    private IDoll getOnlineDoll() {
-        return PlayerDoll.dollManagerMap.getOrDefault(dollName, null);
     }
     private YamlConfiguration getOfflineDollConfig() {
         dollYAML = YAMLManager.loadConfig(dollName,false, true);

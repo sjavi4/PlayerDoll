@@ -14,7 +14,6 @@ public class DollDataValidator {
     private final Player player;
     private final String fullName;
     private final String shortName;
-    //private final Map<String, IDoll> dollMap = PlayerDoll.dollManagerMap;
     private final YamlConfiguration globalConfig = ConfigManager.getConfig();
     public DollDataValidator(Player sender, String dollName) {
         player = sender;

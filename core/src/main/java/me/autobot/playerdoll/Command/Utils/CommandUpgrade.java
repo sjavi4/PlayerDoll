@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.Command.Utils;
 
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.Util.PermissionManager;
@@ -45,7 +46,8 @@ public class CommandUpgrade implements CommandExecutor {
             } else {
                 return true;
             }
-            PlayerDoll.dollManagerMap.values().forEach(d -> {
+            DollManager.ONLINE_DOLL_MAP.values().forEach(d -> {
+            //PlayerDoll.dollManagerMap.values().forEach(d -> {
                 if (d.getOwner().getUniqueId() == p.getUniqueId()) {
                     d.getConfigManager().config.set("Owner.Perm", permissionManager.nextGroup);
                 }

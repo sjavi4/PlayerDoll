@@ -3,6 +3,7 @@ package me.autobot.playerdoll.Command.SubCommands;
 import me.autobot.playerdoll.Command.ArgumentType;
 import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollHelper;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
@@ -31,7 +32,7 @@ public class Spawn extends SubCommand {
         dollYAML.reloadConfig();
 
         int serverMaxDoll = ConfigManager.getConfig().getInt("Global.ServerMaxDoll");
-        if (serverMaxDoll > -1 && !sender.isOp() && PlayerDoll.dollManagerMap.size() >= serverMaxDoll) {
+        if (serverMaxDoll > -1 && !sender.isOp() && DollManager.ONLINE_DOLL_MAP.size() >= serverMaxDoll) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("DollCapacityIsFull"));
             return;
         }
@@ -53,7 +54,7 @@ public class Spawn extends SubCommand {
 
         if (!player.isOp()) {
             int count = 0;
-            for (IDoll d : PlayerDoll.dollManagerMap.values()) {
+            for (IDoll d : DollManager.ONLINE_DOLL_MAP.values()) {
                 if (d.getConfigManager().config.getString("Owner.UUID").equals(ownerUUID)) {
                     count++;
                 }
@@ -70,20 +71,6 @@ public class Spawn extends SubCommand {
         }
         dollConfig = dollYAML.reloadConfig().getConfig();
         UUID configUUID = UUID.fromString(dollConfig.getString("UUID"));
-        try {
-            PlayerDoll.dollManagerMap.put(dollName, null);
-            Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit."+ PlayerDoll.version +".entity.CraftPlayer");
-            ServerPlayer serverPlayer = (ServerPlayer) player.getClass().asSubclass(craftPlayerClass).getDeclaredMethod("getHandle").invoke(player);
-            IDoll doll = (IDoll) DollHelper.callSpawn(serverPlayer,dollName, configUUID , PlayerDoll.version);
-            if (doll != null) {
-                PlayerDoll.dollManagerMap.put(dollName, doll);
-                if (args != null && args.length > 0 && checkArgumentValid(ArgumentType.ALIGN_IN_GRID,args[0])) {
-                    var pos = player.getLocation();
-                    doll._setPos(Math.round(pos.getX() * 2) / 2.0, pos.getBlockY(), Math.round(pos.getZ() * 2) / 2.0);
-                }
-            } else PlayerDoll.dollManagerMap.remove(dollName);
-        } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+        DollManager.getInstance().spawnDoll(dollName, configUUID,sender,(args != null && args.length > 0 && checkArgumentValid(ArgumentType.ALIGN_IN_GRID,args[0])));
     }
 }

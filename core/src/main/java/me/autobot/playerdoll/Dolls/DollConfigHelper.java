@@ -1,13 +1,13 @@
-package me.autobot.playerdoll.Command.SubCommands;
+package me.autobot.playerdoll.Dolls;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import me.autobot.playerdoll.Command.SubCommand;
-import me.autobot.playerdoll.Dolls.DollConfigHelper;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.Util.PermissionManager;
 import me.autobot.playerdoll.YAMLManager;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayInputStream;
@@ -20,58 +20,40 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Create extends SubCommand {
-    public Create(Player sender, String dollName, String[] args) {
-        super(sender, dollName);
-        String skin = sender.getName();
-        if (permissionManager == null) {
-            permissionManager = PermissionManager.getPlayerPermission(sender);
-        }
+public class DollConfigHelper {
 
-        if (!(boolean) PermissionManager.getPlayerPermission(sender).groupProperties.get("canCreateDoll")) {
-            sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandDisabledByPermissionGroup"));
-            return;
-        }
+    public static File getFile(String dollName) {
+        return new File(PlayerDoll.getDollDirectory(),dollName+".yml");
+    }
+    public static File getPlayerDataFile(String dollUUID) {
+        return new File(Bukkit.getServer().getWorldContainer() + File.separator + "world" + File.separator + "playerdata" + File.separator + dollUUID + ".dat");
+    }
+    public static File getPlayerData_OldFile(String dollUUID) {
+        return new File(Bukkit.getServer().getWorldContainer() + File.separator + "world" + File.separator + "playerdata" + File.separator + dollUUID + ".dat_old");
+    }
+    public static String getDollName(File dollFile) {
+        return dollFile.getName().substring(0,dollFile.getName().length()-4);
+    }
+    public static boolean hasConfig(File dollFile) {
+        return dollFile.exists();
+    }
+    public static boolean hasConfig(String dollName) {
+        return getFile(dollName).exists();
+    }
+    public static YamlConfiguration getConfig(File dollFile) {
+        return YamlConfiguration.loadConfiguration(dollFile);
+    }
+    public static YamlConfiguration getConfig(String dollName) {
+        return YamlConfiguration.loadConfiguration(getFile(dollName));
+    }
 
+    public static void createDollConfig(Player creator, String dollName, String skinName, PermissionManager permissionGroup) {
 
-        int count = 0;
-        UUID uuid = sender.getUniqueId();
-        Map<UUID, Integer> dollCountMap = PlayerDoll.playerDollCountMap;
-        if (dollCountMap.containsKey(uuid)) {
-            count = dollCountMap.get(uuid);
-        } else {
-            dollCountMap.put(uuid,0);
-        }
-        int maxCreation = (int) permissionManager.groupProperties.get("maxDollCreation");
-        if (maxCreation != -1 && !sender.isOp() && count >= maxCreation) {
-            sender.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateTooMuchDoll", maxCreation));
-            return;
-        }
-        
-        if (validator.longName()) return;
-        if (validator.illegalName()) return;
-        if (validator.preservedName()) return;
-        if (validator.repeatName()) return;
-
-        boolean success = PlayerDoll.getVaultHelper().dollCreation(sender);
-        if (!success) {
-            return;
-        }
-        if (args != null && args.length != 0) {
-            skin = args[0];
-        }
-
-        DollConfigHelper.createDollConfig(sender,dollName,skin,permissionManager);
-/*
-        File dollFile = new File(PlayerDoll.getDollDirectory(), dollName+".yml");
+        File dollFile = getFile(dollName);
         dollFile.delete();
 
         YAMLManager configFile = YAMLManager.loadConfig(dollName,true, false);
-        dollConfig = configFile.getConfig();
-
-        if (args != null && args.length != 0) {
-            skin = args[0];
-        }
+        YamlConfiguration dollConfig = configFile.getConfig();
 
         DateFormat date = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
         String formatedDate = date.format(new Date(System.currentTimeMillis()));
@@ -79,29 +61,27 @@ public class Create extends SubCommand {
         dollConfig.set("LastSpawn", formatedDate);
         dollConfig.set("UUID", UUID.randomUUID().toString());
         dollConfig.set("Owner", new LinkedHashMap<String,String>(){{
-            put("Name",sender.getName());
-            put("UUID",uuid.toString());
-            put("Perm",permissionManager.groupName);
+            put("Name",creator.getName());
+            put("UUID",creator.getUniqueId().toString());
+            put("Perm",permissionGroup.groupName);
         }});
         dollConfig.set("Remove", false);
         dollConfig.set("SkinData", new LinkedHashMap<String,String>());
 
-        dollConfig.createSection("setting", permissionManager.dollDefaultSettings);
+        dollConfig.createSection("setting", permissionGroup.dollDefaultSettings);
         dollConfig.createSection("generalSetting");
         dollConfig.createSection("playerSetting");
 
         JsonObject textureProperty = null;
+        Map<String,String> skinData = new LinkedHashMap<>();
         try {
-            URL url_playerName = new URL("https://api.mojang.com/users/profiles/minecraft/" + skin);
+            URL url_playerName = new URL("https://api.mojang.com/users/profiles/minecraft/" + skinName);
             String skinUUID = JsonParser.parseReader(new InputStreamReader(url_playerName.openStream())).getAsJsonObject().get("id").getAsString();
 
             URL url_skinTexture = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + skinUUID + "?unsigned=false");
             textureProperty = JsonParser.parseReader(new InputStreamReader(url_skinTexture.openStream())).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
         } catch (IOException e) {
             System.out.println("Could not get skin data from session servers!");
-            //dollFile.delete();
-            //e.printStackTrace();
-            Map<String,String> skinData = new HashMap<>();
             skinData.put("Name", "");
             skinData.put("Skin", "");
             skinData.put("Cape", "");
@@ -112,7 +92,7 @@ public class Create extends SubCommand {
 
             dollConfig.set("SkinData",skinData);
 
-            sender.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateInvalidSkin"));
+            creator.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateInvalidSkin"));
         }
         if (textureProperty != null) {
             String texture = textureProperty.get("value").getAsString();
@@ -129,7 +109,6 @@ public class Create extends SubCommand {
             String timestamp = profile.get("timestamp").getAsString();
             var encoder = Base64.getEncoder();
 
-            Map<String,String> skinData = new HashMap<>();
             skinData.put("Name", profile.get("profileName").getAsString());
             skinData.put("Skin", encoder.encodeToString(skinImage.getBytes(StandardCharsets.UTF_8)));
             skinData.put("Cape", capeImage == null ? "" : encoder.encodeToString(capeImage.getBytes(StandardCharsets.UTF_8)));
@@ -140,10 +119,6 @@ public class Create extends SubCommand {
 
             dollConfig.set("SkinData",skinData);
         }
-
- */
-//        configFile.saveConfig();
-        dollCountMap.put(uuid,count+1);
-        sender.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateSucceed", dollName.substring(1)));
+        configFile.saveConfig();
     }
 }

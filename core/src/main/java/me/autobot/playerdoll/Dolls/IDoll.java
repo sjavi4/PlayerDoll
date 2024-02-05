@@ -116,4 +116,5 @@ public interface IDoll {
         }
         return damaged;
     }
+    Player getBukkitPlayer();
 }

@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.Events;
 
 import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
 import me.autobot.playerdoll.Util.PermissionManager;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -22,8 +24,9 @@ public class DollDisconnectEvent implements Listener {
     public void onDollDisconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String name = player.getName();
-        var dollMap = PlayerDoll.dollManagerMap;
-        if (!dollMap.containsKey(name)) {
+        UUID uuid = player.getUniqueId();
+        var dollMap = DollManager.ONLINE_DOLL_MAP;
+        if (!dollMap.containsKey(uuid)) {
             playerDisconnect(event);
             return;
         }
@@ -36,7 +39,9 @@ public class DollDisconnectEvent implements Listener {
         DollConfigManager dollConfigManager = DollConfigManager.getConfigManager(player);
         dollConfigManager.save();
         if (dollConfigManager.config.getBoolean("Remove")) {
-            String uuid = player.getUniqueId().toString();
+            DollManager.getInstance().removeDoll(name);
+            /*
+            //String uuid = player.getUniqueId().toString();
             File config = new File(PlayerDoll.getDollDirectory(),player.getName()+".yml");
             File dat = new File(Bukkit.getServer().getWorldContainer()+File.separator+"world"+File.separator+"playerdata"+File.separator+uuid+".dat");
             File dat_old = new File(Bukkit.getServer().getWorldContainer()+File.separator+"world"+File.separator+"playerdata"+File.separator+uuid+".dat_old");
@@ -46,12 +51,14 @@ public class DollDisconnectEvent implements Listener {
                 dat.delete();
                 dat_old.delete();
             }, 2, TimeUnit.SECONDS);
+
+             */
         }
         dollConfigManager.removeListener();
         if (!globalConfig.getBoolean("Global.DollDisconnectMessage")) {
             event.setQuitMessage(null);
         }
-        dollMap.remove(name);
+        dollMap.remove(uuid);
         var invMap = PlayerDoll.dollInvStorage;
         invMap.get(name).closeAllInv();
     }

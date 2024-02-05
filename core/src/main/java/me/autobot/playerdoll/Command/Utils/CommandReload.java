@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.Command.Utils;
 
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
 import me.autobot.playerdoll.Util.LangFormatter;
@@ -13,7 +14,7 @@ public class CommandReload implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof Player p && p.isOp()) {
             p.sendMessage(LangFormatter.YAMLReplaceMessage("ReloadPlugin"));
-            PlayerDoll.dollManagerMap.values().forEach(i -> i.getConfigManager().save());
+            DollManager.ONLINE_DOLL_MAP.values().forEach(i -> i.getConfigManager().save());
             PlayerDoll.configManager = new ConfigManager(PlayerDoll.getPlugin());
             //YAMLManager.reloadAllConfig();
         }

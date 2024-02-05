@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.Events;
 
 import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
 import me.autobot.playerdoll.Util.PermissionManager;
@@ -12,7 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 public class DollDieEvent implements Listener {
     @EventHandler
     public void onDollDie(PlayerDeathEvent event) {
-        if (!PlayerDoll.dollManagerMap.containsKey(event.getEntity().getName())) {
+        if (!DollManager.ONLINE_DOLL_MAP.containsKey(event.getEntity().getUniqueId())) {
             return;
         }
         YamlConfiguration globalConfig = ConfigManager.getConfig();

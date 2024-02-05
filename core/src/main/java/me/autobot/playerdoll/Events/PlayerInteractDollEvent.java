@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.Events;
 
 
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -17,7 +18,7 @@ public class PlayerInteractDollEvent implements Listener {
             return;
         }
         Entity doll = event.getRightClicked();
-        if (!PlayerDoll.dollManagerMap.containsKey(doll.getName())) {
+        if (!DollManager.ONLINE_DOLL_MAP.containsKey(doll.getUniqueId())) {
             return;
         }
         Player player = event.getPlayer();

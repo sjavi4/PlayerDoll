@@ -2,9 +2,7 @@ package me.autobot.playerdoll.Command.SubCommands;
 
 import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -17,13 +15,10 @@ public class Remove extends SubCommand {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandExecutorMustBeOwner"));
             return;
         }
+        /*
         if (doll != null) {
             dollConfigManager.config.set("Remove", true);
-            if (PlayerDoll.isFolia) {
-                DollManager.Folia_Kill(Bukkit.getPlayer(dollName), doll);
-            } else {
-                doll._kill();
-            }
+            DollManager.getInstance().removeDoll(dollName);
         } else {
             String uuid = dollConfig.getString("UUID");
             File config = new File(PlayerDoll.getDollDirectory(),dollName+".yml");
@@ -33,5 +28,8 @@ public class Remove extends SubCommand {
             dat.delete();
             dat_old.delete();
         }
+
+         */
+        DollManager.getInstance().removeDoll(dollName);
     }
 }

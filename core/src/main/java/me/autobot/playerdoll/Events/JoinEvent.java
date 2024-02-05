@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.Events;
 
 import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.GUIs.Doll.DollInvStorage;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
@@ -80,7 +81,7 @@ public class JoinEvent implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void OnDollJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!PlayerDoll.dollManagerMap.containsKey(player.getName())) {
+        if (!DollManager.ONLINE_DOLL_MAP.containsKey(player.getUniqueId())) {
             playerJoin(event);
             return;
         }

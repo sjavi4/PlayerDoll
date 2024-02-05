@@ -389,7 +389,7 @@ permissionInfo:
   #minDropInterval: '&6Minimum Drop Interval &a: &r%a%'
   #minJumpInterval: '&6Minimum Jump Interval &a: &r%a%'
   #minLookatInterval: '&6Minimum Lookat Interval &a: &r%a%'
-
+  playerImmune: '&6Can be Attacked by player &a: &r%a%'
   bypassResidence: '&6Bypass Residence &a: &r%a%'
   costPerCreation: '&6Doll Creation Cost &a: &r%a%'
   costForUpgrade: '&6Permission Group Upgrading Fee &a: &r%a%'

@@ -42,7 +42,7 @@ public final class PlayerDoll extends JavaPlugin {
     private static Plugin plugin;
 
     public static String version;
-    public static Map<String, IDoll> dollManagerMap = new HashMap<>();
+    //public static Map<String, IDoll> dollManagerMap = new HashMap<>();
     public static final Map<UUID,Integer> playerDollCountMap = new HashMap<>();
     public static final Map<String, DollInvStorage> dollInvStorage = new HashMap<>();
     public static final Set<String> pendingRespawnList = new HashSet<>();
@@ -104,15 +104,11 @@ public final class PlayerDoll extends JavaPlugin {
         }
 
         thridPartyCheck();
-        if (luckPermsHelper == null) {
-            //if (!luckPermsHelper.exist()) {
-            PermissionManager.initialize(this, false);
-            //} else {
-                //PermissionManager.newInstance(this);
-            //}
-        } else {
-            PermissionManager.initialize(this, true);
-        }
+        //if (!luckPermsHelper.exist()) {
+        //} else {
+        //PermissionManager.newInstance(this);
+        //}
+        PermissionManager.initialize(this, luckPermsHelper != null);
 
         countPlayerDoll();
 
@@ -127,10 +123,11 @@ public final class PlayerDoll extends JavaPlugin {
             Bukkit.setMaxPlayers(maxplayer);
         }
         dollInvStorage.values().forEach(DollInvStorage::closeAllInv);
-        if (isFolia) dollManagerMap.forEach((s,d) -> {
-            DollManager.Folia_Disconnect(Bukkit.getPlayer(s),d);
-        });
-        else dollManagerMap.values().forEach(IDoll::_disconnect);
+        if (isFolia) {
+            DollManager.ONLINE_DOLL_MAP.values().forEach((DollManager::Folia_Disconnect));
+        } else {
+            DollManager.ONLINE_DOLL_MAP.values().forEach(IDoll::_disconnect);
+        }
         PermissionManager.save();
         DollConfigManager.dollConfigManagerMap.values().forEach(d -> {
             if (d != null) {
@@ -264,9 +261,10 @@ public final class PlayerDoll extends JavaPlugin {
             if (!config.getBoolean("setting.join_at_start")) {
                 continue;
             }
-            IDoll doll = (IDoll) DollHelper.callSpawn(null, s, UUID.fromString(config.getString("UUID")) , version);
+            UUID dollUUID = UUID.fromString(config.getString("UUID"));
+            IDoll doll = (IDoll) DollHelper.callSpawn(null, s, dollUUID , version);
             if (doll != null) {
-                dollManagerMap.put(s, doll);
+                DollManager.ONLINE_DOLL_MAP.put(dollUUID,doll);
             }
         }
         pendingRespawnList.clear();

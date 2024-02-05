@@ -1,5 +1,7 @@
 package me.autobot.playerdoll;
 
+import me.autobot.playerdoll.Dolls.DollManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -62,9 +64,10 @@ public class YAMLManager {
         return true;
     }
     public YAMLManager reloadConfig() {
-        if (PlayerDoll.dollManagerMap.keySet().contains(this.dollName)) {
-            this.saveConfig();
-        }
+        //if (DollManager.ONLINE_DOLL_MAP.containsKey(Bukkit.getPlayer(dollName).getUniqueId())) {
+        //    this.saveConfig();
+        //}
+        this.saveConfig();
         this.unloadConfig();
 
         return loadConfig(this.dollName,false, this.lossy);

@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.Command;
 
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;
@@ -13,11 +14,12 @@ public enum ArgumentType {
     ONLINE_DOLL {
         @Override
         List<String> get() {
-            return PlayerDoll.dollManagerMap.keySet().stream().map(s -> s.substring(1)).toList();
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName).map(s -> s.substring(1)).filter(name -> name.startsWith("-")).toList();
         }
         @Override
         boolean argumentValid(String s) {
-            return PlayerDoll.dollManagerMap.containsKey(CommandType.getDollName(s,true));
+            Player player = Bukkit.getPlayer(CommandType.getDollName(s,true));
+            return player != null && DollManager.ONLINE_DOLL_MAP.containsKey(player.getUniqueId());
         }
     }, ONLINE_PERMISSIONED_DOLL {
         @Override

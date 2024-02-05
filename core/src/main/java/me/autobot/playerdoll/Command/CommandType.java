@@ -1,10 +1,12 @@
 package me.autobot.playerdoll.Command;
 
 import me.autobot.playerdoll.Command.SubCommands.*;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.Util.PermissionManager;
 import me.autobot.playerdoll.YAMLManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -589,13 +591,14 @@ public enum CommandType {
     public static boolean checkHasPermission(String commandName, Player sender, String dollName, boolean alert) {
         String senderUUID = sender.getUniqueId().toString();
         YamlConfiguration dollConfig = null;
-        if (PlayerDoll.dollManagerMap.containsKey(dollName)) {
-            dollConfig = PlayerDoll.dollManagerMap.get(dollName).getConfigManager().config;
-        } else {
+        Player dollPlayer = Bukkit.getPlayer(dollName);
+        if (dollPlayer == null) {
             YAMLManager yamlManager = YAMLManager.loadConfig(dollName,false, true);
             if (yamlManager != null) {
                 dollConfig = yamlManager.getConfig();
             }
+        } else {
+            dollConfig = DollManager.ONLINE_DOLL_MAP.get(dollPlayer.getUniqueId()).getConfigManager().config;
         }
         if (dollConfig == null) {
             if (alert) sender.sendMessage(LangFormatter.YAMLReplaceMessage("CannotObtainDollConfig"));
@@ -659,7 +662,8 @@ public enum CommandType {
             @Override
             boolean valid(String dollName) {
                 String fullDollName = getDollName(dollName, true);
-                return PlayerDoll.dollManagerMap.containsKey(fullDollName);
+                Player player = Bukkit.getPlayer(fullDollName);
+                return player != null && DollManager.ONLINE_DOLL_MAP.containsKey(player.getUniqueId());
             }
         }, MUST_OFFLINE {
             @Override

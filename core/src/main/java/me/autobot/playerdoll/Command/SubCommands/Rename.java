@@ -2,10 +2,12 @@ package me.autobot.playerdoll.Command.SubCommands;
 
 import me.autobot.playerdoll.Command.DollDataValidator;
 import me.autobot.playerdoll.Command.SubCommand;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -30,6 +32,13 @@ public class Rename extends SubCommand {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandExecutorMustBeOwner"));
             return;
         }
+        final boolean flag = DollManager.getInstance().renameDoll(dollName,name);
+        if (flag) {
+            player.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerRenameSucceed",dollName.substring(1),name.substring(1)));
+        } else {
+            player.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerRenameFailed"));
+        }
+        /*
         File oldConfig = new File(PlayerDoll.getDollDirectory(), dollName+".yml");
         File newConfig = new File(PlayerDoll.getDollDirectory(), name+".yml");
         if (oldConfig.exists() && !newConfig.exists()) {
@@ -43,5 +52,7 @@ public class Rename extends SubCommand {
         } else {
             player.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerRenameFailed"));
         }
+
+         */
     }
 }

@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.Events;
 
 import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.PermissionManager;
 import org.bukkit.Bukkit;
@@ -19,7 +20,7 @@ public class DollDamageEvent implements Listener {
     @EventHandler
     public void onDollTakeDamage(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player player) {
-            if (!PlayerDoll.dollManagerMap.containsKey(player.getName())) return;
+            if (!DollManager.ONLINE_DOLL_MAP.containsKey(player.getUniqueId())) return;
             if (event.getDamager() instanceof Player) {
                 if ((boolean) PermissionManager.getPermissionGroup(DollConfigManager.getConfigManager(player).config.getString("Owner.Perm")).dollProperties.get("playerImmune")) {
                     event.setCancelled(true);
