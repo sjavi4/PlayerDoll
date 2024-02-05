@@ -8,6 +8,45 @@ Release avaliable on Modrinth.
 ## Versions
 Spigot, Paper, Purpur, Folia (maybe more)
 - 1.20.1 - 1.20.4
+<table>
+  <tr>
+    <th>version</th>
+    <th>Spigot</th>
+    <th>PaperSeries</th>
+    <th>Folia</th>
+  </tr>
+  <tr>
+    <td>1.20</td>
+    <td>Not Tested</td>
+    <td>Not Tested</td>
+    <td>Not Tested</td>
+  </tr>
+  <tr>
+    <td>1.20.1</td>
+    <td>✓</td>
+    <td>✓</td>
+    <td>✓</td>
+  </tr>
+  <tr>
+    <td>1.20.2</td>
+    <td>✓</td>
+    <td>✓</td>
+    <td>Updating</td>
+  </tr>
+  <tr>
+    <td>1.20.3</td>
+    <td>✓</td>
+    <td>✓</td>
+    <td>Updating</td>
+  </tr>
+  <tr>
+    <td>1.20.4</td>
+    <td>✓</td>
+    <td>✓</td>
+    <td>Updating</td>
+  </tr>
+</table>
+
 ### Cautions
 Things like database, multiverse, bungeecord might went wrong (not tested or coded to handle)
 
