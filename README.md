@@ -30,13 +30,13 @@ Other versions and Server Mods are not guaranteed to 100% work
     <td>1.20.2</td>
     <td>✓</td>
     <td>✓</td>
-    <td>✓</td>
+    <td>Not Tested</td>
   </tr>
   <tr>
     <td>1.20.3</td>
     <td>✓</td>
     <td>✓</td>
-    <td>✓</td>
+    <td>Not Tested</td>
   </tr>
   <tr>
     <td>1.20.4</td>
