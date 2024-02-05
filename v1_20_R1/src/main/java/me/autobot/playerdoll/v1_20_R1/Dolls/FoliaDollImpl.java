@@ -2,6 +2,7 @@ package me.autobot.playerdoll.v1_20_R1.Dolls;
 
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.Dolls.DollManager;
+import me.autobot.playerdoll.Dolls.Folia.v1_20_R1_HandleAcceptedLogin;
 import me.autobot.playerdoll.PlayerDoll;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -14,7 +15,8 @@ public class FoliaDollImpl extends AbstractDoll {
     }
     @Override
     public void spawnToWorld() {
-        DollManager.Folia_HandleAcceptedLogin(this.dollNetworkManager,this,this.server.getPlayerList(),serverLevel().getChunkSource(),spawnPacketTask);
+        new v1_20_R1_HandleAcceptedLogin(this.dollNetworkManager,this,this.server.getPlayerList(),serverLevel().getChunkSource(),spawnPacketTask);
+        //DollManager.Folia_HandleAcceptedLogin(this.dollNetworkManager,this,this.server.getPlayerList(),serverLevel().getChunkSource(),spawnPacketTask);
         /*
         this.helper = new FoliaDollHelper();
 

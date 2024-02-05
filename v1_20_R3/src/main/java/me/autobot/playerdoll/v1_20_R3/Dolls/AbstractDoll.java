@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -39,6 +40,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     byte PacketYaw;
     byte PacketPitch;
     boolean noPhantom;
+    final CommonListenerCookie listenerCookie;
     DollSettingMonitor dollSettingMonitor;
     NMSPlayerEntityActionPack actionPack;
     final Runnable spawnPacketTask = () -> {
@@ -83,7 +85,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         IDoll.setSkin(this.getBukkitEntity(),this);
 
         dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
-
+        this.listenerCookie = CommonListenerCookie.createInitial(getGameProfile());
         spawnToWorld();
 
         this.unsetRemoved();
@@ -113,7 +115,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         this.server.getPlayerList().broadcastAll(packet);
     }
     public void spawnToWorld() {
-        this.server.getPlayerList().placeNewPlayer(this.dollNetworkManager,this,CommonListenerCookie.createInitial(getGameProfile()));
+        this.server.getPlayerList().placeNewPlayer(this.dollNetworkManager,this,listenerCookie);
     }
     @Override
     public void setDollSkin(String property, String signature) {
@@ -265,5 +267,8 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         this.jumpFromGround();
     }
 
-    
+    @Override
+    public Player getBukkitPlayer() {
+        return this.getBukkitEntity();
+    }
 }

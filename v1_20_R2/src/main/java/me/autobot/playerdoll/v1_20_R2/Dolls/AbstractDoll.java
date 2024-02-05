@@ -8,7 +8,6 @@ import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.v1_20_R2.CarpetMod.NMSPlayerEntityActionPack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
@@ -23,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -35,6 +35,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     byte PacketYaw;
     byte PacketPitch;
     boolean noPhantom;
+    final CommonListenerCookie listenerCookie;
     DollSettingMonitor dollSettingMonitor;
     NMSPlayerEntityActionPack actionPack;
     final Runnable spawnPacketTask = () -> {
@@ -78,6 +79,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         IDoll.setSkin(this.getBukkitEntity(),this);
 
         dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
+        this.listenerCookie = CommonListenerCookie.createInitial(getGameProfile());
         spawnToWorld();
 
         this.unsetRemoved();
@@ -106,7 +108,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         this.server.getPlayerList().broadcastAll(packet);
     }
     public void spawnToWorld() {
-        this.server.getPlayerList().placeNewPlayer(this.dollNetworkManager,this,CommonListenerCookie.createInitial(getGameProfile()));
+        this.server.getPlayerList().placeNewPlayer(this.dollNetworkManager,this, listenerCookie);
     }
     @Override
     public void setDollSkin(String property, String signature) {
@@ -259,5 +261,8 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         this.jumpFromGround();
     }
 
-
+    @Override
+    public Player getBukkitPlayer() {
+        return this.getBukkitEntity();
+    }
 }

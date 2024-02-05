@@ -3,6 +3,7 @@ package me.autobot.playerdoll.Folia;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -33,9 +34,8 @@ public class FoliaHelper {
         Bukkit.getServer().getRegionScheduler().execute(plugin, location, task);
     }
     public void entityTeleportTo(Entity entity, Location location) {
-        entityTask(entity, () -> entity.teleportAsync(location, PlayerTeleportEvent.TeleportCause.PLUGIN), 5);
+        entityTask(entity, () -> entity.teleportAsync(location, PlayerTeleportEvent.TeleportCause.PLUGIN), 10);
     }
-
     public void setDollLookAt(Entity entity, Runnable task) {
         entityTask(entity, task, 2);
     }

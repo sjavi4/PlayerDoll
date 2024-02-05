@@ -115,6 +115,9 @@ public class PermissionManager {
     }
 
     private void addToMap(Map<String,Boolean> map, String path) {
+        if (!permissionYAML.contains(path)) {
+            return;
+        }
         permissionYAML.getConfigurationSection(path).getValues(false).forEach((k,o)->{
             map.put(k,(boolean)o);
         });

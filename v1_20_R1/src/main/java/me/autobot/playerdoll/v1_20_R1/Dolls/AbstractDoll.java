@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -256,4 +257,8 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         this.jumpFromGround();
     }
 
+    @Override
+    public Player getBukkitPlayer() {
+        return this.getBukkitEntity();
+    }
 }
