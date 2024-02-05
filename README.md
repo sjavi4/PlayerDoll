@@ -11,7 +11,7 @@ Other versions and Server Mods are not guaranteed to 100% work
   <tr>
     <th>version</th>
     <th>Spigot</th>
-    <th>PaperSeries</th>
+    <th>Paper/Purpur/...</th>
     <th>Folia</th>
   </tr>
   <tr>
