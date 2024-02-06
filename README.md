@@ -66,6 +66,8 @@ Welcome to report any issues (performance, bugs, suggestions, feedback, compatib
 
 ## Commands
 ### Note
+Some commands are not usable when Doll under Spawn Protection Area
+
 All all [action] are specify as this option.
 ```
 once : Do the action once (default when not stated)
