@@ -66,7 +66,7 @@ Welcome to report any issues (performance, bugs, suggestions, feedback, compatib
 
 ## Commands
 ### Note
-Some commands are not usable when Doll under Spawn Protection Area
+Some commands are not usable when Doll is on Spawn Protection Area
 
 All all [action] are specify as this option.
 ```
