@@ -14,7 +14,7 @@ public enum ArgumentType {
     ONLINE_DOLL {
         @Override
         List<String> get() {
-            return Bukkit.getOnlinePlayers().stream().map(Player::getName).map(s -> s.substring(1)).filter(name -> name.startsWith("-")).toList();
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith("-")).map(s -> s.substring(1)).toList();
         }
         @Override
         boolean argumentValid(String s) {

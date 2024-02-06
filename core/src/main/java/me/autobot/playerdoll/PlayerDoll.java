@@ -112,8 +112,12 @@ public final class PlayerDoll extends JavaPlugin {
 
         countPlayerDoll();
 
+        if (isFolia) {
+            getFoliaHelper().globalTaskDelayed(this::prepareDollSpawn,5);
+        } else {
+            Bukkit.getScheduler().runTaskLater(this, this::prepareDollSpawn,5);
+        }
 
-        prepareDollSpawn();
     }
 
     @Override
@@ -262,9 +266,12 @@ public final class PlayerDoll extends JavaPlugin {
                 continue;
             }
             UUID dollUUID = UUID.fromString(config.getString("UUID"));
+            DollManager.ONLINE_DOLL_MAP.put(dollUUID,null);
             IDoll doll = (IDoll) DollHelper.callSpawn(null, s, dollUUID , version);
             if (doll != null) {
                 DollManager.ONLINE_DOLL_MAP.put(dollUUID,doll);
+            } else {
+                DollManager.ONLINE_DOLL_MAP.remove(dollUUID);
             }
         }
         pendingRespawnList.clear();

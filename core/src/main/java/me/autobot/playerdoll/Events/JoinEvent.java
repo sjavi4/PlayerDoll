@@ -2,6 +2,7 @@ package me.autobot.playerdoll.Events;
 
 import me.autobot.playerdoll.Dolls.DollConfigManager;
 import me.autobot.playerdoll.Dolls.DollManager;
+import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.GUIs.Doll.DollInvStorage;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
@@ -9,15 +10,21 @@ import me.autobot.playerdoll.Util.PermissionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Consumer;
+
 @SuppressWarnings("unchecked")
 public class JoinEvent implements Listener {
 
@@ -45,6 +52,10 @@ public class JoinEvent implements Listener {
                 modifiedMap.put(EventPriority.LOWEST,modifiedList);
                 handlerslots.set(handlerList,modifiedMap);
 
+                for (EventPriority priority : EventPriority.values()) {
+                    if (priority == EventPriority.LOWEST) continue;
+                    modifiedList.addAll(map.get(priority));
+                }
                 RegisteredListener[] modifiedHandlers = modifiedList.toArray(new RegisteredListener[0]);
 
                 Field handlers = handlerList.getClass().getDeclaredField("handlers");
@@ -72,12 +83,13 @@ public class JoinEvent implements Listener {
 
 
         if (PlayerDoll.isFolia) {
-            PlayerDoll.getFoliaHelper().globalTask(task);
+            PlayerDoll.getFoliaHelper().globalTaskDelayed(task,1);
             //FoliaSupport.globalTask(task);
         } else {
             Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(), task, 0);
         }
     }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void OnDollJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -85,7 +97,7 @@ public class JoinEvent implements Listener {
             playerJoin(event);
             return;
         }
-
+        //IDoll doll = DollManager.ONLINE_DOLL_MAP.get(player.getUniqueId());
         String permission = DollConfigManager.getConfigManager(player).config.getString("Owner.Perm");
         if (permission == null || permission.isBlank()) {
             permission = "default";
@@ -157,11 +169,14 @@ public class JoinEvent implements Listener {
             });
         };
         if (PlayerDoll.isFolia) {
-            PlayerDoll.getFoliaHelper().globalTask(task);
+            PlayerDoll.getFoliaHelper().globalTaskDelayed(task,1);
             //FoliaSupport.globalTask(task);
         } else {
             Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(), task, 0);
         }
+        HandlerList handlerList2 = PlayerJoinEvent.getHandlerList();
+        player.setFallDistance(0);
+        player.setVelocity(new Vector(0,0,0));
     }
     private void playerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();

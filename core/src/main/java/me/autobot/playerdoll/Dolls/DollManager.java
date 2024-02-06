@@ -77,6 +77,7 @@ public class DollManager {
     public void spawnDoll(String dollName, UUID dollUUID, Player caller, boolean align) {
         //OFFLINE_DOLL_MAP.remove(dollName);
         IDoll doll;
+        ONLINE_DOLL_MAP.put(dollUUID,null);
         try {
             ServerPlayer serverPlayer = null;
             Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit."+ PlayerDoll.version +".entity.CraftPlayer");
@@ -84,17 +85,18 @@ public class DollManager {
                 serverPlayer = (ServerPlayer) caller.getClass().asSubclass(craftPlayerClass).getDeclaredMethod("getHandle").invoke(caller);
             }
             doll = (IDoll) DollHelper.callSpawn(serverPlayer,dollName, dollUUID , PlayerDoll.version);
+            ONLINE_DOLL_MAP.put(dollUUID,doll);
         } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
         if (doll == null) {
+            ONLINE_DOLL_MAP.remove(dollUUID);
             return;
         }
         if (align && caller != null) {
             var pos = caller.getLocation();
             doll._setPos(Math.round(pos.getX() * 2) / 2.0, pos.getBlockY(), Math.round(pos.getZ() * 2) / 2.0);
         }
-        ONLINE_DOLL_MAP.put(dollUUID,doll);
         // caller = null -> spawn in original pos
     }
 
