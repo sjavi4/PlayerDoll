@@ -100,7 +100,9 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         this.actionPack = new NMSPlayerEntityActionPack(this);
 
-        teleportTo();
+        if (this != this.player) {
+            teleportTo();
+        }
 
     }
     public void spawnToWorld() {
