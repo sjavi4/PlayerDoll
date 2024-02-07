@@ -47,3 +47,176 @@ permissions:
   playerdoll.upgrade:
     description: /dollUpgrade command
     default: true
+
+  # Commands
+  #playerdoll.doll.autojoin:
+  #  description: Auto Join when server start
+  #  default: true
+
+  # Grouped Permissions
+  playerdoll.group.doll:
+    description: A permission group for Dolls
+
+  playerdoll.group.basic:
+    description: Very Basic permissions
+    children:
+      - playerdoll.command.create
+      - playerdoll.command.despawn
+      - playerdoll.command.spawn
+      - playerdoll.command.remove
+      - playerdoll.command.menu
+      - playerdoll.command.set
+      - playerdoll.command.gset
+      - playerdoll.command.pset
+
+  playerdoll.group.container:
+    description: Doll container related permissions
+    children:
+      - playerdoll.command.echest
+      - playerdoll.command.exp
+      - playerdoll.command.drop
+      - playerdoll.command.inv
+      - playerdoll.command.menu
+      - playerdoll.command.slot
+      - playerdoll.command.swap
+
+  playerdoll.group.movement:
+    description: A set of permission about movement
+    children:
+      - playerdoll.command.sprint
+      - playerdoll.command.stop
+      - playerdoll.command.move
+      - playerdoll.command.strafe
+      - playerdoll.command.jump
+      - playerdoll.command.tp
+
+  playerdoll.group.action:
+    description: A set of permission for Action commands
+    children:
+      - playerdoll.command.attack
+      - playerdoll.command.copy
+      - playerdoll.command.dismount
+      - playerdoll.command.drop
+      - playerdoll.command.jump
+      - playerdoll.command.look
+      - playerdoll.command.lookat
+      - playerdoll.command.mount
+      - playerdoll.command.move
+      - playerdoll.command.slot
+      - playerdoll.command.sneak
+      - playerdoll.command.sprint
+      - playerdoll.command.stop
+      - playerdoll.command.strafe
+      - playerdoll.command.swap
+      - playerdoll.command.turn
+      - playerdoll.command.use
+
+  playerdoll.group.datacontrol:
+    description: A set of permission for modifying Doll data
+    children:
+      - playerdoll.command.set
+      - playerdoll.command.pset
+      - playerdoll.command.gset
+
+  playerdoll.group.manage:
+    description: A set of permission for managing Doll
+    children:
+      - playerdoll.command.rename
+      - playerdoll.command.give
+
+  # Standalone Permissions
+  playerdoll.command.attack:
+    description: Doll Attack
+
+  playerdoll.command.copy:
+    description: Doll Copy action
+
+  playerdoll.command.create:
+    description: Player Create Doll
+
+  playerdoll.command.despawn:
+    description: Doll Despawn
+
+  playerdoll.command.dismount:
+    description: Doll Dismount
+
+  playerdoll.command.drop:
+    description: Doll Drop item
+
+  playerdoll.command.echest:
+    description: Player access Doll ender chest
+
+  playerdoll.command.exp:
+    description: Player take Doll exp
+
+  playerdoll.command.give:
+    description: Player Transfer Doll
+
+  playerdoll.command.gset:
+    description: Player set Doll All-player-Setting
+
+  playerdoll.command.info:
+    description: Player get Doll information
+
+  playerdoll.command.inv:
+    description: Player access Doll inventory
+
+  playerdoll.command.jump:
+    description: Doll Jump
+
+  playerdoll.command.look:
+    description: Doll Look
+
+  playerdoll.command.lookat:
+    description: Doll Lookat
+
+  playerdoll.command.menu:
+    description: Player open Doll status menu
+
+  playerdoll.command.mount:
+    description: Doll Mount
+
+  playerdoll.command.move:
+    description: Doll Move
+
+  playerdoll.command.pset:
+    description: Player set Doll specific-player-Setting
+
+  playerdoll.command.remove:
+    description: Player Remove Doll
+
+  playerdoll.command.rename:
+    description: Player Rename Doll
+
+  playerdoll.command.set:
+    description: Player set Doll own setting
+
+  playerdoll.command.slot:
+    description: Player set Doll handheld Slot
+
+  playerdoll.command.sneak:
+    description: Player set Doll Sneak
+
+  playerdoll.command.spawn:
+    description: Player spawn Doll
+
+  playerdoll.command.sprint:
+    description: Doll Sprint
+
+  playerdoll.command.stop:
+    description: Doll Stop actions
+
+  playerdoll.command.strafe:
+    description: Doll Strafe
+
+  playerdoll.command.swap:
+    description: Doll Swap main-off hands
+
+  playerdoll.command.tp:
+    description: TP Doll to player
+
+  playerdoll.command.turn:
+    description: Player set Doll turn
+
+  playerdoll.command.use:
+    description: Doll Use

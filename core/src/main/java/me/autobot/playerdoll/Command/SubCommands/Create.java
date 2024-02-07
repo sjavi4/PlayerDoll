@@ -1,24 +1,14 @@
 package me.autobot.playerdoll.Command.SubCommands;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollConfigHelper;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.Util.PermissionManager;
-import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.entity.Player;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 
 public class Create extends SubCommand {
     public Create(Player sender, String dollName, String[] args) {

@@ -2,8 +2,8 @@ package me.autobot.playerdoll.GUIs.Menus;
 
 import me.autobot.playerdoll.Command.CommandType;
 import me.autobot.playerdoll.Dolls.DollConfigManager;
-import me.autobot.playerdoll.GUIs.DollInvHolder;
 import me.autobot.playerdoll.GUIs.ButtonSetter;
+import me.autobot.playerdoll.GUIs.DollInvHolder;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
 import org.bukkit.Bukkit;

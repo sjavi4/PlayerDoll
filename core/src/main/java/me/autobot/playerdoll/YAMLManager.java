@@ -1,7 +1,5 @@
 package me.autobot.playerdoll;
 
-import me.autobot.playerdoll.Dolls.DollManager;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;

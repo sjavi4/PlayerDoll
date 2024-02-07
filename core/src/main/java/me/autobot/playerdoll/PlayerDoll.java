@@ -1,7 +1,10 @@
 package me.autobot.playerdoll;
 
 import me.autobot.playerdoll.Command.CommandHelper;
-import me.autobot.playerdoll.Command.Utils.*;
+import me.autobot.playerdoll.Command.Utils.CommandHelp;
+import me.autobot.playerdoll.Command.Utils.CommandLimit;
+import me.autobot.playerdoll.Command.Utils.CommandList;
+import me.autobot.playerdoll.Command.Utils.CommandReload;
 import me.autobot.playerdoll.Dolls.DollConfigManager;
 import me.autobot.playerdoll.Dolls.DollHelper;
 import me.autobot.playerdoll.Dolls.DollManager;
@@ -170,7 +173,7 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(new DollRecipeEvent(), this);
         //does not work as good as nms.
         //pluginManager.registerEvents(new DollTargetEvent(),this);
-        pluginManager.registerEvents(new DollKickEvent(), this);
+        //pluginManager.registerEvents(new DollKickEvent(), this);
         pluginManager.registerEvents(new DollDamageEvent(), this);
     }
     private void initialGUI(PluginManager pluginManager) {

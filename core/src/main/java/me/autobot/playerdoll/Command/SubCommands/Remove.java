@@ -5,8 +5,6 @@ import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Util.LangFormatter;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-
 public class Remove extends SubCommand {
 
     public Remove(Player sender, String dollName) {

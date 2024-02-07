@@ -3,16 +3,8 @@ package me.autobot.playerdoll.Command.SubCommands;
 import me.autobot.playerdoll.Command.DollDataValidator;
 import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.YAMLManager;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 public class Rename extends SubCommand {
 

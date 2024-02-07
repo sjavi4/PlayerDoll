@@ -3,7 +3,6 @@ package me.autobot.playerdoll.Command.SubCommands;
 import me.autobot.playerdoll.Command.ArgumentType;
 import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

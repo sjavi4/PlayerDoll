@@ -1,6 +1,5 @@
 package me.autobot.playerdoll.GUIs;
 
-import me.autobot.playerdoll.GUIs.ButtonSetter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

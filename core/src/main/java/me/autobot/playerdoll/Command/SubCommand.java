@@ -5,7 +5,6 @@ import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.Dolls.DollConfigManager;
 import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.IDoll;
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.PermissionManager;
 import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;

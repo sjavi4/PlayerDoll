@@ -1,14 +1,11 @@
 package me.autobot.playerdoll.Command;
 
-import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.ConfigManager;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import java.util.Map;
 
 public class DollDataValidator {
     private final Player player;
