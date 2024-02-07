@@ -1,7 +1,6 @@
 package me.autobot.playerdoll.v1_20_R3.Dolls;
 
 import com.mojang.authlib.GameProfile;
-import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.Folia.v1_20_R2_HandleAcceptedLogin;
 import me.autobot.playerdoll.PlayerDoll;
 import net.minecraft.network.chat.Component;
@@ -16,41 +15,15 @@ public class FoliaDollImpl extends AbstractDoll {
     @Override
     public void spawnToWorld() {
         new v1_20_R2_HandleAcceptedLogin(this.dollNetworkManager,this, this.listenerCookie,this.server.getPlayerList(),serverLevel().getChunkSource(),spawnPacketTask);
-        //DollManager.Folia_HandleAcceptedLogin(this.dollNetworkManager,this,this.server.getPlayerList(),serverLevel().getChunkSource(),spawnPacketTask);
-        /*
-        this.helper = new FoliaDollHelper();
-        helper.handleAcceptedLogin(this.dollNetworkManager,this,this.server.getPlayerList(),serverLevel().getChunkSource(),() -> {
-            sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
-            sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
-        });
-
-         */
     }
     @Override
     public void teleportTo() {
         PlayerDoll.getFoliaHelper().entityTeleportTo(this.getBukkitEntity(), player.getBukkitEntity().getLocation());
-        //helper.teleportTo(this.getBukkitEntity(),player.getBukkitEntity().getLocation());
     }
     @Override
     public void setDollLookAt() {
-
         PlayerDoll.getFoliaHelper().setDollLookAt(player.getBukkitEntity(),lookAtPacketTask);
-        /*
-        helper.setDollLookAt(2,() -> {
-            sendPacket(new ClientboundRotateHeadPacket(this, PacketYaw));
-            sendPacket(new ClientboundMoveEntityPacket.Rot(this.getId(), PacketYaw, PacketPitch, true));
-        });
-
-         */
     }
-    /*
-    @Override
-    public void tick() {
-        foliaTickCount = helper.getCurrentTick();
-        super.tick();
-    }
-
-     */
     @Override
     public void disconnect() {
         super.disconnect();

@@ -2,11 +2,9 @@ package me.autobot.playerdoll.v1_20_R1.Dolls;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import org.bukkit.Bukkit;
 
 public class SpigotDollImpl extends AbstractDoll {
     public SpigotDollImpl(MinecraftServer minecraftserver, ServerLevel worldserver, GameProfile gameprofile, ServerPlayer player) {

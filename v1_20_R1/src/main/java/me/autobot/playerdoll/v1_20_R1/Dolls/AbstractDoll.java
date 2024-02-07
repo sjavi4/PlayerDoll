@@ -8,9 +8,7 @@ import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.v1_20_R1.CarpetMod.NMSPlayerEntityActionPack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +21,8 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.UUID;
 
 public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     DollConfigManager configManager;
@@ -76,13 +75,11 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         IDoll.setSkin(this.getBukkitEntity(),this);
 
-        dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
+        dollNetworkManager = new DollNetworkManager();
 
         spawnToWorld();
 
         this.unsetRemoved();
-        //this.connection.send(new ClientboundSetCarriedItemPacket(this.getInventory().selected));
-        //this.server.invalidateStatus();
 
         TPYaw = this.player.getRotationVector().y;
         TPPitch = this.player.getRotationVector().x;

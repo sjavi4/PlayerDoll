@@ -8,10 +8,7 @@ import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.v1_20_R3.CarpetMod.NMSPlayerEntityActionPack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
@@ -28,8 +25,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.UUID;
-
-import static net.minecraft.network.protocol.common.ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED;
 
 public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     DollConfigManager configManager;
@@ -64,7 +59,6 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
             serverLevel = player.serverLevel();
         }
         GameProfile profile = new GameProfile(uuid,name);
-        //GameProfile profile = new GameProfile(UUIDUtil.createOfflinePlayerUUID(name),name);
         if (PlayerDoll.isSpigot) return new SpigotDollImpl(server, serverLevel, profile, player);
         else if (PlayerDoll.isPaperSeries) return new PaperDollImpl(server, serverLevel, profile, player);
         else if (PlayerDoll.isFolia) return new FoliaDollImpl(server, serverLevel, profile, player);
@@ -75,7 +69,6 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         this.player = player == null ? this : player;
 
-        //setConfigInformation();
 
         IDoll.setConfigInformation(this.getBukkitEntity());
         configManager = DollConfigManager.dollConfigManagerMap.get(this.getBukkitEntity().getUniqueId());
@@ -84,13 +77,12 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         IDoll.setSkin(this.getBukkitEntity(),this);
 
-        dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
+        dollNetworkManager = new DollNetworkManager();
+        dollNetworkManager.handler = new DollNetworkHandler(minecraftserver,dollNetworkManager,this);
         this.listenerCookie = CommonListenerCookie.createInitial(getGameProfile());
         spawnToWorld();
 
         this.unsetRemoved();
-        //this.connection.send(new ClientboundSetCarriedItemPacket(this.getInventory().selected));
-        //this.server.invalidateStatus();
 
         TPYaw = this.player.getRotationVector().y;
         TPPitch = this.player.getRotationVector().x;
@@ -102,7 +94,6 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
         this.setPose(this.player.getPose());
 
         this.entityData.set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) 0x7f);
-        //this.getEntityData().refresh(this);
 
         setDollLookAt();
 
@@ -144,20 +135,13 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
             super.tick();
             this.doTick();
             if (dollTickCount % 10 == 0) {
-                //if (checkTick()) {
                 connection.resetPosition();
                 this.serverLevel().getChunkSource().move(this);
                 if (noPhantom) IDoll.resetPhantomStatistic(this.getBukkitEntity());
-                //}
             }
         } catch (NullPointerException ignored) {}
     }
-    /*
-    private boolean checkTick() {
-        return (foliaTickCount % 10 == 0) || (nonFoliaTickCount % 10 == 0);
-    }
 
-     */
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
         return IDoll.executeHurt(this,getBukkitEntity(),super.hurt(damageSource,f));

@@ -2,14 +2,13 @@ package me.autobot.playerdoll.v1_20_R2.Dolls;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import me.autobot.playerdoll.Dolls.DollSettingMonitor;
 import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollSettingMonitor;
 import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.v1_20_R2.CarpetMod.NMSPlayerEntityActionPack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
@@ -24,7 +23,8 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.UUID;
 
 public abstract class AbstractDoll extends ServerPlayer implements IDoll {
     DollConfigManager configManager;
@@ -78,7 +78,7 @@ public abstract class AbstractDoll extends ServerPlayer implements IDoll {
 
         IDoll.setSkin(this.getBukkitEntity(),this);
 
-        dollNetworkManager = new DollNetworkManager(PacketFlow.CLIENTBOUND);
+        dollNetworkManager = new DollNetworkManager(new DollNetworkHandler(minecraftserver,dollNetworkManager,this));
         this.listenerCookie = CommonListenerCookie.createInitial(getGameProfile());
         spawnToWorld();
 

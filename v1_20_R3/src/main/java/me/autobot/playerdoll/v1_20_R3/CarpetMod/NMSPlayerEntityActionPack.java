@@ -2,7 +2,6 @@ package me.autobot.playerdoll.v1_20_R3.CarpetMod;
 
 import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.Dolls.IDoll;
-import me.autobot.playerdoll.v1_20_R3.Dolls.AbstractDoll;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -1,7 +1,6 @@
 package me.autobot.playerdoll.v1_20_R1.Dolls;
 
 import com.mojang.authlib.GameProfile;
-import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.Folia.v1_20_R1_HandleAcceptedLogin;
 import me.autobot.playerdoll.PlayerDoll;
 import net.minecraft.network.chat.Component;

@@ -1,15 +1,12 @@
 package me.autobot.playerdoll.Folia;
 
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Consumer;
 
 public class FoliaHelper {
     public static final Class<?> FOLIA_REGIONIZED_SERVER;

@@ -2,9 +2,7 @@ package me.autobot.playerdoll.v1_20_R2.Dolls;
 
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Dolls.IDoll;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
