@@ -5,6 +5,8 @@ Simple Standalone Fake Player Plugin for Spigot 1.20 [Java 17+]
 
 Release avaliable on Modrinth.
 
+**Author's pc was broken at 8-Feb ~6pm, the plugin will stop update for a while. Thank you for the support.**
+
 ## Versions
 Other versions and Server Mods are not guaranteed to 100% work
 <table>
