@@ -1,20 +1,16 @@
 package me.autobot.playerdoll.Command.Utils;
 
-import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommandLimit implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player p)) return false;
 
+        /*
         PermissionManager perm = PermissionManager.getPlayerPermission(p);
 
         List<String> permissionInfo = new ArrayList<>() {{
@@ -22,6 +18,8 @@ public class CommandLimit implements CommandExecutor {
             add(LangFormatter.YAMLReplace("permissionInfo.nextGroup",perm.nextGroup));
         }};
 
+
+         */
 
                 /*
                 LangFormatter.YAMLReplace("permissionInfo.canCreateDoll",perm.canCreateDoll),
@@ -48,6 +46,7 @@ public class CommandLimit implements CommandExecutor {
                 LangFormatter.YAMLReplace("permissionInfo.minLookatInterval",perm.minLookatInterval)
 
  */
+        /*
         perm.groupProperties.forEach((k,v) -> {
             permissionInfo.add(LangFormatter.YAMLReplace("permissionInfo."+k,v));
         });
@@ -56,7 +55,9 @@ public class CommandLimit implements CommandExecutor {
         });
 
         p.sendMessage(permissionInfo.toArray(String[]::new));
-        
+
+
+         */
         return true;
     }
 }

@@ -1,17 +1,16 @@
 package me.autobot.playerdoll.Command;
 
 import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.Util.ConfigManager;
+import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.YAMLManager;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class DollDataValidator {
     private final Player player;
     private final String fullName;
     private final String shortName;
-    private final YamlConfiguration globalConfig = ConfigManager.getConfig();
+    private final BasicConfig globalConfig = BasicConfig.get();
     public DollDataValidator(Player sender, String dollName) {
         player = sender;
         fullName = dollName;
@@ -25,7 +24,7 @@ public class DollDataValidator {
         return false;
     }
     public boolean preservedName() {
-        if (globalConfig.getStringList("Global.PreservedName").stream().anyMatch(s -> s.equalsIgnoreCase(shortName))) {
+        if (globalConfig.preservedDollName.getValue().stream().anyMatch(s -> s.equalsIgnoreCase(shortName))) {
             player.sendMessage(LangFormatter.YAMLReplaceMessage("PreservedDollName", shortName));
             return true;
         }

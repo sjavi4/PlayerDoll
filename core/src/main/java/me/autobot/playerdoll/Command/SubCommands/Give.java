@@ -2,9 +2,7 @@ package me.autobot.playerdoll.Command.SubCommands;
 
 import me.autobot.playerdoll.Command.ArgumentType;
 import me.autobot.playerdoll.Command.SubCommand;
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -25,11 +23,12 @@ public class Give extends SubCommand {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandTargetPlayerNotExist"));
             return;
         }
-        if (!dollConfig.getString("Owner.UUID").equalsIgnoreCase(sender.getUniqueId().toString())) {
+        if (!dollConfig.ownerUUID.getValue().equalsIgnoreCase(sender.getUniqueId().toString())) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandExecutorMustBeOwner"));
             return;
         }
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+        /*
         PermissionManager perm = PermissionManager.getPlayerPermission(target.getUniqueId());
         int count = PlayerDoll.playerDollCountMap.getOrDefault(target.getUniqueId(),0);
         int max = (int) perm.groupProperties.get("maxDollCreation");
@@ -37,11 +36,15 @@ public class Give extends SubCommand {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateTooMuchDoll",max));
             return;
         }
+
+
         PlayerDoll.playerDollCountMap.put(target.getUniqueId(),count+1);
-        dollConfig.set("Owner.Name",target.getName());
-        dollConfig.set("Owner.UUID",target.getUniqueId());
-        dollConfig.set("Owner.Perm", perm.groupName);
-        dollYAML.saveConfig();
+        */
+        dollConfig.ownerName.setNewValue(target.getName());
+        dollConfig.ownerUUID.setNewValue(target.getUniqueId().toString());
+        //dollConfig.set("Owner.Perm", perm.groupName);
+        dollConfig.saveConfig();
+        //dollYAML.saveConfig();
         player.sendMessage(LangFormatter.YAMLReplaceMessage("DollGiver",target.getName()));
         if (target.isOnline()) {
             ((Player)target).sendMessage(LangFormatter.YAMLReplaceMessage("DollGetter",player.getName()));

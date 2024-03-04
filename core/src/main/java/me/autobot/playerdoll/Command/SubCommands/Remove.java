@@ -9,7 +9,7 @@ public class Remove extends SubCommand {
 
     public Remove(Player sender, String dollName) {
         super(sender, dollName);
-        if (!dollConfig.getString("Owner.UUID").equalsIgnoreCase(sender.getUniqueId().toString())) {
+        if (!dollConfig.ownerUUID.getValue().equalsIgnoreCase(sender.getUniqueId().toString())) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandExecutorMustBeOwner"));
             return;
         }

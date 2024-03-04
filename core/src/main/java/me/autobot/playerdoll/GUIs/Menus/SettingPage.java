@@ -1,13 +1,14 @@
 package me.autobot.playerdoll.GUIs.Menus;
 
 import me.autobot.playerdoll.Command.CommandType;
-import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.GUIs.ButtonSetter;
 import me.autobot.playerdoll.GUIs.DollInvHolder;
-import me.autobot.playerdoll.Util.ConfigManager;
+import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.Util.ConfigLoader;
+import me.autobot.playerdoll.Util.Configs.FlagConfig;
+import me.autobot.playerdoll.Util.Keys.ConfigKey;
 import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
-import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,7 +17,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -25,35 +25,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
+import java.util.logging.Level;
 
 public class SettingPage extends DollInvHolder {
     private final Player doll;
     private final String dollName;
-    private PermissionManager perm;
-    private DollConfigManager configManager;
-    private final YAMLManager dollConfig;
-    private YamlConfiguration config;
-    private Map<String, Object> flag;
+    private final DollConfig dollConfig;
+    private Map<String, Material> flags;
     private final Map<Material, BiPredicate<Player, Boolean>> settingMap = new HashMap<>();
 
     private YamlConfiguration langFile = null;
-    private YamlConfiguration flagFile = null;
     public SettingPage(String doll) {
         this.dollName = CommandType.getDollName(doll, true);
         this.doll = Bukkit.getPlayer(doll);
         String shortDollName = CommandType.getDollName(doll, false);
-        dollConfig = YAMLManager.loadConfig(this.dollName, false, false);
         if (this.doll == null) {
-            if (dollConfig == null) {
-                return;
-            }
-            config = dollConfig.getConfig();
-            // Offline setting
+            this.dollConfig = DollConfig.getOfflineDollConfig(dollName);
         } else {
-            configManager = DollConfigManager.getConfigManager(this.dollName);
-            // Online setting
+            this.dollConfig = DollConfig.getOnlineDollConfig(this.doll.getUniqueId());
         }
-        this.perm = PermissionManager.getPermissionGroup(dollConfig.getConfig().getString("Owner.Perm"));
+        //dollConfig = YAMLManager.loadConfig(this.dollName, false, false);
+        //if (this.doll == null) {
+        //    if (dollConfig == null) {
+        //        return;
+        //    }
+        //    config = dollConfig.getConfig();
+        //    // Offline setting
+        //} else {
+            //configManager = DollConfigManager.getConfigManager(this.dollName);
+            // Online setting
+        //}
+        //this.perm = PermissionManager.getPermissionGroup(dollConfig.getConfig().getString("Owner.Perm"));
         inventory = Bukkit.createInventory(this, 54, LangFormatter.YAMLReplace("menuTitle.setting", shortDollName));
         setupInventoryItem();
     }
@@ -64,16 +66,10 @@ public class SettingPage extends DollInvHolder {
 
         String[] desc = LangFormatter.splitter(LangFormatter.YAMLReplace("controlButton.hint"));
 
-        langFile = ConfigManager.getLanguage();
-        flagFile = ConfigManager.getFlag();
+        langFile = ConfigLoader.get().getConfig(ConfigLoader.ConfigType.CUSTOM_LANGUAGE);
 
-        Map<String, Object> toggleMap;
-        if (doll == null) {
-            toggleMap = YAMLManager.loadConfig(dollName,false,false).getConfig().getConfigurationSection("setting").getValues(true);
-        } else {
-            configManager = DollConfigManager.getConfigManager(doll);
-            toggleMap = configManager.getDollSetting();
-        }
+        //Map<String, Boolean> toggleMap = dollConfig.generalSetting;
+
 
         //Page function wait until necessary
         /*
@@ -92,12 +88,28 @@ public class SettingPage extends DollInvHolder {
 
          */
 
-        flag = flagFile.getConfigurationSection("GlobalFlag").getValues(false);
+        //flags = flagFile.getConfigurationSection("GlobalFlag").getValues(false);
+        flags = FlagConfig.GLOBAL_FLAG_MAP;
 
         int[] counter = {18};
-        flag.forEach((s,o) -> {
-            Material m = Material.valueOf((String) o);
-            boolean toggle = (boolean) toggleMap.get(s);
+        flags.forEach((s, m) -> {
+            DollConfig.SettingType type = null;
+            ConfigKey<DollConfig,Boolean> currentKey = null;
+            //System.out.println(s);
+            for (DollConfig.SettingType types : DollConfig.SettingType.values()) {
+                //System.out.println(types);
+                if (s.equalsIgnoreCase(types.getSettingName())) {
+                    type = types;
+                    currentKey = types.getConfigKey(dollConfig);
+                    break;
+                }
+            }
+            if (type == null || currentKey == null) {
+                PlayerDoll.getPluginLogger().log(Level.WARNING, "Cannot Initialize Doll-Setting page, Missing Flag.");
+                return;
+            }
+            final DollConfig.SettingType finalType = type;
+            boolean toggle = currentKey.getValue();
             String buttonName = langFile.getString("settingmenu."+s+".name");
             List<String> lure = new ArrayList<>();
             lure.add(LangFormatter.YAMLReplace("settingmenu."+s+".desc"));
@@ -113,14 +125,25 @@ public class SettingPage extends DollInvHolder {
             inventory.setItem(counter[0],item);
             counter[0]++;
             settingMap.put(m, (p, b) -> {
+                String perm = "playerdoll.globalflag." + s;
+                if (!p.hasPermission(perm)) {
+                    return false;
+                }
+                /*
                 if (!perm.dollAvailableFlags.get(s) && !p.isOp()) {
                     return false;
                 }
+
+                 */
+                dollConfig.changeSetting(p, finalType,b);
+                /*
                 if (doll == null) {
                     config.set("setting."+s,b);
                 } else {
                     configManager.setDollSetting(s, b);
                 }
+
+                 */
                 return true;
             });
             buttonMap.put(m,(p)->{});
@@ -137,8 +160,8 @@ public class SettingPage extends DollInvHolder {
         if (clickItem == null) return;
         Material clickMaterial = clickItem.getType();
         ItemMeta clickMeta = clickItem.getItemMeta();
-        flag.forEach((s,m) -> {
-            if (!clickMaterial.toString().equalsIgnoreCase((String)m)) {
+        flags.forEach((s, m) -> {
+            if (clickMaterial != m) {
                 return;
             }
             boolean isLeftClick = event.isLeftClick();
@@ -165,13 +188,15 @@ public class SettingPage extends DollInvHolder {
             dollConfig.saveConfig();
         }
     }
-
+/*
     @Override
     public void onOpen(InventoryOpenEvent event) {
-        if (!langFile.equals(ConfigManager.getLanguage()) || !flagFile.equals(ConfigManager.getFlag())) {
+        if (!langFile.equals(ConfigLoader.get().getConfig(ConfigLoader.ConfigType.CUSTOM_LANGUAGE)) || !flagFile.equals(ConfigManager.getFlag())) {
             setupInventoryItem();
         }
     }
+
+ */
     private ChatColor getToggle(boolean b) {
         return b?ChatColor.GREEN : ChatColor.RED;
     }

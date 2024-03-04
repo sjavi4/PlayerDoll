@@ -1,12 +1,11 @@
 package me.autobot.playerdoll.Command;
 
 import me.autobot.playerdoll.Command.SubCommands.*;
+import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
 import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 
@@ -146,7 +145,7 @@ public enum CommandType {
     }, GSET(false, OnlineStatus.ONLINE_OFFLINE) {
         @Override
         void buildSuggestion() {
-            SuggestionBuilder.create(this).addChild(ArgumentType.OFFLINE_PERMISSIONED_DOLL);
+            SuggestionBuilder.create(this).addChild(ArgumentType.ALL_DOLL);
         }
         @Override
         boolean checkPermission(Player sender, String dollName) {
@@ -510,8 +509,25 @@ public enum CommandType {
     private static boolean checkSenderPermission(Player sender, String dollName, CommandType commandType) {
         return commandType.checkSenderPermission(sender, dollName);
     }
+
+
     // Doll must exist when doing check.
     // Check action commands
+    private boolean checkSenderPermissions(Player sender, String dollName) {
+        if (!this.onlineStatus.valid(dollName)) {
+            sender.sendMessage(LangFormatter.YAMLReplaceMessage(switch (this.onlineStatus) {
+                case MUST_ONLINE -> "OnlineStatus.Must_Online";
+                case MUST_OFFLINE -> "OnlineStatus.Must_Offline";
+                case ONLINE_OFFLINE -> "OnlineStatus.Online_Offline";
+                case NOT_EXIST -> "OnlineStatus.Not_Exist";
+            }));
+            return false;
+        }
+        String fullDollName = getDollName(dollName, true);
+        String commandName = this.toString().toLowerCase();
+        return checkHasPermission(commandName, sender, fullDollName, true);
+    }
+
     private boolean checkSenderPermission(Player sender, String dollName) {
         if (!this.onlineStatus.valid(dollName)) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage(switch (this.onlineStatus) {
@@ -589,6 +605,124 @@ public enum CommandType {
 
     public static boolean checkHasPermission(String commandName, Player sender, String dollName, boolean alert) {
         String senderUUID = sender.getUniqueId().toString();
+        DollConfig dollConfig;
+
+        Player dollPlayer = Bukkit.getPlayer(dollName);
+        if (dollPlayer == null) {
+            dollConfig = DollConfig.getOfflineDollConfig(dollName);
+        } else {
+            dollConfig = DollConfig.getOnlineDollConfig(dollPlayer.getUniqueId());
+        }
+
+        /*
+        if (dollConfig == null) {
+            if (alert) sender.sendMessage(LangFormatter.YAMLReplaceMessage("CannotObtainDollConfig"));
+            return false;
+        }
+        PermissionManager permissionManager = PermissionManager.getPermissionGroup(dollConfig.getString("Owner.Perm"));
+        if (permissionManager == null) {
+            if (alert) sender.sendMessage(LangFormatter.YAMLReplaceMessage("CannotObtainDollPermission"));
+            return false;
+        }
+
+         */
+
+        String permission = "playerdoll.command." + commandName;
+        // For Tab Suggestions
+        if (commandName == null && sender.hasPermission(permission)) {
+            // Check Owner - Player Setting - General Setting
+            if (dollConfig.ownerUUID.getValue().equals(senderUUID)) {
+                return true;
+            } else if (dollConfig.playerSetting.get(sender.getUniqueId()).get("admin")) {
+                return true;
+            } else {
+                return dollConfig.generalSetting.get("admin");
+            }
+            /*
+            if (dollConfig.getString("Owner.UUID", "").equals(senderUUID)) {
+                return true;
+            } else if (dollConfig.getBoolean("playerSetting." + senderUUID + ".admin")) {
+                return true;
+            } else {
+                return dollConfig.getBoolean("generalSetting." + senderUUID + ".admin");
+            }
+             */
+        }
+        // Real Commands
+        String CommandExecutorIsNotPermit = LangFormatter.YAMLReplaceMessage("CommandExecutorIsNotPermit");
+
+        //String playerSettingPath = "Player-Setting." + senderUUID + "." + commandName;
+        //String generalSettingPath = "General-Setting." + commandName;
+
+        if (!sender.hasPermission(permission)) {
+            return false;
+        }
+        if (dollConfig.ownerUUID.getValue().equals(senderUUID)) {
+            return true;
+        } else if (dollConfig.playerSetting.containsKey(sender.getUniqueId())) {
+            var playerSetting = dollConfig.playerSetting.get(sender.getUniqueId());
+            if (playerSetting.get("admin")) {
+                return true;
+            } else if (!playerSetting.get(commandName)) {
+                if (alert) sender.sendMessage(CommandExecutorIsNotPermit);
+                return false;
+            }
+            return true;
+        } else if (dollConfig.generalSetting.containsKey(commandName)) {
+            if (dollConfig.generalSetting.get("admin")) {
+                return true;
+            } else if (!dollConfig.generalSetting.get(commandName)) {
+                if (alert) sender.sendMessage(CommandExecutorIsNotPermit);
+                return false;
+            }
+            return true;
+        }
+        /* Check Default
+        else if (permissionManager.playerDefaultSettings.containsKey(commandName)) {
+            if (!permissionManager.playerDefaultSettings.get(commandName)) {
+                if (alert) sender.sendMessage(CommandExecutorIsNotPermit);
+                return false;
+            }
+            return true;
+
+         */
+
+        /*
+        if (!permissionManager.playerAvailableFlags.get(commandName)) {
+            if (alert) sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandDisabledFromOwnerPermissionGroup", commandName));
+            return false;
+        } else if (dollConfig.getString("Owner.UUID", "").equals(senderUUID)) {
+            return true;
+        } else if (dollConfig.contains(playerSettingPath)) {
+            if (dollConfig.getBoolean("playerSetting." + senderUUID + ".admin")) {
+                return true;
+            } else if (!dollConfig.getBoolean(playerSettingPath)) {
+                if (alert) sender.sendMessage(CommandExecutorIsNotPermit);
+                return false;
+            }
+            return true;
+        } else if (dollConfig.contains(generalSettingPath)) {
+            if (dollConfig.getBoolean("generalSetting." + senderUUID + ".admin")) {
+                return true;
+            } else if (!dollConfig.getBoolean(generalSettingPath)) {
+                if (alert) sender.sendMessage(CommandExecutorIsNotPermit);
+                return false;
+            }
+            return true;
+        } else if (permissionManager.playerDefaultSettings.containsKey(commandName)) {
+            if (!permissionManager.playerDefaultSettings.get(commandName)) {
+                if (alert) sender.sendMessage(CommandExecutorIsNotPermit);
+                return false;
+            }
+            return true;
+        }
+
+         */
+        return false;
+    }
+/*
+    public static boolean checkHasPermission(String commandName, Player sender, String dollName, boolean alert) {
+        String senderUUID = sender.getUniqueId().toString();
         YamlConfiguration dollConfig = null;
         Player dollPlayer = Bukkit.getPlayer(dollName);
         if (dollPlayer == null) {
@@ -656,6 +790,8 @@ public enum CommandType {
         }
     }
 
+
+ */
     public enum OnlineStatus {
         MUST_ONLINE {
             @Override

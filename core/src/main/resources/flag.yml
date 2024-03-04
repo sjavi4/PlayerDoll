@@ -1,25 +1,27 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 17
+version: 18
 
 # Follows Permission.yml - PermissionGroup
 # Do not Duplicate Items
 # Avoid Respawn Anchor, Gray Stained Glass Pane
-GlobalFlag:
+Global-Flag:
   # Do not use the same item more than once
   echest: ENDER_EYE
   glow: GLOW_INK_SAC
   gravity: GRAVEL
-  hide_from_list: TINTED_GLASS
+  #hide_from_list: TINTED_GLASS
   hostility: TARGET
   inv: CHEST_MINECART
   invulnerable: TOTEM_OF_UNDYING
   join_at_start: RECOVERY_COMPASS
   large_step_size: STONE_STAIRS
   phantom: PHANTOM_MEMBRANE
-  pickupable: HOPPER
+  pickable: HOPPER
   pushable: ARMOR_STAND
+  real_player_tick_update: CARROT_ON_A_STICK
+  real_player_tick_action: FISHING_ROD
 
-PersonalFlag:
+Personal-Flag:
   # Do not use the same item more than once
   admin: WOODEN_PICKAXE
   attack: WOODEN_SWORD

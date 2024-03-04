@@ -3,18 +3,11 @@ package me.autobot.playerdoll.Command.SubCommands;
 import me.autobot.playerdoll.Command.ArgumentType;
 import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.Util.ConfigManager;
+import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 
@@ -26,15 +19,17 @@ public class Spawn extends SubCommand {
         if (PlayerDoll.dollInvStorage.containsKey(dollName)) {
             PlayerDoll.dollInvStorage.get(dollName).closeOfflineInv();
         }
-        dollYAML.reloadConfig();
+        dollConfig.saveConfig();
+        //dollYAML.reloadConfig();
 
-        int serverMaxDoll = ConfigManager.getConfig().getInt("Global.ServerMaxDoll");
+        int serverMaxDoll = BasicConfig.get().serverMaxDoll.getValue();// getInt("Global.ServerMaxDoll");
         if (serverMaxDoll > -1 && !sender.isOp() && DollManager.ONLINE_DOLL_MAP.size() >= serverMaxDoll) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("DollCapacityIsFull"));
             return;
         }
-        String ownerUUID = dollConfig.getString("Owner.UUID");
-        Player owner = Bukkit.getPlayer(UUID.fromString(ownerUUID));
+        String ownerUUID = dollConfig.ownerUUID.getValue();// getString("Owner.UUID");
+        //Player owner = Bukkit.getPlayer(UUID.fromString(ownerUUID));
+        /*
         if (owner != null) {
             PermissionManager perm = PermissionManager.getPlayerPermission(owner);
             if (!perm.groupName.equals(permissionManager.groupName)) {
@@ -46,9 +41,11 @@ public class Spawn extends SubCommand {
             }
         }
 
-        Map<String, Object> map = dollConfig.getConfigurationSection("setting").getValues(false);
-        permissionManager.dollDefaultSettings.forEach(map::putIfAbsent);
+         */
 
+        //Map<String, Object> map = dollConfig.getConfigurationSection("setting").getValues(false);
+        //permissionManager.dollDefaultSettings.forEach(map::putIfAbsent);
+/*
         if (!player.isOp()) {
             int count = 0;
             for (IDoll d : DollManager.ONLINE_DOLL_MAP.values()) {
@@ -62,12 +59,17 @@ public class Spawn extends SubCommand {
                 return;
             }
         }
+
+ */
+        /*
         if (!player.isOp() && !(boolean)permissionManager.groupProperties.get("bypassMaxPlayer") && Bukkit.getMaxPlayers() <= Bukkit.getOnlinePlayers().size()) {
             player.sendMessage(LangFormatter.YAMLReplaceMessage("ServerReachMaxPlayer"));
             return;
         }
-        dollConfig = dollYAML.reloadConfig().getConfig();
-        UUID configUUID = UUID.fromString(dollConfig.getString("UUID"));
-        DollManager.getInstance().spawnDoll(dollName, configUUID,sender,(args != null && args.length > 0 && checkArgumentValid(ArgumentType.ALIGN_IN_GRID,args[0])));
+
+         */
+        //dollConfig = dollYAML.reloadConfig().getConfig();
+        //UUID configUUID = UUID.fromString(dollConfig.getString("UUID"));
+        DollManager.getInstance().spawnDoll(dollName, UUID.fromString(dollConfig.dollUUID.getValue()),sender,(args != null && args.length > 0 && checkArgumentValid(ArgumentType.ALIGN_IN_GRID,args[0])));
     }
 }

@@ -2,15 +2,12 @@ package me.autobot.playerdoll.Dolls;
 
 import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.Util.PermissionManager;
 import net.minecraft.world.damagesource.DamageSource;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -24,9 +21,9 @@ public interface IDoll {
     void setNoPhantom(boolean b);
 
     boolean getNoPhantom();
-
+    DollConfig getDollConfig();
     OfflinePlayer getOwner();
-    DollConfigManager getConfigManager();
+    //DollConfigManager getConfigManager();
     EntityPlayerActionPack getActionPack();
     void _resetLastActionTime();
     void _resetAttackStrengthTicker();
@@ -36,6 +33,7 @@ public interface IDoll {
     void _disconnect();
     void _setPos(double x, double y, double z);
     void _setMaxUpStep(float h);
+    Player getCaller();
     /*
     static void initialDoll(DollConfigManager configManager, String uuid) {
         if ((boolean)configManager.getData().get("Initial")) {
@@ -48,6 +46,7 @@ public interface IDoll {
     }
 
      */
+    /*
     static void setConfigInformation(Player player) {
         YamlConfiguration dollConfig = YamlConfiguration.loadConfiguration(new File(PlayerDoll.getDollDirectory(),player.getName()+".yml"));
         //dollConfig = YAMLManager.getConfig(this.getGameProfile().getName());
@@ -55,22 +54,30 @@ public interface IDoll {
         //configManager.addListener(dollSettingMonitor);
 
     }
+
+     */
     static void setSkin(Player player, IDoll iDoll) {
         if (!Bukkit.getOnlineMode()) {
             return;
         }
-        YamlConfiguration dollConfig = DollConfigManager.dollConfigManagerMap.get(player.getUniqueId()).config;
+        //YamlConfiguration dollConfig = DollConfigManager.dollConfigManagerMap.get(player.getUniqueId()).config;
+        /*
         if ((boolean)PermissionManager.getPermissionGroup(dollConfig.getString("Owner.Perm")).dollProperties.get("restrictSkin")) {
             return;
         }
-        String skinName = dollConfig.getString("SkinData.Name");
+
+         */
+        DollConfig dollConfig = iDoll.getDollConfig();
+        String skinName = dollConfig.skinName.getValue();//.getString("SkinData.Name");
         if (skinName == null || skinName.isBlank()) {
             return;
         }
-        var dollSkinData = dollConfig.getConfigurationSection("SkinData");
-        if (dollSkinData != null && dollSkinData.getString("Name").equalsIgnoreCase(skinName)) {
+
+        //var dollSkinData = dollConfig.getConfigurationSection("SkinData");
+
+        //if (dollSkinData != null && dollSkinData.getString("Name").equalsIgnoreCase(skinName)) {
             String model = "";
-            if (dollSkinData.getString("Model").equalsIgnoreCase("slim")) {
+            if (dollConfig.skinModel.getValue().equalsIgnoreCase("slim")) {
                 model = """
                           "metadata" : {
                             "model" : "slim"
@@ -78,26 +85,26 @@ public interface IDoll {
                     """;
             }
             String cape = "";
-            if (!dollSkinData.getString("Cape").equalsIgnoreCase("")) {
+            if (!dollConfig.skinCape.getValue().equalsIgnoreCase("")) {
                 cape = ",\n    \"CAPE\" : {\n" +
-                        "      \"url\" : \""+ new String(Base64.getDecoder().decode(dollSkinData.getString("Cape")), StandardCharsets.UTF_8) +"\"\n" +
+                        "      \"url\" : \""+ new String(Base64.getDecoder().decode(dollConfig.skinCape.getValue()), StandardCharsets.UTF_8) +"\"\n" +
                         "    }";
             }
             String jsonData = "{\n" +
-                    "  \"timestamp\" : "+ dollSkinData.getString("timestamp") + ",\n" +
-                    "  \"profileId\" : \""+ dollSkinData.getString("profileId") +"\",\n" +
-                    "  \"profileName\" : \""+ dollSkinData.getString("Name") +"\",\n" +
+                    "  \"timestamp\" : "+ dollConfig.skinTimestamp.getValue() + ",\n" +
+                    "  \"profileId\" : \""+ dollConfig.skinProfileID.getValue() +"\",\n" +
+                    "  \"profileName\" : \""+ dollConfig.skinName.getValue() +"\",\n" +
                     "  \"signatureRequired\" : true,\n" +
                     "  \"textures\" : {\n" +
                     "    \"SKIN\" : {\n" +
-                    "      \"url\" : \"" + new String(Base64.getDecoder().decode(dollSkinData.getString("Skin")),StandardCharsets.UTF_8) + "\",\n" +
+                    "      \"url\" : \"" + new String(Base64.getDecoder().decode(dollConfig.skinImageEncoded.getValue()),StandardCharsets.UTF_8) + "\",\n" +
                     model +
                     "    }" +
                     cape + "\n" +
                     "  }\n" +
                     "}";
-            iDoll.setDollSkin(Base64.getEncoder().encodeToString(jsonData.getBytes(StandardCharsets.UTF_8)), dollSkinData.getString("Signature"));
-        }
+            iDoll.setDollSkin(Base64.getEncoder().encodeToString(jsonData.getBytes(StandardCharsets.UTF_8)), dollConfig.skinSignature.getValue());
+        //}
 
     }
     static void resetPhantomStatistic(Player player) {
@@ -117,4 +124,5 @@ public interface IDoll {
         return damaged;
     }
     Player getBukkitPlayer();
+    void setDollConfig(DollConfig config);
 }

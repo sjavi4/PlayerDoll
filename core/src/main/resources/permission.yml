@@ -1,4 +1,4 @@
-version: 17
+version: 18
 
 group:
   default:
@@ -50,14 +50,14 @@ group:
       echest: true
       glow: false
       gravity: true
-      hide_from_list: false
+      #hide_from_list: false
       hostility: true
       inv: true
       invulnerable: false
       join_at_start: false
       large_step_size: false
       phantom: true
-      pickupable: true
+      pickable: true
       pushable: false
 
     # Can Player switch the on/off state
@@ -66,14 +66,14 @@ group:
       echest: true
       glow: true
       gravity: false
-      hide_from_list: false
+      #hide_from_list: false
       hostility: false
       inv: true
       invulnerable: false
       join_at_start: true
       large_step_size: true
       phantom: true
-      pickupable: true
+      pickable: true
       pushable: true
 
     # Default toggle of behavior

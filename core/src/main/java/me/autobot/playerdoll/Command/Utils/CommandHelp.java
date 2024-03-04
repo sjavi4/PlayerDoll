@@ -1,6 +1,6 @@
 package me.autobot.playerdoll.Command.Utils;
 
-import me.autobot.playerdoll.Util.ConfigManager;
+import me.autobot.playerdoll.Util.ConfigLoader;
 import me.autobot.playerdoll.Util.LangFormatter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -22,7 +22,7 @@ public class CommandHelp implements CommandExecutor, TabCompleter {
     final ArrayList<String> usage = new ArrayList<>();
 
     public CommandHelp() {
-        var command = ConfigManager.getLanguage().getConfigurationSection("helpCommand").getValues(true).keySet();
+        var command = ConfigLoader.get().getConfig(ConfigLoader.ConfigType.CUSTOM_LANGUAGE).getConfigurationSection("helpCommand").getValues(true).keySet();
         for (int i = 0; i < command.size(); i = i + 3) {
             index.add((String) command.toArray()[i]);
             desc.add((String) command.toArray()[i + 1]);

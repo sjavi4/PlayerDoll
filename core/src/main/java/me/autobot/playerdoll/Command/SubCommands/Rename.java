@@ -20,7 +20,7 @@ public class Rename extends SubCommand {
         if (newNameValidator.illegalName()) return;
         if (newNameValidator.preservedName()) return;
         if (newNameValidator.repeatName()) return;
-        if (!dollConfig.getString("Owner.UUID").equalsIgnoreCase(sender.getUniqueId().toString())) {
+        if (!dollConfig.ownerUUID.getValue().equalsIgnoreCase(sender.getUniqueId().toString())) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandExecutorMustBeOwner"));
             return;
         }

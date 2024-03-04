@@ -1,12 +1,5 @@
 package me.autobot.playerdoll.Command.Utils;
 
-import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +9,7 @@ public class CommandUpgrade implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player p)) return false;
-
+/*
         if (args == null || args.length == 0) {
             PermissionManager perm = PermissionManager.getPlayerPermission(p.getUniqueId());
 
@@ -56,6 +49,8 @@ public class CommandUpgrade implements CommandExecutor {
             return true;
 
         }
+
+ */
         return true;
     }
 }

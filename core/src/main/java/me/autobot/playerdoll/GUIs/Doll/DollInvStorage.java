@@ -40,7 +40,7 @@ public class DollInvStorage {
         this.inventoryPage = new InventoryPage(doll).getInventory();
         this.backpackInventory = new BackpackInventory(doll).getInventory();
         this.enderchestInventory = new EnderChestInventory(doll).getInventory();
-        this.GSetPage = new PlayerSettingPage(dollName, null).getInventory();
+        this.GSetPage = new GeneralSettingPage(dollName).getInventory();
         PlayerDoll.dollInvStorage.put(doll.getName(), this);
     }
 

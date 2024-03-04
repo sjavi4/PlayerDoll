@@ -1,7 +1,7 @@
 package me.autobot.playerdoll.GUIs.Menus;
 
 import me.autobot.playerdoll.Command.CommandType;
-import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.GUIs.ButtonSetter;
 import me.autobot.playerdoll.GUIs.DollInvHolder;
 import me.autobot.playerdoll.PlayerDoll;
@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
@@ -84,11 +83,11 @@ public class InformationPage extends DollInvHolder {
     }
 
     private ItemStack getDollStatus() {
-        YamlConfiguration dollConfig = DollConfigManager.getConfigManager(doll).config;
+        DollConfig dollConfig = DollConfig.getOnlineDollConfig(doll.getUniqueId());
 
         ItemStack slot0 = ButtonSetter.setItem(Material.PLAYER_HEAD,null, ChatColor.GREEN+ fullDollName, Arrays.asList(
-                LangFormatter.YAMLReplace("mainmenu.uuid", doll.getUniqueId().toString()),
-                LangFormatter.YAMLReplace("mainmenu.owner", dollConfig.getString("Owner.Name"), dollConfig.getString("Owner.UUID")),
+                LangFormatter.YAMLReplace("mainmenu.uuid", dollConfig.dollUUID.getValue()),
+                LangFormatter.YAMLReplace("mainmenu.owner", dollConfig.ownerName.getValue(), dollConfig.ownerUUID.getValue()),
                 LangFormatter.YAMLReplace("mainmenu.hp",doll.getHealth(), doll.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()),
                 LangFormatter.YAMLReplace("mainmenu.hunger", doll.getFoodLevel(),"20"),
                 LangFormatter.YAMLReplace("mainmenu.gamemode",doll.getGameMode().toString()),

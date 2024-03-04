@@ -4,8 +4,8 @@ import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.YAMLManager;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -15,11 +15,13 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class DollManager {
     private static final DollManager instance = new DollManager();
     public static final File dollDirectory = new File(PlayerDoll.getDollDirectory());
     public static final Map<UUID, IDoll> ONLINE_DOLL_MAP = new HashMap<>();
+    public static final Map<UUID, PermissionAttachment> DOLL_PERMISSION_MAP = new HashMap<>();
     private static final String NAME_PATTERN = "^[a-zA-Z0-9_]*$";
 
     public static DollManager getInstance() {
@@ -27,16 +29,16 @@ public class DollManager {
     }
 
     public void removeDoll(String dollName) {
-        File config = DollConfigHelper.getFile(dollName);
-        if (!config.exists()) {
+        //File config = DollConfigHelper.getFile(dollName);
+        File dollFile = new File(PlayerDoll.getDollDirectory(),dollName+".yml");
+        DollConfig dollConfig = DollConfig.getOfflineDollConfig(dollName);
+        if (!dollFile.exists()) {
             return;
         }
-        YamlConfiguration dollConfig = DollConfigHelper.getConfig(config);
-        if (!dollConfig.contains("UUID")) {
-            return;
-        }
-        String dollUUID = dollConfig.getString("UUID");
-        if (dollUUID == null || dollUUID.isBlank()) {
+        //YamlConfiguration dollConfig = DollConfigHelper.getConfig(config);
+                //String dollUUID = dollConfig.getString("UUID");
+        String dollUUID = dollConfig.dollUUID.getValue();
+        if (dollUUID.equals(DollConfig.NULL_UUID)) {
             return;
         }
         UUID uuid = UUID.fromString(dollUUID);
@@ -44,7 +46,7 @@ public class DollManager {
         File dat_old = DollConfigHelper.getPlayerData_OldFile(dollUUID);
 
         Runnable task = () -> {
-            config.delete(); dat.delete(); dat_old.delete();
+            dollFile.delete(); dat.delete(); dat_old.delete();
         };
         if (!isDollOnline(uuid)) {
             task.run();
@@ -56,11 +58,11 @@ public class DollManager {
             delayedExecutor.schedule(task, 2, TimeUnit.SECONDS);
             delayedExecutor.shutdown();
         }
-
+        dollConfig = null;
     }
     public boolean renameDoll(String dollName, String newName) {
         String name = dollFullName(newName);
-        UUID dollUUID = UUID.fromString(DollConfigHelper.getConfig(dollName).getString("UUID"));
+        //UUID dollUUID = UUID.fromString(DollConfigHelper.getConfig(dollName).getString("UUID"));
 
         File oldConfig = DollConfigHelper.getFile(dollName);
         File newConfig = DollConfigHelper.getFile(name);
@@ -77,20 +79,20 @@ public class DollManager {
     public void spawnDoll(String dollName, UUID dollUUID, Player caller, boolean align) {
         //OFFLINE_DOLL_MAP.remove(dollName);
         IDoll doll;
-        ONLINE_DOLL_MAP.put(dollUUID,null);
-        try {
-            ServerPlayer serverPlayer = null;
-            Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit."+ PlayerDoll.version +".entity.CraftPlayer");
-            if (caller != null) {
-                serverPlayer = (ServerPlayer) caller.getClass().asSubclass(craftPlayerClass).getDeclaredMethod("getHandle").invoke(caller);
-            }
-            doll = (IDoll) DollHelper.callSpawn(serverPlayer,dollName, dollUUID , PlayerDoll.version);
-            ONLINE_DOLL_MAP.put(dollUUID,doll);
-        } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
+        //ONLINE_DOLL_MAP.put(dollUUID,null);
+        /*
+        ServerPlayer serverPlayer = null;
+        Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit."+ PlayerDoll.version +".entity.CraftPlayer");
+        if (caller != null) {
+            serverPlayer = (ServerPlayer) caller.getClass().asSubclass(craftPlayerClass).getDeclaredMethod("getHandle").invoke(caller);
         }
+
+         */
+
+        doll = (IDoll) DollHelper.callSpawn(caller,dollName, dollUUID , PlayerDoll.version);
+        //ONLINE_DOLL_MAP.put(dollUUID,doll);
         if (doll == null) {
-            ONLINE_DOLL_MAP.remove(dollUUID);
+            //ONLINE_DOLL_MAP.remove(dollUUID);
             return;
         }
         if (align && caller != null) {
@@ -157,11 +159,11 @@ public class DollManager {
             playerChunkLoader.getClass().getDeclaredMethod("removePlayer", ServerPlayer.class).invoke(playerChunkLoader, serverPlayer);
         } catch (NoSuchMethodException | NoSuchFieldException ignored) {
         } catch (InvocationTargetException | IllegalAccessException e) {
-            System.out.println("Exception while invoking Paper's playerChunkLoader");
+            PlayerDoll.getPluginLogger().log(Level.WARNING,"Exception while invoking Paper's playerChunkLoader");
+            //System.out.println("Exception while invoking Paper's playerChunkLoader");
             throw new RuntimeException(e);
         }
     }
-
     public static void Folia_Disconnect(IDoll iDoll) {
         PlayerDoll.getFoliaHelper().entityTask(iDoll.getBukkitPlayer(), iDoll::_disconnect, 1);
     }

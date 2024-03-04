@@ -1,13 +1,12 @@
 package me.autobot.playerdoll.GUIs.Menus;
 
 import me.autobot.playerdoll.Command.CommandType;
-import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.GUIs.ButtonSetter;
 import me.autobot.playerdoll.GUIs.DollInvHolder;
-import me.autobot.playerdoll.Util.ConfigManager;
+import me.autobot.playerdoll.Util.ConfigLoader;
+import me.autobot.playerdoll.Util.Configs.FlagConfig;
 import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
-import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,7 +15,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -30,24 +28,23 @@ public class GeneralSettingPage extends DollInvHolder {
     private final Player doll;
     private final String fullDollName;
     private final String shortDollName;
-    private PermissionManager perm;
-    private YAMLManager dollConfig;
-    private Map<String, Object> flag;
+    private DollConfig dollConfig;
+    private Map<String, Material> flags;
     private final Map<Material, BiPredicate<Player, Boolean>> settingMap = new HashMap<>();
     private YamlConfiguration langFile = null;
-    private YamlConfiguration flagFile = null;
-    public GeneralSettingPage(String doll) {
-        this.doll = Bukkit.getPlayer(doll);
-        this.fullDollName = CommandType.getDollName(doll, true);
-        this.shortDollName = CommandType.getDollName(doll, false);
+    public GeneralSettingPage(String dollName) {
+        this.doll = Bukkit.getPlayer(dollName);
+        this.fullDollName = CommandType.getDollName(dollName, true);
+        this.shortDollName = CommandType.getDollName(dollName, false);
 
-        this.dollConfig = YAMLManager.loadConfig(fullDollName,false,false);
-        if (this.dollConfig == null) {
-            return;
+        if (this.doll == null) {
+            this.dollConfig = DollConfig.getOfflineDollConfig(fullDollName);
+        } else {
+            this.dollConfig = DollConfig.getOnlineDollConfig(this.doll.getUniqueId());
         }
         
 
-        this.perm = PermissionManager.getPermissionGroup(this.dollConfig.getConfig().getString("Owner.Perm"));
+        //this.perm = PermissionManager.getPermissionGroup(this.dollConfig.getConfig().getString("Owner.Perm"));
         inventory = Bukkit.createInventory(this, 54, LangFormatter.YAMLReplace("menuTitle.playerSetting","Everyone",shortDollName));
         setupInventoryItem();
     }
@@ -58,11 +55,9 @@ public class GeneralSettingPage extends DollInvHolder {
 
         String[] desc = LangFormatter.splitter(LangFormatter.YAMLReplace("controlButton.hint"));
 
-        langFile = ConfigManager.getLanguage();
-        flagFile = ConfigManager.getFlag();
+        langFile = ConfigLoader.get().getConfig(ConfigLoader.ConfigType.CUSTOM_LANGUAGE);
 
-        DollConfigManager configManager = DollConfigManager.getConfigManager(doll);
-        Map<String, Object> toggleMap = configManager.getDollSetting();
+        Map<String, Boolean> toggleMap = dollConfig.generalSetting;
 
         //Page function wait until necessary
         /*
@@ -81,12 +76,14 @@ public class GeneralSettingPage extends DollInvHolder {
 
          */
 
-        flag = flagFile.getConfigurationSection("GlobalFlag").getValues(false);
+        flags = FlagConfig.PERSONAL_FLAG_MAP;
 
         int[] counter = {18};
-        flag.forEach((s,o) -> {
-            Material m = Material.valueOf((String) o);
-            boolean toggle = (boolean) toggleMap.get(s);
+        flags.forEach((s, m) -> {
+            boolean toggle = false;
+            if (toggleMap.get(s) != null) {
+                toggle = toggleMap.get(s);
+            }
             String buttonName = langFile.getString("settingmenu."+s+".name");
             List<String> lure = new ArrayList<>();
             lure.add(LangFormatter.YAMLReplace("settingmenu."+s+".desc"));
@@ -102,10 +99,17 @@ public class GeneralSettingPage extends DollInvHolder {
             inventory.setItem(counter[0],item);
             counter[0]++;
             settingMap.put(m, (p, b) -> {
+                String perm = "playerdoll.personalflag." + s;
+                if (!p.hasPermission(perm)) {
+                    return false;
+                }
+                /*
                 if (!perm.playerAvailableFlags.get(s) && !p.isOp()) {
                     return false;
                 }
-                configManager.setGeneralSetting(s, b);
+
+                 */
+                dollConfig.generalSetting.put(s, b);
                 return true;
             });
             buttonMap.put(m,(p)->{});
@@ -118,12 +122,15 @@ public class GeneralSettingPage extends DollInvHolder {
             this.dollConfig.saveConfig();
         }
     }
+    /*
     @Override
     public void onOpen(InventoryOpenEvent event) {
-        if (!langFile.equals(ConfigManager.getLanguage()) || !flagFile.equals(ConfigManager.getFlag())) {
+        if (!langFile.equals(ConfigLoader.get().getConfig(ConfigLoader.ConfigType.CUSTOM_LANGUAGE)) || !flagFile.equals(ConfigManager.getFlag())) {
             setupInventoryItem();
         }
     }
+
+     */
     @Override
     public void onClick(InventoryClickEvent event) {
         super.onClick(event);
@@ -133,8 +140,8 @@ public class GeneralSettingPage extends DollInvHolder {
         ItemStack clickItem = event.getCurrentItem();
         Material clickMaterial = clickItem.getType();
         ItemMeta clickMeta = clickItem.getItemMeta();
-        flag.forEach((s,m) -> {
-            if (!clickMaterial.toString().equalsIgnoreCase((String)m)) {
+        flags.forEach((s, m) -> {
+            if (clickMaterial != m) {
                 return;
             }
             boolean isLeftClick = event.isLeftClick();

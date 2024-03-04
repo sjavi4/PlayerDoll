@@ -1,19 +1,40 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 17
+version: 18
 
 # Custom Server Mod
 # If plugin has detected the Mod wrongly,
 # or you are using Unknown Server Mod, you can manually set the Mod.
 # Leave it blank when you are already using main Branches, otherwise write a most suitable one
 # Spigot / PaperSeries (include Paper/Purpur/...) / Folia
-##server-mod: ''
 
+server-mod: ''
 # Language file
 # it loads language/EXAMPLE.yml
-##plugin-language: english
+plugin-language: english
+check-update: true
+update-replace-config: false
+config-auto-reload: false
+backup-startup: false
+backup-shutdown: false
+remove-inactive-doll: false
+remove-time: 30 #Days
+preserved-doll-name:
+    - ''
+adjustable-max-player: true
+server-max-doll: -1
 
+broadcast-doll-death: true
+broadcast-doll-join: false
+broadcast-doll-disconnect: false
 
-##check-update: true
+# Will doll joining Trigger PlayerJoinEvent
+# It depends on what plugins you installed in the server
+#trigger-player-join-event: false
+
+# Add permission to all Dolls
+# It could be helpful in some circumstances
+doll-permission:
+  - ''
 
 Global:
   # Custom Server Mod

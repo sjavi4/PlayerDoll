@@ -1,10 +1,10 @@
 package me.autobot.playerdoll.Command.SubCommands;
 
 import me.autobot.playerdoll.Command.SubCommand;
+import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollConfigHelper;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
-import me.autobot.playerdoll.Util.PermissionManager;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -13,16 +13,27 @@ import java.util.UUID;
 public class Create extends SubCommand {
     public Create(Player sender, String dollName, String[] args) {
         super(sender, dollName);
+        if (!sender.hasPermission("playerdoll.command.create")) {
+            sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandDisabledByPermissionGroup"));
+            return;
+        }
+
+        DollConfig offlineDollConfig = DollConfig.getOfflineDollConfig(dollName);
+
+
         String skin = sender.getName();
+        /*
         if (permissionManager == null) {
             permissionManager = PermissionManager.getPlayerPermission(sender);
         }
+
+
 
         if (!(boolean) PermissionManager.getPlayerPermission(sender).groupProperties.get("canCreateDoll")) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("CommandDisabledByPermissionGroup"));
             return;
         }
-
+*/
 
         int count = 0;
         UUID uuid = sender.getUniqueId();
@@ -32,26 +43,31 @@ public class Create extends SubCommand {
         } else {
             dollCountMap.put(uuid,0);
         }
+        /*
         int maxCreation = (int) permissionManager.groupProperties.get("maxDollCreation");
         if (maxCreation != -1 && !sender.isOp() && count >= maxCreation) {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateTooMuchDoll", maxCreation));
             return;
         }
-        
+
+         */
+        /*
         if (validator.longName()) return;
         if (validator.illegalName()) return;
         if (validator.preservedName()) return;
         if (validator.repeatName()) return;
 
-        boolean success = PlayerDoll.getVaultHelper().dollCreation(sender);
-        if (!success) {
-            return;
-        }
+
+         */
+        //boolean success = PlayerDoll.getVaultHelper().dollCreation(sender);
+        //if (!success) {
+        //    return;
+        //}
         if (args != null && args.length != 0) {
             skin = args[0];
         }
-
-        DollConfigHelper.createDollConfig(sender,dollName,skin,permissionManager);
+        DollConfigHelper.createDollConfig(sender,dollName,skin,offlineDollConfig);
+        //DollConfigHelper.createDollConfig(sender,dollName,skin,permissionManager);
 /*
         File dollFile = new File(PlayerDoll.getDollDirectory(), dollName+".yml");
         dollFile.delete();
@@ -133,6 +149,7 @@ public class Create extends SubCommand {
 
  */
 //        configFile.saveConfig();
+        offlineDollConfig.saveConfig();
         dollCountMap.put(uuid,count+1);
         sender.sendMessage(LangFormatter.YAMLReplaceMessage("PlayerCreateSucceed", dollName.substring(1)));
     }

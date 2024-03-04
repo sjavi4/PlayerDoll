@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 17
+version: 18
 
 ###
 # &0 black
@@ -84,6 +84,8 @@ Message:
   noFurtherUpgrade: '&cThere is no group to Upgrade.'
   upgradeSuccess: '&aYou have promoted to the next group.'
 
+  DollDisconnected: '&9Doll %a% Disconnected.'
+
 controlButton:
   back: '&fback'
   hint: '&2Left Click to Enable$n&cRight Click to Disable'
@@ -142,9 +144,15 @@ settingmenu:
   hide_from_list:
     name: 'Hide From List'
     desc: '&fWhether Doll will hide from dolllist command'
-  pickupable:
-    name: 'Pickupable'
+  pickable:
+    name: 'Pickable'
     desc: '&fWhether Doll can pick up items'
+  real_player_tick_update:
+    name: 'Real Player Tick (Entity Update)'
+    desc: '&fWhether Doll will tick at Network Phase or Entity Phase'
+  real_player_tick_action:
+    name: 'Real Player Tick (Action) [Not Implemented]'
+    desc: '&fWhether Doll will tick at Asynchronous Task Phase or Entity Phase'
   admin:
     name: 'Admin'
     desc: '&fEnable all access in the menu'

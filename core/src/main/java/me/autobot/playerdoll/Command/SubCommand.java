@@ -2,13 +2,10 @@ package me.autobot.playerdoll.Command;
 
 
 import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
-import me.autobot.playerdoll.Dolls.DollConfigManager;
+import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.IDoll;
-import me.autobot.playerdoll.Util.PermissionManager;
-import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,38 +15,44 @@ public abstract class SubCommand {
     public Player dollPlayer;
     public IDoll doll;
     public EntityPlayerActionPack actionPack;
-    public PermissionManager permissionManager;
-    public DollConfigManager dollConfigManager;
-    public YAMLManager dollYAML;
-    public YamlConfiguration dollConfig;
+    //public DollConfigManager dollConfigManager;
+    //public YAMLManager dollYAML;
+    //public YamlConfiguration dollConfig;
+    public DollConfig dollConfig;
     public DollDataValidator validator;
     private final String dollName;
     public SubCommand(Player sender, String dollName) {
         this.player = sender;
         this.dollName = dollName;
         this.dollPlayer = Bukkit.getPlayer(dollName);
+
         if (dollPlayer == null) {
-            dollConfig = getOfflineDollConfig();
+            dollConfig = DollConfig.getOfflineDollConfig(dollName);
         } else {
             this.doll = DollManager.ONLINE_DOLL_MAP.get(dollPlayer.getUniqueId());
-
+            dollConfig = DollConfig.getOnlineDollConfig(dollPlayer.getUniqueId());
             this.actionPack = doll.getActionPack();
-            this.dollPlayer = Bukkit.getPlayer(dollName);
-            dollConfigManager = doll.getConfigManager();
-            dollConfig = dollConfigManager.config;
-            permissionManager = PermissionManager.getPlayerPermission(doll.getOwner().getUniqueId());
+            //dollConfigManager = doll.getConfigManager();
+            //dollConfig = dollConfigManager.config;
+            //permissionManager = PermissionManager.getPlayerPermission(doll.getOwner().getUniqueId());
         }
+        /*
         if (dollConfig != null) {
             permissionManager = PermissionManager.getPermissionGroup(dollConfig.getString("Owner.Perm","default"));
         }
+
+         */
         if (sender != null) {
             validator = new DollDataValidator(sender, dollName);
         }
     }
+    /*
     private YamlConfiguration getOfflineDollConfig() {
         dollYAML = YAMLManager.loadConfig(dollName,false, true);
         return dollYAML == null ? null : dollYAML.getConfig();
     }
+
+     */
     public void executeAction(String[] args, int startIndex, EntityPlayerActionPack.ActionType actionType) {
         EntityPlayerActionPack.Action action = EntityPlayerActionPack.Action.once();
         ArgumentType argumentType = ArgumentType.POSITIVE_INTEGER;

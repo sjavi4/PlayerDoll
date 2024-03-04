@@ -5,19 +5,19 @@ import me.autobot.playerdoll.Command.Utils.CommandHelp;
 import me.autobot.playerdoll.Command.Utils.CommandLimit;
 import me.autobot.playerdoll.Command.Utils.CommandList;
 import me.autobot.playerdoll.Command.Utils.CommandReload;
-import me.autobot.playerdoll.Dolls.DollConfigManager;
 import me.autobot.playerdoll.Dolls.DollHelper;
 import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.IDoll;
-import me.autobot.playerdoll.Events.*;
+import me.autobot.playerdoll.EventListener.*;
 import me.autobot.playerdoll.Folia.FoliaHelper;
 import me.autobot.playerdoll.GUIs.Doll.DollInvStorage;
 import me.autobot.playerdoll.GUIs.GUIEventListener;
 import me.autobot.playerdoll.GUIs.GUIManager;
 import me.autobot.playerdoll.LuckPerms.LuckPermsHelper;
 import me.autobot.playerdoll.Util.BackupHelper;
-import me.autobot.playerdoll.Util.ConfigManager;
-import me.autobot.playerdoll.Util.PermissionManager;
+import me.autobot.playerdoll.Util.ConfigLoader;
+import me.autobot.playerdoll.Util.Configs.BasicConfig;
+import me.autobot.playerdoll.Util.Configs.FlagConfig;
 import me.autobot.playerdoll.Vault.VaultHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,17 +39,20 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class PlayerDoll extends JavaPlugin {
 
     private static Plugin plugin;
+    private static Logger logger;
 
     public static String version;
     //public static Map<String, IDoll> dollManagerMap = new HashMap<>();
     public static final Map<UUID,Integer> playerDollCountMap = new HashMap<>();
     public static final Map<String, DollInvStorage> dollInvStorage = new HashMap<>();
     public static final Set<String> pendingRespawnList = new HashSet<>();
-    private static int maxplayer;
+    private static int maxPlayer;
     public static final String dollIdentifier = "-";
     private static String dollDirectory = "";
 
@@ -62,8 +65,7 @@ public final class PlayerDoll extends JavaPlugin {
     public static String getDollDirectory() {
         return dollDirectory;
     }
-    public static ConfigManager configManager;
-
+    private static ConfigLoader configLoader;
     public static boolean isSpigot = false;
     public static boolean isPaperSeries = false;
     public static boolean isFolia = false;
@@ -79,19 +81,35 @@ public final class PlayerDoll extends JavaPlugin {
     public static FoliaHelper getFoliaHelper() {
         return foliaHelper;
     }
+    public static Logger getPluginLogger() {
+        return logger;
+    }
+    private BasicConfig basicConfig;
     @Override
     public void onEnable() {
         version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         gameVersionCheck();
 
         plugin = this;
-        maxplayer = Bukkit.getMaxPlayers();
+        logger = getLogger();
+        maxPlayer = Bukkit.getMaxPlayers();
 
-        configManager = new ConfigManager(this);
+        if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
+        File dollDirectoryFolder = new File(plugin.getDataFolder() + File.separator + "doll");
+        if (!dollDirectoryFolder.exists()) dollDirectoryFolder.mkdirs();
+        File backupDirectory = new File(plugin.getDataFolder() + File.separator + "backup");
+        if (!backupDirectory.exists()) backupDirectory.mkdirs();
+
+
+        configLoader = new ConfigLoader(this);
+        //configManager = new ConfigManager(this);
 
         PluginManager pluginManager = Bukkit.getPluginManager();
         dollDirectory = PlayerDoll.getPlugin().getDataFolder() + File.separator + "doll";
 
+        basicConfig = BasicConfig.get();
+        FlagConfig.get();
+        //if (basicConfig.)
         getServerBranch();
 
         initialGUI(pluginManager);
@@ -102,16 +120,22 @@ public final class PlayerDoll extends JavaPlugin {
 
         pluginVersionCheck();
 
+        if (basicConfig.backupStartUp.getValue()) {
+            BackupHelper.zip(this.getDataFolder(), new File(dollDirectory));
+        }
+        /*
         if (ConfigManager.getConfig().getBoolean("Global.Backup.StartUp")) {
             BackupHelper.zip(this.getDataFolder(), new File(dollDirectory));
         }
+
+         */
 
         thridPartyCheck();
         //if (!luckPermsHelper.exist()) {
         //} else {
         //PermissionManager.newInstance(this);
         //}
-        PermissionManager.initialize(this, luckPermsHelper != null);
+        //PermissionManager.initialize(this, luckPermsHelper != null);
 
         countPlayerDoll();
 
@@ -125,27 +149,47 @@ public final class PlayerDoll extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (basicConfig.adjustableMaxPlayer.getValue()) {
+            Bukkit.setMaxPlayers(maxPlayer);
+        }
+        /*
         YamlConfiguration config = ConfigManager.getConfig();
         if (config != null && config.getBoolean("Global.FlexibleServerMaxPlayer")) {
             Bukkit.setMaxPlayers(maxplayer);
         }
+
+         */
         dollInvStorage.values().forEach(DollInvStorage::closeAllInv);
         if (isFolia) {
             DollManager.ONLINE_DOLL_MAP.values().forEach((DollManager::Folia_Disconnect));
         } else {
             DollManager.ONLINE_DOLL_MAP.values().forEach(IDoll::_disconnect);
         }
-        PermissionManager.save();
+        //PermissionManager.save();
+
+        /*
         DollConfigManager.dollConfigManagerMap.values().forEach(d -> {
             if (d != null) {
                 d.save();
                 d.removeListener();
             }
         });
+
+         */
+        if (basicConfig.backupShutDown.getValue()) {
+            BackupHelper.zip(this.getDataFolder(), new File(dollDirectory));
+        }
+        /*
         if (ConfigManager.getConfig().getBoolean("Global.Backup.ShutDown")) {
             BackupHelper.zip(this.getDataFolder(), new File(dollDirectory));
         }
         configManager.stopWatcher();
+
+         */
+    }
+
+    public static ConfigLoader getConfigLoader() {
+        return configLoader;
     }
 
     private void registerCommand() {
@@ -167,7 +211,8 @@ public final class PlayerDoll extends JavaPlugin {
     }
     private void registerEvent(PluginManager pluginManager) {
         pluginManager.registerEvents(new DollDisconnectEvent(), this);
-        pluginManager.registerEvents(new JoinEvent(), this);
+        pluginManager.registerEvents(new PlayerJoin(), this);
+        pluginManager.registerEvents(new DollJoin(), this);
         pluginManager.registerEvents(new PlayerInteractDollEvent(), this);
         pluginManager.registerEvents(new DollDieEvent(), this);
         pluginManager.registerEvents(new DollRecipeEvent(), this);
@@ -175,6 +220,7 @@ public final class PlayerDoll extends JavaPlugin {
         //pluginManager.registerEvents(new DollTargetEvent(),this);
         //pluginManager.registerEvents(new DollKickEvent(), this);
         pluginManager.registerEvents(new DollDamageEvent(), this);
+        DollHelper.registerDollEvent(version);
     }
     private void initialGUI(PluginManager pluginManager) {
         GUIEventListener guiEventListener = new GUIEventListener(new GUIManager());
@@ -189,19 +235,25 @@ public final class PlayerDoll extends JavaPlugin {
 
     }
     private void pluginVersionCheck() {
+        if (!basicConfig.checkUpdate.getValue()) {
+            return;
+        }
+        /*
         if (!ConfigManager.getConfig().getBoolean("Global.CheckUpdate")) {
             return;
         }
+
+         */
         new Thread(()->{
             try {
-                System.out.println("Checking New Versions...");
+                logger.log(Level.INFO,"Checking New Versions...");
                 InputStream release = new URL("https://raw.githubusercontent.com/sjavi4/PlayerDoll/main/ver.txt").openStream();
                 String ver = new String(release.readAllBytes(),StandardCharsets.UTF_8).replaceAll("\\r?\\n","");
                 if (!ver.equalsIgnoreCase(this.getDescription().getVersion())) {
-                    System.out.println("New version available: " + ver + "(current:"+this.getDescription().getVersion()+")");
-                    System.out.println("Visit https://modrinth.com/plugin/playerdoll/versions#all-versions to download the latest version.");
+                    logger.log(Level.INFO, "New version available: " + ver + "(current:"+this.getDescription().getVersion()+")");
+                    logger.log(Level.INFO,"Visit https://modrinth.com/plugin/playerdoll/versions#all-versions to download the latest version.");
                 } else {
-                    System.out.println("You are running the latest version.");
+                    logger.log(Level.INFO,"You are running the latest version.");
                 }
                 /*
                 String[] urlVer = new String(release.readAllBytes(),StandardCharsets.UTF_8).split("\\r?\\n");
@@ -226,18 +278,21 @@ public final class PlayerDoll extends JavaPlugin {
     }
     private void gameVersionCheck() {
         switch (version) {
-            case "v1_20_R1", "v1_20_R2", "v1_20_R3", "v1_20_R4" -> {}
-            default -> {
-                System.out.println("Unknown or Unsupported Versions, Please Use with Cautions.");
-                //getPluginLoader().disablePlugin(this);
-                //yield false;
-            }
+            case "v1_20_R3", "v1_20_R4" -> {}
+            default -> logger.log(Level.WARNING, "Unknown or Unsupported Versions, Please Use with Cautions.");
+            //getPluginLoader().disablePlugin(this);
+            //yield false;
         };
     }
     private void getServerBranch() {
+        String mod = basicConfig.serverMod.getValue();
+        /*
         String mod = ConfigManager.getConfig().getString("Global.Mod");
+
+         */
         if (mod == null || mod.isBlank()) {
-            System.out.println("Auto-detecting Server Mod:" +getServer().getName());
+
+            logger.log(Level.INFO, "Auto-detecting Server Mod:" +getServer().getName());
             if (getClass("io.papermc.paper.threadedregions.RegionizedServer")) {
                 isFolia = true;
                 foliaHelper = new FoliaHelper(this);
@@ -252,7 +307,7 @@ public final class PlayerDoll extends JavaPlugin {
                 case "paperseries" -> PlayerDoll.isPaperSeries = true;
                 case "folia" -> PlayerDoll.isFolia = true;
                 default -> {
-                    System.out.println("Unknown mod, Disabled Plugin.");
+                    logger.log(Level.WARNING,"Unknown mod, Disabled Plugin.");
                     getPluginLoader().disablePlugin(this);
                 }
             }
@@ -298,6 +353,7 @@ public final class PlayerDoll extends JavaPlugin {
                 continue;
             }
             YamlConfiguration config = yamlManager.getConfig();
+            // TODO: Change This To BasicConfig value
             if (getConfig().getBoolean("Global.Remove.InactiveDoll")) {
                 String lastSpawn = config.getString("LastSpawn");
                 if (lastSpawn != null && !lastSpawn.isBlank()) {
