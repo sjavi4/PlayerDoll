@@ -152,76 +152,91 @@ continuous : Continuously repeat the action
   </tr>
   <tr>
     <td>mount</td>
+    <td>playerdoll.command.mount</td>
     <td>Assign Doll to ride on nearby vehicle/entity</td>
     <td></td>
   </tr>
   <tr>
     <td>move [forwards/backwards]</td>
+    <td>playerdoll.command.move</td>
     <td>Assign Doll to move forward(W) or backward(S)</td>
     <td></td>
   </tr>
   <tr>
     <td>pset <player></td>
+    <td>playerdoll.command.pset</td>
     <td>Set Doll settings for Specific player</td>
     <td>This will override gset</td>
   </tr>
   <tr>
     <td>remove</td>
+    <td>playerdoll.command.remove</td>
     <td>Remove Doll and its Data immediately</td>
     <td>No recovery</td>
   </tr>
   <tr>
     <td>set</td>
+    <td>playerdoll.command.set</td>
     <td>Open Doll settings</td>
     <td></td>
   </tr>
   <tr>
     <td>slot [1-9]</td>
+    <td>playerdoll.command.slot</td>
     <td>Set Doll's Handheld Slot</td>
     <td>Default:Slot 1</td>
   </tr>
   <tr>
     <td>sneak [true/false]</td>
+    <td>playerdoll.command.sneak</td>
     <td>Toggle Doll to (un)sneak</td>
     <td>Default:Opposite from Current</td>
   </tr>
   <tr>
     <td>spawn [gridded]</td>
+    <td>playerdoll.command.spawn</td>
     <td>Spawn Doll at player position and copy player's pitch and yaw</td>
     <td>gridded: Align at nearest line/quarter center</td>
   </tr>
   <tr>
     <td>sprint [true/false]</td>
+    <td>playerdoll.command.sprint</td>
     <td>Toggle Doll to (un)sprint</td>
     <td>Default:Opposite from Current</td>
   </tr>
   <tr>
     <td>stop [all/movement]</td>
+    <td>playerdoll.command.stop</td>
     <td>Stop Doll Action</td>
     <td>Default:All</td>
   </tr>
   <tr>
     <td>strafe [left/right]</td>
+    <td>playerdoll.command.strafe</td>
     <td>Assign Doll to move left(A) or right(D)</td>
     <td></td>
   </tr>
   <tr>
     <td>swap [action]</td>
+    <td>playerdoll.command.swap</td>
     <td>Swap item between Doll's main hand and off hand</td>
     <td></td>
   </tr>
   <tr>
     <td>tp [gridded]</td>
+    <td>playerdoll.command.tp</td>
     <td>Teleport Doll to player and copy player's pitch and yaw</td>
     <td>gridded: Align at nearest line/quarter center</td>
   </tr>
   <tr>
     <td>turn &lt;yaw&gt; &lt;pitch&gt;</td>
+    <td>playerdoll.command.turn</td>
     <td>Rotate Doll's head by yaw(horizontal) and pitch(vertical)</td>
     <td>[yaw pitch]In +/-ve decimal</td>
   </tr>
   <tr>
     <td>use [action]</td>
+    <td>playerdoll.command.use</td>
     <td>Doll uses/interacts(right click) towards it's line of sight</td>
     <td></td>
   </tr>
