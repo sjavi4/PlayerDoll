@@ -242,8 +242,12 @@ continuous : Continuously repeat the action
   </tr>
 </table>
 
-## Other Permission
-Some misc permissions
+## Permissions
+If there is permission plugin installed, permissions can be set to normal players.<br>
+Otherwise, only OP will be able to use the related action.
+- Although some per-player setting can be set to true for specific players, they still need permission to perform those action.
+### Other Permission
+- Some misc permissions
 <table>
   <tr>
     <th>Permission</th>
@@ -272,9 +276,8 @@ Some misc permissions
   </tr>
 </table>
 
-
-## Grouped Permission
-The followings are some preset of permission groups
+### Grouped Permission
+- The followings are some presets
 <table>
   <tr>
     <th>Group</th>
@@ -371,6 +374,188 @@ The followings are some preset of permission groups
         <li>playerdoll.command.give</li>
       </ul>
     </td>
+  </tr>
+</table>
+
+### GUI (Doll Setting) Permission
+- These permissions will affect what Doll Setting can be modify by a player.
+
+<table>
+  <tr>
+    <th>Permission</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.echest</td>
+    <td>Global Access of Doll Ender Chest</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.glow</td>
+    <td>Set Doll to Glow</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.gravity</td>
+    <td>Set Doll to obey Gravity</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.hostility</td>
+    <td>Set Doll to be targeted by mobs</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.inv</td>
+    <td>Global access of Doll Inventory</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.invulnerable</td>
+    <td>Set Doll to ignore damage</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.join_at_start</td>
+    <td>Set Doll to Join automatically when Server Starts</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.large_step_size</td>
+    <td>Set Doll to step up to 1 or 0.6 Block high</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.phantom</td>
+    <td>Set Phantom Spawn when Long Awake</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.pickable</td>
+    <td>Set Doll to Pick up nearby items or Exp</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.pushable</td>
+    <td>Set Doll to be Pushable</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.real_player_tick_update</td>
+    <td>Set Doll to tick update at Real Player timing</td>
+  </tr>
+  <tr>
+    <td>playerdoll.globalflag.real_player_tick_action</td>
+    <td>Set Doll to tick action at Real Player timing [NOT IMPLEMENTED]</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.admin</td>
+    <td>Grant All Access of Doll</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.attack</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.copy</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.despawn</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.dismount</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.drop</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.echest</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.exp</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.gset</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.info</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.inv</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.jump</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.look</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.lookat</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.menu</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.mount</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.move</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.pset</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.set</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.slot</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.sneak</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.spawn</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.sprint</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.stop</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.strafe</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.swap</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.tp</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.turn</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.use</td>
+    <td>Grant command access for Player</td>
   </tr>
 </table>
 
