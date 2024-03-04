@@ -253,7 +253,7 @@ Some misc permissions
   <tr>
     <td>playerdoll.doll</td>
     <td>Ability to use /doll subCommands</td>
-    <td>true</td>
+    <td>true (everyone)</td>
   </tr>
   <tr>
     <td>playerdoll.reload</td>
@@ -263,12 +263,12 @@ Some misc permissions
   <tr>
     <td>playerdoll.help</td>
     <td>/dollHelp command</td>
-    <td>true</td>
+    <td>true (everyone)</td>
   </tr>
   <tr>
     <td>playerdoll.list</td>
     <td>/dollList command</td>
-    <td>true</td>
+    <td>true (everyone)</td>
   </tr>
 </table>
 
