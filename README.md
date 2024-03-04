@@ -5,40 +5,15 @@ Simple Standalone Fake Player Plugin for Spigot 1.20 [Java 17+]
 
 Release avaliable on Modrinth.
 
-**Author's pc was broken at 8-Feb ~6pm, the plugin will stop update for a while. Thank you for the support.**
-
 ## Versions
-Other versions and Server Mods are not guaranteed to 100% work
+Other versions and Server Mods are not guaranteed to 100% work<br>
+Pre-1.20.4 versions are temporary un-supported.
 <table>
   <tr>
     <th>version</th>
     <th>Spigot</th>
     <th>Paper/Purpur/...</th>
     <th>Folia</th>
-  </tr>
-  <tr>
-    <td>1.20</td>
-    <td>Not Tested</td>
-    <td>Not Tested</td>
-    <td>Not Tested</td>
-  </tr>
-  <tr>
-    <td>1.20.1</td>
-    <td>✓</td>
-    <td>✓</td>
-    <td>✓</td>
-  </tr>
-  <tr>
-    <td>1.20.2</td>
-    <td>✓</td>
-    <td>✓</td>
-    <td>✓</td>
-  </tr>
-  <tr>
-    <td>1.20.3</td>
-    <td>✓</td>
-    <td>✓</td>
-    <td>Not Tested</td>
   </tr>
   <tr>
     <td>1.20.4</td>
@@ -81,81 +56,97 @@ continuous : Continuously repeat the action
 <table>
   <tr>
     <th>Command<br>(/doll &lt;target&gt; ?)</th>
+    <th>Permission</th>
     <th>Description</th>
     <th>Note</th>
   </tr>
   <tr>
     <td>attack [action]</td>
+    <td>playerdoll.command.attack</td>
     <td>Doll attacks(left click) towards it's line of sight</td>
     <td></td>
   </tr>
   <tr>
     <td>copy <Target></td>
+    <td>playerdoll.command.copy</td>
     <td>Copy other Doll's action to Doll</td>
     <td></td>
   </tr>
   <tr>
     <td>create [skinName]</td>
+    <td>playerdoll.command.create</td>
     <td>Register Doll to server</td>
     <td>skinName: Any authenticated player name<br>Default using creator's skin<br>Offline server uses default skins</td>
   </tr>
   <tr>
     <td>despawn</td>
+    <td>playerdoll.command.despawn</td>
     <td>Offline Doll and save Data</td>
     <td></td>
   </tr>
   <tr>
     <td>drop [stack/single] [slots/action]</td>
+    <td>playerdoll.command.drop</td>
     <td>Drop Doll's Item from Slot</td>
     <td>stack:Drop in maximum amount<br>Default:Drop 1 handheld item</td>
   </tr>
   <tr>
     <td>dismount</td>
+    <td>playerdoll.command.dismount</td>
     <td>Let Doll gets off from current vehicle/entity</td>
     <td></td>
   </tr>
   <tr>
     <td>echest</td>
+    <td>playerdoll.command.echest</td>
     <td>Open Doll's ender chest</td>
     <td></td>
   </tr>
   <tr>
     <td>exp [all/level]</td>
+    <td>playerdoll.command.exp/td>
     <td>Get Exp from Doll</td>
     <td>Default:1 level</td>
   </tr>
   <tr>
     <td>gset</td>
+    <td>playerdoll.command.gset</td>
     <td>Set Doll settings for All players</td>
     <td>This will be overridden by pset</td>
   </tr>
   <tr>
     <td>info</td>
+    <td>playerdoll.command.info</td>
     <td>Show Doll data</td>
     <td>Not implemented</td>
   </tr>
   <tr>
     <td>inv</td>
+    <td>playerdoll.command.inv</td>
     <td>Open Doll's inventory</td>
     <td></td>
   </tr>
   <tr>
     <td>jump [action]</td>
+    <td>playerdoll.command.jump</td>
     <td>Make Doll jumps</td>
     <td></td>
   </tr>
   <tr>
     <td>look &lt;yaw&gt; &lt;pitch&gt;<br>look &lt;direction/player&gt;</td>
+    <td>playerdoll.command.look</td>
     <td>Copy Doll's head to target's orientation</td>
     <td>[yaw pitch]In +/-ve decimal</td>
   </tr>
   <tr>
     <td>lookat &lt;X&gt; &lt;Y&gt; &lt;Z&gt;<br>lookat &lt;player&gt;<br>lookat target [action]</td>
+    <td>playerdoll.command.lookat</td>
     <td>Set Doll's head pointing to player/coordinates/Entity</td>
     <td>[X Y Z]In +/-ve decimal</td>
   </tr>
   <tr>
     <td>menu</td>
+    <td>playerdoll.command.menu</td>
     <td>Open Doll's information panel</td>
     <td></td>
   </tr>
