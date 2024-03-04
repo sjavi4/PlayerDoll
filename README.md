@@ -242,6 +242,139 @@ continuous : Continuously repeat the action
   </tr>
 </table>
 
+## Other Permission
+Some misc permissions
+<table>
+  <tr>
+    <th>Permission</th>
+    <th>Description</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td>playerdoll.doll</td>
+    <td>Ability to use /doll subCommands</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>playerdoll.reload</td>
+    <td>/dollReload command</td>
+    <td>op</td>
+  </tr>
+  <tr>
+    <td>playerdoll.help</td>
+    <td>/dollHelp command</td>
+    <td>true</td>
+  </tr>
+  <tr>
+    <td>playerdoll.list</td>
+    <td>/dollList command</td>
+    <td>true</td>
+  </tr>
+</table>
+
+
+## Grouped Permission
+The followings are some preset of permission groups
+<table>
+  <tr>
+    <th>Group</th>
+    <th>Description</th>
+    <th>Children</th>
+  </tr>
+  <tr>
+    <td>playerdoll.group.basic</td>
+    <td>Very Basic permissions</td>
+    <td>
+      <ul>
+        <li>playerdoll.command.create</li>
+        <li>playerdoll.command.despawn</li>
+        <li>playerdoll.command.spawn</li>
+        <li>playerdoll.command.remove</li>
+        <li>playerdoll.command.menu</li>
+        <li>playerdoll.command.set</li>
+        <li>playerdoll.command.gset</li>
+        <li>playerdoll.command.pset</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>playerdoll.group.container</td>
+    <td>Doll container related permissions</td>
+    <td>
+      <ul>
+        <li>playerdoll.command.echest</li>
+        <li>playerdoll.command.exp</li>
+        <li>playerdoll.command.drop</li>
+        <li>playerdoll.command.inv</li>
+        <li>playerdoll.command.menu</li>
+        <li>playerdoll.command.slot</li>
+        <li>playerdoll.command.swap</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>playerdoll.group.movement</td>
+    <td>A set of permission about movement</td>
+    <td>
+      <ul>
+        <li>playerdoll.command.sprint</li>
+        <li>playerdoll.command.stop</li>
+        <li>playerdoll.command.move</li>
+        <li>playerdoll.command.strafe</li>
+        <li>playerdoll.command.jump</li>
+        <li>playerdoll.command.tp</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>playerdoll.group.action</td>
+    <td>A set of permission for Action commands</td>
+    <td>
+      <ul>
+        <li>playerdoll.command.attack</li>
+        <li>playerdoll.command.copy</li>
+        <li>playerdoll.command.dismount</li>
+        <li>playerdoll.command.drop</li>
+        <li>playerdoll.command.jump</li>
+        <li>playerdoll.command.look</li>
+        <li>playerdoll.command.lookat</li>
+        <li>playerdoll.command.mount</li>
+        <li>playerdoll.command.move</li>
+        <li>playerdoll.command.slot</li>
+        <li>playerdoll.command.sneak</li>
+        <li>playerdoll.command.sprint</li>
+        <li>playerdoll.command.stop</li>
+        <li>playerdoll.command.strafe</li>
+        <li>playerdoll.command.swap</li>
+        <li>playerdoll.command.turn</li>
+        <li>playerdoll.command.use</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>playerdoll.group.datacontrol</td>
+    <td>A set of permission for modifying Doll data</td>
+    <td>
+      <ul>
+        <li>playerdoll.command.set</li>
+        <li>playerdoll.command.pset</li>
+        <li>playerdoll.command.gset</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>playerdoll.group.manage</td>
+    <td>A set of permission for managing Doll</td>
+    <td>
+      <ul>
+        <li>playerdoll.command.rename</li>
+        <li>playerdoll.command.give</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+
 ## Shortcut
 - Player sneaks and right click Doll can open Doll status GUI (same as Menu)
 
