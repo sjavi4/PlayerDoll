@@ -7,7 +7,7 @@
     <parent>
         <groupId>me.autobot</groupId>
         <artifactId>PlayerDoll-parent</artifactId>
-        <version>1.24</version>
+        <version>1.25</version>
     </parent>
     <artifactId>dist</artifactId>
     <version>${project.parent.version}</version>
@@ -36,22 +36,12 @@
         </dependency>
         <dependency>
             <groupId>me.autobot</groupId>
-            <artifactId>thridParty</artifactId>
+            <artifactId>thirdParty</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>me.autobot</groupId>
-            <artifactId>v1_20_R1</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>me.autobot</groupId>
-            <artifactId>v1_20_R2</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>me.autobot</groupId>
-            <artifactId>v1_20_R3</artifactId>
+            <artifactId>v1_20_R4</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

@@ -6,7 +6,7 @@
 
     <groupId>me.autobot</groupId>
     <artifactId>PlayerDoll-parent</artifactId>
-    <version>1.24</version>
+    <version>1.25</version>
     <packaging>pom</packaging>
 
     <name>PlayerDoll_cv</name>
@@ -19,10 +19,8 @@
         <module>core</module>
         <module>utility</module>
         <module>folia</module>
-        <module>v1_20_R1</module>
-        <module>v1_20_R2</module>
-        <module>v1_20_R3</module>
-        <module>thridParty</module>
+        <module>v1_20_R4</module>
+        <module>thirdParty</module>
         <module>dist</module>
     </modules>
 </project>

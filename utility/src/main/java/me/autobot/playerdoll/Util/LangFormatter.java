@@ -34,8 +34,8 @@ public class LangFormatter {
 
     @SafeVarargs
     private static <T> String YAMLFormat(String path, T... variables) {
-        var config = ConfigManager.getLanguage();
-        if (config == null) return "LANGNOTFOUND";
+        var config = ConfigLoader.get().getConfig(ConfigLoader.ConfigType.CUSTOM_LANGUAGE);
+        if (config == null) return "CONFIG_NOT_FOUND";
         String str = config.getString(path);
         if (str == null) return path;
         if (variables != null) {
