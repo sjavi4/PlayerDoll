@@ -116,7 +116,7 @@ continuous : Continuously repeat the action
   </tr>
   <tr>
     <td>exp [all/level]</td>
-    <td>playerdoll.command.exp/td>
+    <td>playerdoll.command.exp</td>
     <td>Get Exp from Doll</td>
     <td>Default:1 level</td>
   </tr>
