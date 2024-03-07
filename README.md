@@ -455,7 +455,7 @@ Otherwise, only OP will be able to use the related action.
   </tr>
   <tr>
     <td>playerdoll.personalflag.admin</td>
-    <td>Grant All Access of Doll</td>
+    <td>Grant All Access for Player</td>
   </tr>
   <tr>
     <td>playerdoll.personalflag.attack</td>
