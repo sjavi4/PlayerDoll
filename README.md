@@ -175,7 +175,7 @@ continuous : Continuously repeat the action
     <td></td>
   </tr>
   <tr>
-    <td>pset <player></td>
+    <td>pset &lt;player&gt;</td>
     <td>playerdoll.command.pset</td>
     <td>Set Doll settings for Specific player</td>
     <td>This will override gset</td>
