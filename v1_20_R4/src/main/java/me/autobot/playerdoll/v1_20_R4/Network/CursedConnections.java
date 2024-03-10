@@ -74,6 +74,7 @@ public class CursedConnections {
                     PlayerDoll.getPluginLogger().log(Level.INFO, "Found Connection");
                     int index = serverConnectionList.lastIndexOf(connections);
                     Connection con = serverConnectionList.get(index);
+                    new DollPacketInjector(con);
                     con.setListener(new ServerLoginListener(server,con,profile,caller));
                     while (con.getPacketListener() == null || !(con.getPacketListener() instanceof ServerLoginListener)) {
                         PlayerDoll.getPluginLogger().log(Level.INFO,"Waiting For Server Login Listener");

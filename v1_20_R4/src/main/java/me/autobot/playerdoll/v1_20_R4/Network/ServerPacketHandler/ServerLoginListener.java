@@ -14,10 +14,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.InetSocketAddress;
 
 public class ServerLoginListener extends ServerLoginPacketListenerImpl {
     private final GameProfile profile;
@@ -31,6 +35,20 @@ public class ServerLoginListener extends ServerLoginPacketListenerImpl {
     @Override
     public void handleHello(ServerboundHelloPacket packetlogininstart) {
         for (Method method : getClass().getSuperclass().getDeclaredMethods()) {
+            if (method.getReturnType() == void.class && method.getParameterCount() == 1 && method.getParameterTypes()[0] == GameProfile.class) {
+                if (method.getModifiers() == 0) {
+                    // void startClientVerification(GameProfile)
+                    method.setAccessible(true);
+                    try {
+                        method.invoke(this, profile);
+                    } catch (InvocationTargetException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    callPreLogin();
+                    break;
+                }
+            }
+            /*
             if (method.getModifiers() == 0 && method.getReturnType() == void.class) {
                 if (method.getParameterCount() == 1 && method.getParameterTypes()[0] == GameProfile.class) {
                     //System.out.println("Find startClientVerification");
@@ -43,7 +61,17 @@ public class ServerLoginListener extends ServerLoginPacketListenerImpl {
                     break;
                 }
             }
+
+             */
         }
+    }
+    private void callPreLogin() {
+        Thread preLogin = new Thread(() -> {
+            AsyncPlayerPreLoginEvent preLoginEvent = new AsyncPlayerPreLoginEvent(profile.getName(), ((InetSocketAddress)this.connection.getRemoteAddress()).getAddress(), profile.getId());
+            preLoginEvent.setLoginResult(AsyncPlayerPreLoginEvent.Result.ALLOWED);
+            Bukkit.getPluginManager().callEvent(preLoginEvent);
+        });
+        preLogin.start();
     }
 
     @Override

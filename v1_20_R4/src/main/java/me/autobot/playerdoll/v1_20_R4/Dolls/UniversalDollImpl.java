@@ -13,6 +13,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,6 +48,9 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
     final Runnable lookAtPacketTask = () -> {
         sendPacket(new ClientboundRotateHeadPacket(this, PacketYaw));
         sendPacket(new ClientboundMoveEntityPacket.Rot(this.getId(), PacketYaw, PacketPitch, true));
+    };
+    final Runnable updateActionTask = () -> {
+        actionPack.onUpdate();
     };
     static int dollTickCount = -1;
     public static IDoll callSpawn(String name, UUID uuid) {
@@ -126,8 +130,11 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
             dollTickCount = this.getServer().getTickCount();
         }
         try {
-            this.actionPack.onUpdate();
-            //this.connection.tick();
+            if (!dollConfig.dollRealPlayerTickAction.getValue()) {
+                updateActionTask.run();
+            } else {
+                server.tell(server.wrapRunnable(updateActionTask));
+            }
             super.tick();
             if (!dollConfig.dollRealPlayerTickUpdate.getValue()) {
                 this.doTick();
@@ -135,6 +142,7 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
             if (dollTickCount % 10 == 0) {
                 connection.resetPosition();
                 this.serverLevel().getChunkSource().move(this);
+                //this.serverConnection.flushChannel();
                 if (noPhantom) IDoll.resetPhantomStatistic(this.getBukkitEntity());
             }
         } catch (NullPointerException ignored) {
@@ -172,7 +180,7 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
         Runnable kickTask = () -> Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "kick " + this.getBukkitEntity().getName());
 
         if (PlayerDoll.isFolia) {
-            PlayerDoll.getFoliaHelper().entityTask(this.getBukkitEntity(),kickTask,1);
+            PlayerDoll.getFoliaHelper().globalTask(kickTask);
         } else {
             kickTask.run();
         }
