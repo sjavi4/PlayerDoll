@@ -31,13 +31,6 @@ Welcome to report any issues (performance, bugs, suggestions, feedback, compatib
 v1.25 : Doll now will connect to server by Emulating a client.<br>
 - This Should provide a better support in the future.
 
-[To-Be-Solved problem]<br>
-For Paper based Servers or packet limiter plugin.<br>
-Doll sometimes will being kicked by Server because of Exceeding Packet Rate Limit.<br>
-Try to set the packet-limiter higher by going to<br>
-ServerRoot/config/paper-global.yml<br>
-packet-limiter.all-packets.max-packet-rate<br>
-(Default is 500.0)
 
 
 ## Functionalities
