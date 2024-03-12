@@ -14,6 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.Vector;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.logging.Level;
+
 public class DollJoin implements Listener {
     @EventHandler
     public void onDollJoin(DollJoinEvent event) {
@@ -138,6 +142,32 @@ public class DollJoin implements Listener {
             player.teleport(doll.getCaller());
         }
 
-        //player.addAttachment(PlayerDoll.getPlugin(),"forcepack.bypass",true);
+        if (Bukkit.hasWhitelist() && player.isWhitelisted()) {
+            Runnable task = () -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"whitelist remove " + player.getName());
+            if (PlayerDoll.isFolia) {
+                PlayerDoll.getFoliaHelper().globalTask(task);
+            } else {
+                Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(), task);
+            }
+        }
+
+        List<String> messageList = basicConfig.dollChatWhenJoin.getValue();
+        if (!messageList.isEmpty()) {
+            long count = 0;
+            long interval = Long.valueOf(basicConfig.dollChatWhenJoinInterval.getValue());
+            for (String s : messageList) {
+                if (s.isEmpty()) {
+                    continue;
+                }
+                String replaced = s.replaceAll("%name%",player.getName()).replaceAll("%uuid%",player.getUniqueId().toString());
+                Runnable task = () -> player.chat(replaced);
+                if (PlayerDoll.isFolia) {
+                    PlayerDoll.getFoliaHelper().entityTask(player,task, 1+count*interval);
+                } else {
+                    Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),task,1+count*interval);
+                }
+                count++;
+            }
+        }
     }
 }

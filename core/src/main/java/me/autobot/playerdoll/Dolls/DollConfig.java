@@ -4,6 +4,7 @@ import me.autobot.playerdoll.CustomEvent.DollConfigLoadEvent;
 import me.autobot.playerdoll.CustomEvent.DollConfigUnLoadEvent;
 import me.autobot.playerdoll.CustomEvent.DollSettingChangeEvent;
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.Util.ConfigLoader;
 import me.autobot.playerdoll.Util.Configs.AbstractConfig;
 import me.autobot.playerdoll.Util.Configs.FlagConfig;
 import me.autobot.playerdoll.Util.Keys.ConfigKey;
@@ -91,6 +92,7 @@ public class DollConfig extends AbstractConfig {
         getData();
         OFFLINE_DOLL_CONFIGS.put(name,this);
         Bukkit.getPluginManager().callEvent(new DollConfigLoadEvent(this.doll,this));
+        //saveConfig();
     }
 
     public DollConfig(IDoll doll, YamlConfiguration config) {
@@ -101,6 +103,7 @@ public class DollConfig extends AbstractConfig {
         getData();
         DOLL_CONFIGS.put(doll.getBukkitPlayer().getUniqueId(),this);
         Bukkit.getPluginManager().callEvent(new DollConfigLoadEvent(this.doll,this));
+        //saveConfig();
     }
 
     @SuppressWarnings("unchecked")
@@ -169,8 +172,9 @@ public class DollConfig extends AbstractConfig {
         //this.generalSetting = (Map<String, Boolean>) getOrDefault("General-Setting", new LinkedHashMap<String,Boolean>());
     }
     @Override
-    public void checkVersion() {
+    public boolean checkVersion() {
         // Do Not Check Version For Doll Config
+        return true;
     }
 
     public void changeSetting(Player player, SettingType type, boolean b) {

@@ -151,7 +151,7 @@ settingmenu:
     name: 'Real Player Tick (Entity Update)'
     desc: '&fWhether Doll will tick at Network Phase or Entity Phase'
   real_player_tick_action:
-    name: 'Real Player Tick (Action) [Not Implemented]'
+    name: 'Real Player Tick (Action)'
     desc: '&fWhether Doll will tick at Asynchronous Task Phase or Entity Phase'
   admin:
     name: 'Admin'

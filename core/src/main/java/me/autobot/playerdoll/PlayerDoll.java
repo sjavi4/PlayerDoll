@@ -220,6 +220,7 @@ public final class PlayerDoll extends JavaPlugin {
         //pluginManager.registerEvents(new DollTargetEvent(),this);
         //pluginManager.registerEvents(new DollKickEvent(), this);
         pluginManager.registerEvents(new DollDamageEvent(), this);
+        pluginManager.registerEvents(new AsyncPreLoginEvent(), this);
         DollHelper.registerDollEvent(version);
     }
     private void initialGUI(PluginManager pluginManager) {
@@ -227,11 +228,14 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(guiEventListener, this);
     }
     private void thridPartyCheck() {
+        /*
         vaultHelper = new VaultHelper();
         try {
             luckPermsHelper = new LuckPermsHelper();
         } catch (NoClassDefFoundError ignored) {
         }
+
+         */
 
     }
     private void pluginVersionCheck() {
