@@ -138,6 +138,6 @@ public class DollJoin implements Listener {
             player.teleport(doll.getCaller());
         }
 
-        //player.addAttachment(PlayerDoll.getPlugin(),"forcepack.bypass",true);
+        
     }
 }
