@@ -440,7 +440,7 @@ Otherwise, only OP will be able to use the related action.
   </tr>
   <tr>
     <td>playerdoll.globalflag.real_player_tick_action</td>
-    <td>Set Doll to tick action at Real Player timing [NOT IMPLEMENTED]</td>
+    <td>Set Doll to tick action at Real Player timing</td>
   </tr>
   <tr>
     <td> </td>
