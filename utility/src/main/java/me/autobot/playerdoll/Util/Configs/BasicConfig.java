@@ -5,9 +5,12 @@ import me.autobot.playerdoll.Util.Keys.ConfigKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class BasicConfig extends AbstractConfig {
+    private static final List<String> DEFAULT_STRING_LIST = new ArrayList<>(Collections.singletonList(""));
     private static BasicConfig INSTANCE;
     public final ConfigKey<BasicConfig,String> serverMod;
     public final ConfigKey<BasicConfig,String> pluginLanguage;
@@ -26,6 +29,9 @@ public class BasicConfig extends AbstractConfig {
     public final ConfigKey<BasicConfig,Boolean> broadcastDollDisconnect;
 
     public final ConfigKey<BasicConfig,List<String>> dollPermission;
+
+    public final ConfigKey<BasicConfig,Integer> dollChatWhenJoinInterval;
+    public final ConfigKey<BasicConfig,List<String>> dollChatWhenJoin;
     @SuppressWarnings("unchecked")
     public BasicConfig(YamlConfiguration conf) {
         super(conf);
@@ -39,13 +45,15 @@ public class BasicConfig extends AbstractConfig {
         this.backupShutDown = new ConfigKey<>(this,"backup-shutdown",false);
         this.removeInactiveDoll = new ConfigKey<>(this,"remove-inactive-doll",false);
         this.removeTime = new ConfigKey<>(this,"remove-time",30);
-        this.preservedDollName = new ConfigKey<>(this,"preserved-doll-name", new ArrayList<>());
+        this.preservedDollName = new ConfigKey<>(this,"preserved-doll-name", DEFAULT_STRING_LIST);
         this.adjustableMaxPlayer = new ConfigKey<>(this,"adjustable-max-player",true);
         this.serverMaxDoll = new ConfigKey<>(this,"server-max-doll",-1);
         this.broadcastDollDeath = new ConfigKey<>(this,"broadcast-doll-death",true);
         this.broadcastDollJoin = new ConfigKey<>(this,"broadcast-doll-join",false);
         this.broadcastDollDisconnect = new ConfigKey<>(this,"broadcast-doll-disconnect",false);
-        this.dollPermission = new ConfigKey<>(this,"doll-permission",new ArrayList<>());
+        this.dollPermission = new ConfigKey<>(this,"doll-permission",DEFAULT_STRING_LIST);
+        this.dollChatWhenJoinInterval = new ConfigKey<>(this, "chat-when-join-interval", 10);
+        this.dollChatWhenJoin = new ConfigKey<>(this,"chat-when-join", DEFAULT_STRING_LIST);
         ConfigLoader.get().saveConfig(this.yamlConfiguration, ConfigLoader.ConfigType.BASIC);
     }
 

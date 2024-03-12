@@ -133,7 +133,11 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
             if (!dollConfig.dollRealPlayerTickAction.getValue()) {
                 updateActionTask.run();
             } else {
-                server.tell(server.wrapRunnable(updateActionTask));
+                if (PlayerDoll.isFolia) {
+                    PlayerDoll.getFoliaHelper().entityTask(this.getBukkitEntity(),updateActionTask,1);
+                } else {
+                    server.tell(server.wrapRunnable(updateActionTask));
+                }
             }
             super.tick();
             if (!dollConfig.dollRealPlayerTickUpdate.getValue()) {

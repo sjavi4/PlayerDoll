@@ -103,6 +103,7 @@ public class FlagConfig extends AbstractConfig {
         this.PersonalFlag_Turn = new FlagKey<>(this,"Personal-Flag.turn", Material.IRON_TRAPDOOR);
         this.PersonalFlag_Use = new FlagKey<>(this,"Personal-Flag.use", Material.OAK_BUTTON);
         addToMap();
+        ConfigLoader.get().saveConfig(this.yamlConfiguration, ConfigLoader.ConfigType.FLAG);
     }
 
     @SuppressWarnings("unchecked")

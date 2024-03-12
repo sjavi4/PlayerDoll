@@ -20,7 +20,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.InetSocketAddress;
 
 public class ServerLoginListener extends ServerLoginPacketListenerImpl {
@@ -34,6 +33,7 @@ public class ServerLoginListener extends ServerLoginPacketListenerImpl {
     }
     @Override
     public void handleHello(ServerboundHelloPacket packetlogininstart) {
+        callPreLogin();
         for (Method method : getClass().getSuperclass().getDeclaredMethods()) {
             if (method.getReturnType() == void.class && method.getParameterCount() == 1 && method.getParameterTypes()[0] == GameProfile.class) {
                 if (method.getModifiers() == 0) {
@@ -44,7 +44,6 @@ public class ServerLoginListener extends ServerLoginPacketListenerImpl {
                     } catch (InvocationTargetException | IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
-                    callPreLogin();
                     break;
                 }
             }
@@ -69,6 +68,7 @@ public class ServerLoginListener extends ServerLoginPacketListenerImpl {
         Thread preLogin = new Thread(() -> {
             AsyncPlayerPreLoginEvent preLoginEvent = new AsyncPlayerPreLoginEvent(profile.getName(), ((InetSocketAddress)this.connection.getRemoteAddress()).getAddress(), profile.getId());
             preLoginEvent.setLoginResult(AsyncPlayerPreLoginEvent.Result.ALLOWED);
+            preLoginEvent.setKickMessage("PlayerDoll");
             Bukkit.getPluginManager().callEvent(preLoginEvent);
         });
         preLogin.start();

@@ -13,8 +13,14 @@ public class FlagKey<R extends AbstractConfig> extends ConfigKey<R,Material> {
         if (this.config.yamlConfiguration.contains(path)) {
             return Material.getMaterial(this.config.yamlConfiguration.getString(path));
         } else {
-            this.config.yamlConfiguration.set(path,defaultValue);
+            this.config.yamlConfiguration.set(path,defaultValue.name());
             return defaultValue;
         }
+    }
+
+    @Override
+    public void setNewValue(Material value) {
+        this.value = value;
+        this.config.yamlConfiguration.set(this.path,value.name());
     }
 }
