@@ -16,6 +16,12 @@ Pre-1.20.4 versions are temporary un-supported.
     <th>Folia</th>
   </tr>
   <tr>
+    <td>1.20.3</td>
+    <td>✓</td>
+    <td>✓</td>
+    <td>✓</td>
+  </tr>
+  <tr>
     <td>1.20.4</td>
     <td>✓</td>
     <td>✓</td>
