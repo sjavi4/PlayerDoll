@@ -572,7 +572,7 @@ Otherwise, only OP will be able to use the related action.
 
 
 ## Shortcut
-- Player sneaks and right click Doll can open Doll status GUI (same as Menu)
+- Player sneaks and right click Doll with bare hand can open Doll status GUI (same as Menu)
 
 ## Doll inventories
 - Players with permission can access Doll's ender chest directly (put&take)
