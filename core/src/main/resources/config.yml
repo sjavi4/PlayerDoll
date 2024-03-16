@@ -40,8 +40,8 @@ doll-permission:
 # Avoid Spamming message too fast
 chat-when-join-interval: 10
 
-# Doll will say the following list when Joined
-# Each item represents a message
+# What to say by Doll when Joined
+# Each element represents a message
 # Use "/" to indicate command
 # Execution order : from top to bottom
 # Variables : %name% -> Player Name; %uuid% -> Player UUID

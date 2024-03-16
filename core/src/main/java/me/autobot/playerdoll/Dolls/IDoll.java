@@ -13,8 +13,8 @@ import java.util.Base64;
 
 public interface IDoll {
     void setDollSkin(String property, String signature);
-    void teleportTo();
-    void setDollLookAt();
+    //void teleportTo();
+    //void setDollLookAt();
     boolean canBeSeenAsEnemy();
     void die(DamageSource damageSource);
     void disconnect();
