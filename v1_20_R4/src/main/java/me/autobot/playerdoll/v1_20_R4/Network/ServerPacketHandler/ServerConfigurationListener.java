@@ -30,17 +30,11 @@ public class ServerConfigurationListener extends ServerConfigurationPacketListen
             ((UniversalDollImpl) this.player).serverConnection = this.connection;
             ((UniversalDollImpl) this.player).setup(caller);
             this.player.connection = gamePlayListener;
-            this.player.joining = false;
             this.connection.resumeInboundAfterProtocolChange();
         };
 
         if (PlayerDoll.isFolia) {
-            try {
-                Thread.sleep(300L);
-                task.run();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            PlayerDoll.getFoliaHelper().globalTaskDelayed(task,5);
         } else {
             task.run();
         }

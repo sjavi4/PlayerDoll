@@ -11,12 +11,14 @@ import net.minecraft.network.protocol.handshake.ClientIntent;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public class CursedConnections {
@@ -27,13 +29,17 @@ public class CursedConnections {
     public static void doConnection(Player caller, String name, UUID uuid) {
         CursedClientConnection clientConnection = CursedClientConnection.connectToServer(serverAddress);
 
-        clientConnection.runOnceConnected((c) -> {
-            c.setListener(new ClientHandshakeListener(clientConnection));
-            PlayerDoll.getPluginLogger().log(Level.INFO,"Client Connected");
+        CompletableFuture<Void> afterConnected = CompletableFuture.supplyAsync(() -> {
+            clientConnection.runOnceConnected((c) -> {
+                c.setListener(new ClientHandshakeListener(clientConnection));
+                PlayerDoll.getPluginLogger().log(Level.INFO,"Client Connected");
                 ClientIntentionPacket intentionPacket = new ClientIntentionPacket(SharedConstants.getProtocolVersion(), serverIP, serverPort, ClientIntent.LOGIN);
                 c.send(intentionPacket);
+            });
+            return null;
         });
-
+        afterConnected.thenRunAsync(() -> startCursedConnection(clientConnection, name, uuid, caller));
+        /*
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(1000L);
@@ -43,6 +49,8 @@ public class CursedConnections {
             startCursedConnection(clientConnection,name,uuid,caller);
         });
         thread.start();
+
+         */
     }
 
     @SuppressWarnings("unchecked")
@@ -63,28 +71,43 @@ public class CursedConnections {
     }
     private static void startCursedConnection(Connection clientConnection, String name, UUID UUID, Player caller) {
         final GameProfile profile = new GameProfile(UUID,name);
+        boolean loop = true;
+        while (loop) {
+            try {
+                Thread.sleep(500L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            List<Connection> serverConnectionList = getServerConnectionList();
+            synchronized (serverConnectionList) {
 
-        List<Connection> serverConnectionList = getServerConnectionList();
-        synchronized (serverConnectionList) {
-            for (Connection connections : serverConnectionList) {
-                String addressClient = clientConnection.channel.localAddress().toString();
-                String addressServer = connections.channel.remoteAddress().toString();
+                for (Connection connections : serverConnectionList) {
+                    String addressClient = clientConnection.channel.localAddress().toString();
+                    String addressServer = connections.channel.remoteAddress().toString();
 
-                if (addressClient.equals(addressServer)) {
-                    PlayerDoll.getPluginLogger().log(Level.INFO, "Found Connection");
-                    int index = serverConnectionList.lastIndexOf(connections);
-                    Connection con = serverConnectionList.get(index);
-                    new DollPacketInjector(con);
-                    con.setListener(new ServerLoginListener(server,con,profile,caller));
-                    while (con.getPacketListener() == null || !(con.getPacketListener() instanceof ServerLoginListener)) {
-                        PlayerDoll.getPluginLogger().log(Level.INFO,"Waiting For Server Login Listener");
-                        try {
-                            Thread.sleep(500L);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
+                    if (addressClient.equals(addressServer)) {
+                        loop = false;
+                        int index = serverConnectionList.lastIndexOf(connections);
+                        Connection con = serverConnectionList.get(index);
+                        CompletableFuture<Connection> waitForLoginListener = CompletableFuture.supplyAsync(() -> {
+                            while (!(con.getPacketListener() instanceof ServerLoginPacketListenerImpl)) {
+                                PlayerDoll.getPluginLogger().log(Level.INFO, "Wait For Listener");
+                                try {
+                                    Thread.sleep(200L);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                            return con;
+                        });
+                        waitForLoginListener.thenAccept((serverConnection) -> {
+                            PlayerDoll.getPluginLogger().log(Level.INFO, "Found Connection");
+                            new DollPacketInjector(con);
+                            con.setListener(new ServerLoginListener(server, con, profile, caller));
+                            clientConnection.send(new ServerboundHelloPacket(name, UUID));
+                        });
+                        break;
                     }
-                    clientConnection.send(new ServerboundHelloPacket(name,UUID));
                 }
             }
         }

@@ -47,21 +47,6 @@ public class ServerLoginListener extends ServerLoginPacketListenerImpl {
                     break;
                 }
             }
-            /*
-            if (method.getModifiers() == 0 && method.getReturnType() == void.class) {
-                if (method.getParameterCount() == 1 && method.getParameterTypes()[0] == GameProfile.class) {
-                    //System.out.println("Find startClientVerification");
-                    method.setAccessible(true);
-                    try {
-                        method.invoke(this, profile);
-                    } catch (InvocationTargetException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                    break;
-                }
-            }
-
-             */
         }
     }
     private void callPreLogin() {

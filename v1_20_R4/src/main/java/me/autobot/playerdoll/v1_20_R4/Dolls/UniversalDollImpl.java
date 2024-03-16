@@ -11,9 +11,9 @@ import me.autobot.playerdoll.v1_20_R4.Network.CursedConnections;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
+import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,30 +41,14 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
     boolean noPhantom;
     public CommonListenerCookie listenerCookie;
     NMSPlayerEntityActionPack actionPack;
-    final Runnable spawnPacketTask = () -> {
-        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, this));
-        sendPacket(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED, this));
-    };
-    final Runnable lookAtPacketTask = () -> {
-        sendPacket(new ClientboundRotateHeadPacket(this, PacketYaw));
-        sendPacket(new ClientboundMoveEntityPacket.Rot(this.getId(), PacketYaw, PacketPitch, true));
-    };
     final Runnable updateActionTask = () -> {
         actionPack.onUpdate();
     };
-    static int dollTickCount = -1;
+    int dollTickCount = -1;
     public static IDoll callSpawn(String name, UUID uuid) {
         MinecraftServer server = CursedConnections.server;
         ServerLevel serverLevel = server.overworld();
         GameProfile profile = new GameProfile(uuid,name);
-        /*
-        if (instance != null) {
-            doConnection5(profile);
-            //doTestConnection4(((ServerPlayer)instance).displayName,((ServerPlayer)instance).getUUID());
-            //doTestConnection3((ServerPlayer) instance);
-        }
-
-         */
         return new UniversalDollImpl(server,serverLevel,profile);
     }
     public UniversalDollImpl(MinecraftServer minecraftserver, ServerLevel worldserver, GameProfile gameprofile) {
@@ -107,27 +91,11 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
         this.getGameProfile().getProperties().put("textures", new Property("textures", property, signature));
     }
     @Override
-    public void teleportTo() {
-        this.teleportTo(player.serverLevel(), player.position().x, player.position().y, player.position().z, TPYaw, TPPitch);
-    }
-    @Override
-    public void setDollLookAt() {
-        if (PlayerDoll.isFolia) {
-            PlayerDoll.getFoliaHelper().setDollLookAt(player.getBukkitEntity(), lookAtPacketTask);
-        } else {
-            Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(), lookAtPacketTask, 2);
-        }
-    }
-
-    @Override
     public void tick() {
-        if (joining) {
-            return;
-        }
         if (PlayerDoll.isFolia) {
             dollTickCount = PlayerDoll.getFoliaHelper().getTick();
         } else {
-            dollTickCount = this.getServer().getTickCount();
+            dollTickCount = this.server.getTickCount();
         }
         try {
             if (!dollConfig.dollRealPlayerTickAction.getValue()) {
@@ -146,20 +114,12 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
             if (dollTickCount % 10 == 0) {
                 connection.resetPosition();
                 this.serverLevel().getChunkSource().move(this);
-                //this.serverConnection.flushChannel();
                 if (noPhantom) IDoll.resetPhantomStatistic(this.getBukkitEntity());
             }
         } catch (NullPointerException ignored) {
             //System.out.println(ignored);
         }
     }
-    /*
-    private <R extends Runnable> void runAtAsync(BlockableEventLoop<R> executor, Runnable task) {
-        //net.minecraft.util.thread.BlockableEventLoop //Thread Executor
-        //executor.tell(executor.wrapRunnable);
-    }
-
-     */
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
         return IDoll.executeHurt(this,getBukkitEntity(),super.hurt(damageSource,f));
@@ -167,7 +127,6 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
     @Override
     public boolean canBeSeenAsEnemy() {
         return dollConfig != null && dollConfig.dollHostility.getValue() && super.canBeSeenAsEnemy();
-        //return (boolean)configManager.getDollSetting().get("hostility") && super.canBeSeenAsEnemy();
     }
     @Override
     public void die(DamageSource damageSource) {
