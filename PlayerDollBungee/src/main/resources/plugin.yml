@@ -1,0 +1,4 @@
+name: PlayerDollBungee
+main: me.autobot.playerdoll.Proxy
+version: 1.0
+author: ''

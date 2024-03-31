@@ -5,7 +5,6 @@ import me.autobot.playerdoll.Util.Keys.ConfigKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,9 +28,10 @@ public class BasicConfig extends AbstractConfig {
     public final ConfigKey<BasicConfig,Boolean> broadcastDollDisconnect;
 
     public final ConfigKey<BasicConfig,List<String>> dollPermission;
-
     public final ConfigKey<BasicConfig,Integer> dollChatWhenJoinInterval;
     public final ConfigKey<BasicConfig,List<String>> dollChatWhenJoin;
+    public final ConfigKey<BasicConfig,Boolean> dollMultiInstance;
+
     @SuppressWarnings("unchecked")
     public BasicConfig(YamlConfiguration conf) {
         super(conf);
@@ -54,6 +54,7 @@ public class BasicConfig extends AbstractConfig {
         this.dollPermission = new ConfigKey<>(this,"doll-permission",DEFAULT_STRING_LIST);
         this.dollChatWhenJoinInterval = new ConfigKey<>(this, "chat-when-join-interval", 10);
         this.dollChatWhenJoin = new ConfigKey<>(this,"chat-when-join", DEFAULT_STRING_LIST);
+        this.dollMultiInstance = new ConfigKey<>(this, "doll-multi-instance", false);
         ConfigLoader.get().saveConfig(this.yamlConfiguration, ConfigLoader.ConfigType.BASIC);
     }
 

@@ -14,7 +14,7 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.protocol.status.ClientboundPongResponsePacket;
 
 public class ClientPacketListener extends ClientCommonListenerAbs implements TickablePacketListener, ClientGamePacketListener {
-        private final GameProfile profile;
+    private final GameProfile profile;
     public ClientPacketListener(Connection connection, GameProfile profile) {
         super(connection);
         this.connection.channel.attr(Connection.ATTRIBUTE_CLIENTBOUND_PROTOCOL).set(ConnectionProtocol.PLAY.codec(PacketFlow.CLIENTBOUND));

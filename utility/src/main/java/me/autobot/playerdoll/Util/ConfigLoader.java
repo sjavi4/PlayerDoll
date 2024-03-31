@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.Util;
 
+import me.autobot.playerdoll.Util.Configs.AbstractConfig;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -27,6 +28,16 @@ public class ConfigLoader {
         if (CONFIGS.containsKey(type)) {
             return CONFIGS.get(type);
         }
+
+        if (type == ConfigType.LANGUAGE || type == ConfigType.CUSTOM_LANGUAGE) {
+            YamlConfiguration langConfig = YamlConfiguration.loadConfiguration(ConfigType.LANGUAGE.getFile());
+            if (langConfig.getInt("version") != AbstractConfig.CURRENT_VERSION) {
+                plugin.getLogger().log(Level.WARNING, "Config ["+ConfigType.LANGUAGE+"] Not Up to Date, Generate From Resource.");
+                plugin.getLogger().log(Level.WARNING, "Config ["+type+"] Not Up to Date, Please Check Language File.");
+                getFromResource(ConfigType.LANGUAGE);
+            }
+        }
+
         YamlConfiguration config;
 
         if (type.getFile().exists()) {
@@ -36,6 +47,7 @@ public class ConfigLoader {
             plugin.getLogger().log(Level.WARNING, "Config ["+type+"] Not Found, Generate From Resource.");
             config = getFromResource(type);
         }
+
         CONFIGS.put(type,config);
         return config;
     }
@@ -97,6 +109,17 @@ public class ConfigLoader {
             @Override
             InputStream getResource() {
                 return plugin.getResource("flag.yml");
+            }
+        },
+        PERMISSION {
+            @Override
+            File getFile() {
+                return new File(plugin.getDataFolder(),"perm.yml");
+            }
+
+            @Override
+            InputStream getResource() {
+                return plugin.getResource("perm.yml");
             }
         };
 

@@ -34,9 +34,18 @@ public class CursedClientConnection extends Connection {
         PlayerDoll.getPluginLogger().log(Level.INFO, "Client Disconnected, "+ ichatbasecomponent.getString());
         super.disconnect(ichatbasecomponent);
     }
-
+/*
     @Override
     public void send(Packet<?> packet) {
+        System.out.println("Send: " + packet);
         super.send(packet);
     }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        //System.out.println("Read: "+msg);
+        super.channelRead(ctx, msg);
+    }
+
+ */
 }
