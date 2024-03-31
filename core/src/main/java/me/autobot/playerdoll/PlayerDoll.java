@@ -5,22 +5,21 @@ import me.autobot.playerdoll.Command.Utils.CommandHelp;
 import me.autobot.playerdoll.Command.Utils.CommandLimit;
 import me.autobot.playerdoll.Command.Utils.CommandList;
 import me.autobot.playerdoll.Command.Utils.CommandReload;
+import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollHelper;
 import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.EventListener.*;
-import me.autobot.playerdoll.Folia.FoliaHelper;
+import me.autobot.playerdoll.folia.FoliaHelper;
 import me.autobot.playerdoll.GUIs.Doll.DollInvStorage;
 import me.autobot.playerdoll.GUIs.GUIEventListener;
 import me.autobot.playerdoll.GUIs.GUIManager;
-import me.autobot.playerdoll.LuckPerms.LuckPermsHelper;
 import me.autobot.playerdoll.Util.BackupHelper;
 import me.autobot.playerdoll.Util.ConfigLoader;
 import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.Util.Configs.FlagConfig;
-import me.autobot.playerdoll.Vault.VaultHelper;
+import me.autobot.playerdoll.Util.Configs.PermConfig;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,7 +30,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -43,15 +41,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class PlayerDoll extends JavaPlugin {
-
     private static Plugin plugin;
     private static Logger logger;
 
     public static String version;
-    //public static Map<String, IDoll> dollManagerMap = new HashMap<>();
-    public static final Map<UUID,Integer> playerDollCountMap = new HashMap<>();
     public static final Map<String, DollInvStorage> dollInvStorage = new HashMap<>();
-    public static final Set<String> pendingRespawnList = new HashSet<>();
+    public static final Set<DollConfig> pendingRespawnList = new HashSet<>();
     private static int maxPlayer;
     public static final String dollIdentifier = "-";
     private static String dollDirectory = "";
@@ -69,15 +64,6 @@ public final class PlayerDoll extends JavaPlugin {
     public static boolean isSpigot = false;
     public static boolean isPaperSeries = false;
     public static boolean isFolia = false;
-
-    private static VaultHelper vaultHelper;
-    public static VaultHelper getVaultHelper() {
-        return vaultHelper;
-    }
-    private static LuckPermsHelper luckPermsHelper;
-    public static LuckPermsHelper getluckPermsHelper() {
-        return luckPermsHelper;
-    }
     public static FoliaHelper getFoliaHelper() {
         return foliaHelper;
     }
@@ -85,6 +71,7 @@ public final class PlayerDoll extends JavaPlugin {
         return logger;
     }
     private BasicConfig basicConfig;
+    public static boolean useBungeeCord = false;
     @Override
     public void onEnable() {
         version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
@@ -109,6 +96,7 @@ public final class PlayerDoll extends JavaPlugin {
 
         basicConfig = BasicConfig.get();
         FlagConfig.get();
+        PermConfig.get();
         //if (basicConfig.)
         getServerBranch();
 
@@ -136,8 +124,19 @@ public final class PlayerDoll extends JavaPlugin {
         //PermissionManager.newInstance(this);
         //}
         //PermissionManager.initialize(this, luckPermsHelper != null);
+        useBungeeCord = getServer().spigot().getConfig().getBoolean("settings.bungeecord");
 
-        countPlayerDoll();
+        if (useBungeeCord) {
+            //getServer().getMessenger().registerOutgoingPluginChannel(this, "playerdoll:player");
+            getServer().getMessenger().registerOutgoingPluginChannel(this, "playerdoll:doll");
+            getServer().getMessenger().registerIncomingPluginChannel(this, "playerdoll:doll", new Messenger());
+        }
+
+        try {
+            countPlayerDoll();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
         if (isFolia) {
             getFoliaHelper().globalTaskDelayed(this::prepareDollSpawn,5);
@@ -186,6 +185,11 @@ public final class PlayerDoll extends JavaPlugin {
         configManager.stopWatcher();
 
          */
+        if (useBungeeCord) {
+            //getServer().getMessenger().unregisterOutgoingPluginChannel(this,"playerdoll:player");
+            getServer().getMessenger().unregisterOutgoingPluginChannel(this,"playerdoll:doll");
+            getServer().getMessenger().unregisterIncomingPluginChannel(this, "playerdoll:doll");
+        }
     }
 
     public static ConfigLoader getConfigLoader() {
@@ -221,6 +225,9 @@ public final class PlayerDoll extends JavaPlugin {
         //pluginManager.registerEvents(new DollKickEvent(), this);
         pluginManager.registerEvents(new DollDamageEvent(), this);
         pluginManager.registerEvents(new AsyncPreLoginEvent(), this);
+        if (!PlayerDoll.isSpigot) {
+            //pluginManager.registerEvents(new HandshakeEvent(), this);
+        }
         DollHelper.registerDollEvent(version);
     }
     private void initialGUI(PluginManager pluginManager) {
@@ -318,23 +325,12 @@ public final class PlayerDoll extends JavaPlugin {
         }
     }
     public void prepareDollSpawn() {
-        for (String s : pendingRespawnList) {
-            YAMLManager yamlManager = YAMLManager.loadConfig(s,false, true);
-            if (yamlManager == null) {
+        for (DollConfig dollConfig : pendingRespawnList) {
+            if (!dollConfig.dollJoinAtStart.getValue()) {
                 continue;
             }
-            YamlConfiguration config = yamlManager.getConfig();
-            if (!config.getBoolean("setting.join_at_start")) {
-                continue;
-            }
-            UUID dollUUID = UUID.fromString(config.getString("UUID"));
-            DollManager.ONLINE_DOLL_MAP.put(dollUUID,null);
-            IDoll doll = (IDoll) DollHelper.callSpawn(null, s, dollUUID , version);
-            if (doll != null) {
-                DollManager.ONLINE_DOLL_MAP.put(dollUUID,doll);
-            } else {
-                DollManager.ONLINE_DOLL_MAP.remove(dollUUID);
-            }
+            UUID dollUUID = UUID.fromString(dollConfig.dollUUID.getValue());
+            DollHelper.callSpawn(null, dollConfig.dollName.getValue(), dollUUID , version);
         }
         pendingRespawnList.clear();
 
@@ -347,50 +343,41 @@ public final class PlayerDoll extends JavaPlugin {
             return false;
         }
     }
-    private void countPlayerDoll() {
+    private void countPlayerDoll() throws ParseException {
         File[] dollFiles = new File(plugin.getDataFolder() + File.separator + "doll").listFiles();
         if (dollFiles == null) return;
         for (File files : dollFiles) {
             String dollName = files.getName().substring(0,files.getName().lastIndexOf("."));
-            YAMLManager yamlManager = YAMLManager.loadConfig(dollName,false, true);
-            if (yamlManager == null) {
+            DollConfig dollConfig = DollConfig.getOfflineDollConfig(dollName);
+            String dollUUIDS = dollConfig.dollUUID.getValue();
+            UUID dollUUID = UUID.fromString(dollUUIDS);
+            if (dollUUIDS.equals(DollConfig.NULL_UUID)) {
+                getLogger().log(Level.SEVERE, "Doll ["+ dollName +"] has missing UUID!");
                 continue;
             }
-            YamlConfiguration config = yamlManager.getConfig();
-            // TODO: Change This To BasicConfig value
-            if (getConfig().getBoolean("Global.Remove.InactiveDoll")) {
-                String lastSpawn = config.getString("LastSpawn");
-                if (lastSpawn != null && !lastSpawn.isBlank()) {
-                    Date lastSpawnDate;
-                    try {
-                        lastSpawnDate = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z").parse(lastSpawn);
-                    } catch (ParseException ignored) {
-                        continue;
-                    }
-                    LocalDate lastSpawnTime = lastSpawnDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate currentTime = LocalDate.now();
-                    long dateDifference = ChronoUnit.DAYS.between(lastSpawnTime,currentTime);
-                    if (dateDifference > getConfig().getLong("Global.Remove.Time")) {
-                        String uuid = config.getString("UUID");
-                        final File configFile = files;
-                        File dat = new File(Bukkit.getServer().getWorldContainer() + File.separator + "world" + File.separator + "playerdata" + File.separator + uuid + ".dat");
-                        File dat_old = new File(Bukkit.getServer().getWorldContainer() + File.separator + "world" + File.separator + "playerdata" + File.separator + uuid + ".dat_old");
-                        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                        executorService.schedule(() -> {
-                            configFile.delete();
-                            dat.delete();
-                            dat_old.delete();
-                        }, 1, TimeUnit.SECONDS);
-                        continue;
-                    }
+            if (basicConfig.removeInactiveDoll.getValue()) {
+                String lastSpawn = dollConfig.lastSpawnTimeStamp.getValue();
+                Date lastSpawnDate = DollConfig.dateFormat.parse(lastSpawn);
+                LocalDate lastSpawnTime = lastSpawnDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate currentTime = LocalDate.now();
+                long dateDifference = ChronoUnit.DAYS.between(lastSpawnTime,currentTime);
+                if (dateDifference > getConfig().getLong("Global.Remove.Time")) {
+                    String uuid = dollConfig.dollUUID.getValue();
+                    final File configFile = files;
+                    File dat = new File(Bukkit.getServer().getWorldContainer() + File.separator + "world" + File.separator + "playerdata" + File.separator + uuid + ".dat");
+                    File dat_old = new File(Bukkit.getServer().getWorldContainer() + File.separator + "world" + File.separator + "playerdata" + File.separator + uuid + ".dat_old");
+                    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                    executorService.schedule(() -> {
+                        configFile.delete();
+                        dat.delete();
+                        dat_old.delete();
+                    }, 1, TimeUnit.SECONDS);
+                    continue;
                 }
             }
-            if (config.contains("Owner.UUID")) {
-                UUID uuid = UUID.fromString(config.getString("Owner.UUID"));
-                int count = PlayerDoll.playerDollCountMap.getOrDefault(uuid,0);
-                PlayerDoll.playerDollCountMap.put(uuid,count+1);
-            }
-            PlayerDoll.pendingRespawnList.add(dollName);
+            int count = DollManager.PLAYER_DOLL_COUNT_MAP.getOrDefault(dollUUID,0);
+            DollManager.PLAYER_DOLL_COUNT_MAP.put(dollUUID,count+1);
+            PlayerDoll.pendingRespawnList.add(dollConfig);
         }
     }
 }

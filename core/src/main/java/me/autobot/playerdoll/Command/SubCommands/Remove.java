@@ -28,6 +28,6 @@ public class Remove extends SubCommand {
         }
 
          */
-        DollManager.getInstance().removeDoll(dollName);
+        DollManager.getInstance().removeDoll(sender, dollName);
     }
 }

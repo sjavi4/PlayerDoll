@@ -1,17 +1,13 @@
 package me.autobot.playerdoll.EventListener;
 
-import me.autobot.playerdoll.PlayerDoll;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
-import java.util.logging.Level;
-
 public class AsyncPreLoginEvent implements Listener {
     @EventHandler
     public void onDollPreLogin(AsyncPlayerPreLoginEvent event) {
+        /*
         if (!Bukkit.hasWhitelist()) {
             return;
         }
@@ -24,5 +20,7 @@ public class AsyncPreLoginEvent implements Listener {
                 Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(), task);
             }
         }
+
+         */
     }
 }

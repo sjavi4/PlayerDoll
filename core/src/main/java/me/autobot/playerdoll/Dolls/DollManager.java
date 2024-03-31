@@ -21,6 +21,7 @@ public class DollManager {
     private static final DollManager instance = new DollManager();
     public static final File dollDirectory = new File(PlayerDoll.getDollDirectory());
     public static final Map<UUID, IDoll> ONLINE_DOLL_MAP = new HashMap<>();
+    public static final Map<UUID, Integer> PLAYER_DOLL_COUNT_MAP = new HashMap<>();
     public static final Map<UUID, PermissionAttachment> DOLL_PERMISSION_MAP = new HashMap<>();
     private static final String NAME_PATTERN = "^[a-zA-Z0-9_]*$";
 
@@ -28,7 +29,7 @@ public class DollManager {
         return instance;
     }
 
-    public void removeDoll(String dollName) {
+    public void removeDoll(Player sender, String dollName) {
         //File config = DollConfigHelper.getFile(dollName);
         File dollFile = new File(PlayerDoll.getDollDirectory(),dollName+".yml");
         DollConfig dollConfig = DollConfig.getOfflineDollConfig(dollName);
@@ -59,6 +60,8 @@ public class DollManager {
             delayedExecutor.shutdown();
         }
         dollConfig = null;
+        int count = PLAYER_DOLL_COUNT_MAP.get(sender.getUniqueId());
+        PLAYER_DOLL_COUNT_MAP.put(sender.getUniqueId(), count-1);
     }
     public boolean renameDoll(String dollName, String newName) {
         String name = dollFullName(newName);

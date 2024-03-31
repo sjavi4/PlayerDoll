@@ -1,0 +1,54 @@
+version: 20
+
+# Add permissions from this file to your permission group
+# These settings are suggested to set under groups
+
+# Examples are not required to follow exactly
+
+# Example
+# max-doll-create:
+#   a: 1
+#   b: 2
+# for group A, use [playerdoll.perm.max-doll-create.a]
+# to set players in group A can create 1 doll.
+# for group B, use [playerdoll.perm.max-doll-create.b]
+# to set players in group B can create 2 dolls.
+
+# Example
+# max-doll-spawn:
+#   default: 1
+#   disallow: 0
+#   allow: 1
+#   other: 100
+# players who have permission [playerdoll.perm.max-doll-spawn.allow]
+# will be able to spawn up to 1 doll.
+
+# If not enabled, players are not limited from these settings
+# If enabled, please provide default value to default group
+enable: false
+
+# Skip checking for OP
+op-bypass: true
+
+# Key - value pairs
+
+playerdoll.perm:
+  # Integer
+  max-doll-spawn:
+    default: 1
+
+  # Integer
+  playerdoll.perm.max-doll-create:
+    default: 1
+
+  # String, Optional: color code
+  doll-prefix:
+    default: '[BOT]'
+
+  # String, Optional: color code
+  doll-suffix:
+    default: ''
+
+  # Boolean
+  restrict-skin:
+    default: false

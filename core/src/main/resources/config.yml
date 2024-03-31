@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 18
+version: 20
 
 # Custom Server Mod
 # If plugin has detected the Mod wrongly,
@@ -47,3 +47,8 @@ chat-when-join-interval: 10
 # Variables : %name% -> Player Name; %uuid% -> Player UUID
 chat-when-join:
   - ''
+
+# This will prevent Doll with same name spawn in different servers
+# Prevent Dupe from Cross-server Data loading
+# BungeeCord mode required
+doll-multi-instance: false

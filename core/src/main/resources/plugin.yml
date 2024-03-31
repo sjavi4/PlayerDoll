@@ -304,3 +304,15 @@ permissions:
     description: GUI permission
   playerdoll.personalflag.use:
     description: GUI permission
+
+# description: Tab shortcut for perm.yml
+  playerdoll.perm.max-doll-spawn:
+    description: Tab shortcut for perm.yml
+  playerdoll.perm.max-doll-create:
+    description: Tab shortcut for perm.yml
+  playerdoll.perm.doll-prefix:
+    description: Tab shortcut for perm.yml
+  playerdoll.perm.doll-suffix:
+    description: Tab shortcut for perm.yml
+  playerdoll.perm.restrict-skin:
+    description: Tab shortcut for perm.yml

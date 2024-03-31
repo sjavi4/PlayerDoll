@@ -7,7 +7,10 @@ import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.GUIs.Doll.DollInvStorage;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.Configs.BasicConfig;
+import me.autobot.playerdoll.Util.Configs.PermConfig;
+import me.autobot.playerdoll.Util.LangFormatter;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,8 +18,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.Vector;
 
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.logging.Level;
+import java.util.Optional;
 
 public class DollJoin implements Listener {
     @EventHandler
@@ -132,6 +134,26 @@ public class DollJoin implements Listener {
         // Trigger this after Doll Placed in World
         String prefix = "[BOT]";
         String suffix = "";
+
+        OfflinePlayer offlineOwner = doll.getOwner();
+        if (offlineOwner.isOnline()) {
+            Player owner = (Player) offlineOwner;
+            PermConfig perm = PermConfig.get();
+            if (perm.enable.getValue()) {
+                var prefixes = perm.dollPrefix.getValue();
+                Optional<String> matchP = prefixes.keySet().stream().filter(owner::hasPermission).findFirst();
+                if (matchP.isPresent()) {
+                    prefix = prefixes.get(matchP.get());
+                }
+                var suffixes = perm.dollSuffix.getValue();
+                Optional<String> matchS = prefixes.keySet().stream().filter(owner::hasPermission).findFirst();
+                if (matchS.isPresent()) {
+                    suffix = suffixes.get(matchS.get());
+                }
+            }
+        }
+
+
         //String prefix = ChatColor.translateAlternateColorCodes('&', (String) permissionManager.dollProperties.get("prefix"));
         //String suffix = ChatColor.translateAlternateColorCodes('&', (String) permissionManager.dollProperties.get("suffix"));
         player.setDisplayName(prefix + player.getName() + suffix);
@@ -143,12 +165,17 @@ public class DollJoin implements Listener {
         }
 
         if (Bukkit.hasWhitelist() && player.isWhitelisted()) {
+            player.setWhitelisted(false);
+            Bukkit.reloadWhitelist();
+            /*
             Runnable task = () -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"whitelist remove " + player.getName());
             if (PlayerDoll.isFolia) {
                 PlayerDoll.getFoliaHelper().globalTask(task);
             } else {
                 Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(), task);
             }
+
+             */
         }
 
         List<String> messageList = basicConfig.dollChatWhenJoin.getValue();
@@ -169,5 +196,6 @@ public class DollJoin implements Listener {
                 count++;
             }
         }
+
     }
 }

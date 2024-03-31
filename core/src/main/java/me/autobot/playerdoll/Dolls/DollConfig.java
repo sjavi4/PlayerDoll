@@ -4,7 +4,6 @@ import me.autobot.playerdoll.CustomEvent.DollConfigLoadEvent;
 import me.autobot.playerdoll.CustomEvent.DollConfigUnLoadEvent;
 import me.autobot.playerdoll.CustomEvent.DollSettingChangeEvent;
 import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.Util.ConfigLoader;
 import me.autobot.playerdoll.Util.Configs.AbstractConfig;
 import me.autobot.playerdoll.Util.Configs.FlagConfig;
 import me.autobot.playerdoll.Util.Keys.ConfigKey;
