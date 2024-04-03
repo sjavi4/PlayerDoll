@@ -134,7 +134,7 @@ continuous : Continuously repeat the action
   <tr>
     <td>inv</td>
     <td>playerdoll.command.inv</td>
-    <td>Open Doll's inventory</td>
+    <td>Open Doll's inventory (snapshot)</td>
     <td></td>
   </tr>
   <tr>
@@ -576,13 +576,13 @@ Otherwise, only OP will be able to use the related action.
 
 ## Doll inventories
 - Players with permission can access Doll's ender chest directly (put&take)
-- Doll inventory are not supported to do so base on some technological reasons (no direct api for open-up player inventory)
+- Doll inventory are not supported to do so because of there is no access for armor/offhand slot in GUI view
 
 Put items to Doll : Drop item and let Doll pick up
 
 Take items from Doll : Command Drop or perform actions through Doll inventory navigation GUI
 
-There is an in-direct solution to let players to interact with Doll inventory (upper inventory navigation action)
+An indirect solution to interact with Doll inventory (upper inventory navigation action) is provided
 
 Similar to vanilla player backpack shortcuts
 ```
