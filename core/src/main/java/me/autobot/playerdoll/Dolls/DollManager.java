@@ -2,25 +2,24 @@ package me.autobot.playerdoll.Dolls;
 
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.YAMLManager;
-import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 public class DollManager {
     private static final DollManager instance = new DollManager();
     public static final File dollDirectory = new File(PlayerDoll.getDollDirectory());
-    public static final Map<UUID, IDoll> ONLINE_DOLL_MAP = new HashMap<>();
+    public static final Map<UUID, IServerDoll> ONLINE_DOLL_MAP = new HashMap<>();
+    public static final Map<UUID, IServerPlayerExt> ONLINE_PLAYER_MAP = new HashMap<>();
     public static final Map<UUID, Integer> PLAYER_DOLL_COUNT_MAP = new HashMap<>();
     public static final Map<UUID, PermissionAttachment> DOLL_PERMISSION_MAP = new HashMap<>();
     private static final String NAME_PATTERN = "^[a-zA-Z0-9_]*$";
@@ -52,7 +51,7 @@ public class DollManager {
         if (!isDollOnline(uuid)) {
             task.run();
         } else  {
-            IDoll doll = ONLINE_DOLL_MAP.get(uuid);
+            IServerDoll doll = ONLINE_DOLL_MAP.get(uuid);
             killDoll(doll);
             // Delay and then delete
             final ScheduledExecutorService delayedExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -79,9 +78,9 @@ public class DollManager {
             return false;
         }
     }
-    public void spawnDoll(String dollName, UUID dollUUID, Player caller, boolean align) {
+    public void spawnDoll(String dollName, UUID dollUUID, Player caller) {
         //OFFLINE_DOLL_MAP.remove(dollName);
-        IDoll doll;
+        IServerDoll doll;
         //ONLINE_DOLL_MAP.put(dollUUID,null);
         /*
         ServerPlayer serverPlayer = null;
@@ -92,16 +91,8 @@ public class DollManager {
 
          */
 
-        doll = (IDoll) DollHelper.callSpawn(caller,dollName, dollUUID , PlayerDoll.version);
+        DollHelper.callSpawn(caller,dollName, dollUUID , PlayerDoll.version);
         //ONLINE_DOLL_MAP.put(dollUUID,doll);
-        if (doll == null) {
-            //ONLINE_DOLL_MAP.remove(dollUUID);
-            return;
-        }
-        if (align && caller != null) {
-            var pos = caller.getLocation();
-            doll._setPos(Math.round(pos.getX() * 2) / 2.0, pos.getBlockY(), Math.round(pos.getZ() * 2) / 2.0);
-        }
         // caller = null -> spawn in original pos
     }
 
@@ -111,19 +102,19 @@ public class DollManager {
     public void killDoll(Player dollPlayer) {
         killDoll(ONLINE_DOLL_MAP.get(dollPlayer.getUniqueId()));
     }
-    public void despawnDoll(IDoll doll) {
+    public void despawnDoll(IServerDoll doll) {
         if (PlayerDoll.isFolia) {
             DollManager.Folia_Disconnect(doll);
         } else {
-            doll._disconnect();
+            doll.dollDisconnect();
         }
         //ONLINE_DOLL_MAP.remove(doll.getBukkitPlayer().getUniqueId());
     }
-    public void killDoll(IDoll doll) {
+    public void killDoll(IServerDoll doll) {
         if (PlayerDoll.isFolia) {
             DollManager.Folia_Kill(doll);
         } else {
-            doll._kill();
+            doll.dollKill();
         }
         //ONLINE_DOLL_MAP.remove(doll.getBukkitPlayer().getUniqueId());
     }
@@ -156,6 +147,7 @@ public class DollManager {
     public static boolean isPlayerDoll(Player player) {
         return ONLINE_DOLL_MAP.containsKey(player.getUniqueId());
     }
+    /*
     public static void Paper_RemoveChunkLoader(Object serverLevel, Object serverPlayer) {
         try {
             Object playerChunkLoader = serverLevel.getClass().getField("playerChunkLoader").get(serverLevel);
@@ -167,11 +159,15 @@ public class DollManager {
             throw new RuntimeException(e);
         }
     }
-    public static void Folia_Disconnect(IDoll iDoll) {
-        PlayerDoll.getFoliaHelper().entityTask(iDoll.getBukkitPlayer(), iDoll::_disconnect, 1);
+
+     */
+    public static void Folia_Disconnect(IServerDoll iServerDoll) {
+        PlayerDoll.getScheduler().entityTask(iServerDoll.getBukkitPlayer(), iServerDoll::dollDisconnect, 1);
+        //PlayerDoll.getFoliaHelper().entityTask(iDoll.getBukkitPlayer(), iDoll::_disconnect, 1);
     }
-    public static void Folia_Kill(IDoll iDoll) {
-        PlayerDoll.getFoliaHelper().entityTask(iDoll.getBukkitPlayer(), iDoll::_kill, 1);
+    public static void Folia_Kill(IServerDoll iDoll) {
+        PlayerDoll.getScheduler().entityTask(iDoll.getBukkitPlayer(), iDoll::dollKill, 1);
+        //PlayerDoll.getFoliaHelper().entityTask(iDoll.getBukkitPlayer(), iDoll::_kill, 1);
     }
 
 }

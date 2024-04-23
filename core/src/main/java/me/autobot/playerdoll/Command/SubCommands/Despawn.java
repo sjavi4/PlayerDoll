@@ -12,11 +12,15 @@ public class Despawn extends SubCommand {
         Runnable task = () -> {
             Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "kick " + dollPlayer.getName());
         };
+        PlayerDoll.getScheduler().globalTask(task);
+        /*
         if (PlayerDoll.isFolia) {
             PlayerDoll.getFoliaHelper().globalTask(task);
         } else {
             task.run();
         }
+
+         */
         //DollManager.getInstance().despawnDoll(doll);
     }
 }

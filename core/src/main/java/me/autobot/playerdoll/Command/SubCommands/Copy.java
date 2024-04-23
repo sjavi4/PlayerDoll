@@ -15,7 +15,7 @@ public class Copy extends SubCommand {
             return;
         }
         if (checkArgumentValid(ArgumentType.ONLINE_DOLL,args[0])) {
-            actionPack.copyFrom(DollManager.ONLINE_DOLL_MAP.get(Bukkit.getPlayer(args[0]).getUniqueId()));
+            actionPack.copyFrom(DollManager.ONLINE_DOLL_MAP.get(Bukkit.getPlayer(DollManager.dollFullName(args[0])).getUniqueId()));
         }
     }
 }

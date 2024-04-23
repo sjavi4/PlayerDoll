@@ -1,15 +1,16 @@
 package me.autobot.playerdoll.CustomEvent;
 
 import me.autobot.playerdoll.Dolls.DollConfig;
-import me.autobot.playerdoll.Dolls.IDoll;
+
+import me.autobot.playerdoll.Dolls.IServerDoll;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class DollConfigUnLoadEvent extends Event {
     private static final HandlerList handlerList = new HandlerList();
-    private final IDoll doll;
+    private final IServerDoll doll;
     private final DollConfig dollConfig;
-    public DollConfigUnLoadEvent(IDoll who, DollConfig config) {
+    public DollConfigUnLoadEvent(IServerDoll who, DollConfig config) {
         this.doll = who;
         this.dollConfig = config;
     }
@@ -18,7 +19,7 @@ public class DollConfigUnLoadEvent extends Event {
         return this.doll == null;
     }
 
-    public IDoll getDoll() {
+    public IServerDoll getDoll() {
         return doll;
     }
 

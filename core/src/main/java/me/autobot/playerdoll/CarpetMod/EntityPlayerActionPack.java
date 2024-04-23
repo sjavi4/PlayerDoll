@@ -1,6 +1,6 @@
 package me.autobot.playerdoll.CarpetMod;
 
-import me.autobot.playerdoll.Dolls.IDoll;
+import me.autobot.playerdoll.Dolls.IServerPlayerExt;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public class EntityPlayerActionPack {
-    private final IDoll doll;
+    private final IServerPlayerExt serverPlayerExt;
     private final Player player;
 
     private final Map<ActionType, Action> actions = new EnumMap<>(ActionType.class);
@@ -34,15 +34,15 @@ public class EntityPlayerActionPack {
     private int itemUseCooldown;
     protected static Tracer tracer;
 
-    public EntityPlayerActionPack(Player playerIn, IDoll dollIn)
+    public EntityPlayerActionPack(Player playerIn, IServerPlayerExt playerExtIn)
     {
         player = playerIn;
-        doll = dollIn;
+        serverPlayerExt = playerExtIn;
         stopAll();
     }
-    public void copyFrom(IDoll doll)
+    public void copyFrom(IServerPlayerExt serverPlayerExt)
     {
-        EntityPlayerActionPack other = doll.getActionPack();
+        EntityPlayerActionPack other = serverPlayerExt.getActionPack();
         actions.putAll(other.actions);
         currentBlock = other.currentBlock;
         blockHitDelay = other.blockHitDelay;
@@ -60,11 +60,11 @@ public class EntityPlayerActionPack {
     public void start(ActionType type, Action action)
     {
         Action previous = actions.remove(type);
-        if (previous != null) type.stop(player, doll, previous);
+        if (previous != null) type.stop(player, serverPlayerExt, previous);
         if (action != null)
         {
             actions.put(type, action);
-            type.start(player, doll, action); // noop
+            type.start(player, serverPlayerExt, action); // noop
         }
     }
     public void setSneaking(boolean doSneak)
@@ -154,7 +154,7 @@ public class EntityPlayerActionPack {
     }
     public void stopAll()
     {
-        for (ActionType type : actions.keySet()) type.stop(player, doll, actions.get(type));
+        for (ActionType type : actions.keySet()) type.stop(player, serverPlayerExt, actions.get(type));
         actions.clear();
         stopMovement();
     }
@@ -239,10 +239,10 @@ public class EntityPlayerActionPack {
 
          */
     }
-    static Object getTarget(IDoll doll, Player player)
+    static Object getTarget(IServerPlayerExt serverPlayerExt, Player player)
     {
         float reach = player.getGameMode() == GameMode.CREATIVE ? 5 : 4.5f;
-        return tracer.rayTrace(doll, 1,reach, false);
+        return tracer.rayTrace(serverPlayerExt, 1,reach, false);
     }
     private boolean isEmpty(ItemStack itemStack) {
         return itemStack == null || itemStack.getType().isAir() || itemStack.getAmount() <= 0;
@@ -322,7 +322,7 @@ public class EntityPlayerActionPack {
     protected Object getRelativeHitPos(Object entityHit, Object entity) {
         return null;
     }
-    protected String entityInteractAt(Object entity, IDoll doll, Object relativeHitPos, Object hand) {
+    protected String entityInteractAt(Object entity, IServerPlayerExt serverPlayerExt, Object relativeHitPos, Object hand) {
         return null;
     }
     protected String playerInteractOn(Object entity, Object hand) {
@@ -359,9 +359,9 @@ public class EntityPlayerActionPack {
         USE(true)
             {
                 @Override
-                boolean execute(Player player, IDoll doll, Action action)
+                boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action)
                 {
-                    EntityPlayerActionPack ap = doll.getActionPack();
+                    EntityPlayerActionPack ap = serverPlayerExt.getActionPack();
                     if (ap.itemUseCooldown > 0)
                     {
                         ap.itemUseCooldown--;
@@ -371,14 +371,14 @@ public class EntityPlayerActionPack {
                     {
                         return true;
                     }
-                    Object hit = getTarget(doll,player);
+                    Object hit = getTarget(serverPlayerExt,player);
                     for (Object hand : ap.getInteractionHand())
                     {
                         switch (ap.getHitType(hit))
                         {
                             case "BLOCK":
                             {
-                                doll._resetLastActionTime();
+                                serverPlayerExt._resetLastActionTime();
                                 World world = player.getWorld();
                                 Object blockHit = ap.getBlockHitResult(hit);
                                 Object pos = ap.getHitBlockPos(blockHit);
@@ -401,14 +401,14 @@ public class EntityPlayerActionPack {
                             }
                             case "ENTITY":
                             {
-                                doll._resetLastActionTime();
+                                serverPlayerExt._resetLastActionTime();
                                 Object entityHit = ap.getEntityHitResult(hit);
                                 Object entity = ap.getHitEntity(entityHit);
                                 boolean handWasEmpty = ap.getHandEmpty(hand);
                                 boolean itemFrameEmpty = (entity instanceof ItemFrame) && ((ItemFrame) entity).isEmpty();
 
                                 Object relativeHitPos = ap.getRelativeHitPos(entityHit,entity);// entityHit.getLocation().subtract(entity.getX(), entity.getY(), entity.getZ());
-                                if (ap.entityInteractAt(entity,doll,relativeHitPos,hand).matches("(?i)SUCCESS|CONSUME|CONSUME_PARTIAL")) {
+                                if (ap.entityInteractAt(entity,serverPlayerExt,relativeHitPos,hand).matches("(?i)SUCCESS|CONSUME|CONSUME_PARTIAL")) {
                                     ap.itemUseCooldown = 3;
                                     return true;
                                 }
@@ -454,9 +454,9 @@ public class EntityPlayerActionPack {
                 }
 
                 @Override
-                void inactiveTick(Player player, IDoll doll, Action action)
+                void inactiveTick(Player player, IServerPlayerExt serverPlayerExt, Action action)
                 {
-                    EntityPlayerActionPack ap = doll.getActionPack();
+                    EntityPlayerActionPack ap = serverPlayerExt.getActionPack();
                     ap.itemUseCooldown = 0;
                     ap.player_releaseUsingItem();
                     //player.releaseUsingItem();
@@ -464,9 +464,9 @@ public class EntityPlayerActionPack {
             },
         ATTACK(true) {
             @Override
-            boolean execute(Player player, IDoll doll, Action action) {
-                EntityPlayerActionPack ap = doll.getActionPack();
-                Object hit = getTarget(doll,player);
+            boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action) {
+                EntityPlayerActionPack ap = serverPlayerExt.getActionPack();
+                Object hit = getTarget(serverPlayerExt,player);
                 switch (ap.getHitType(hit)) {
                     case "ENTITY": {
                         Object entityHit = ap.getEntityHitResult(hit);
@@ -476,8 +476,8 @@ public class EntityPlayerActionPack {
                             player.swingMainHand();
                             //player.swing(InteractionHand.MAIN_HAND);
                         }
-                        doll._resetAttackStrengthTicker();
-                        doll._resetLastActionTime();
+                        serverPlayerExt._resetAttackStrengthTicker();
+                        serverPlayerExt._resetLastActionTime();
                         //player.resetAttackStrengthTicker();
                         //player.resetLastActionTime();
                         return true;
@@ -557,7 +557,7 @@ public class EntityPlayerActionPack {
                             //player.level().destroyBlockProgress(-1, pos, (int) (ap.curBlockDamageMP * 10));
 
                         }
-                        doll._resetLastActionTime();
+                        serverPlayerExt._resetLastActionTime();
                         //player.resetLastActionTime();
                         player.swingMainHand();
                         return blockBroken;
@@ -566,9 +566,9 @@ public class EntityPlayerActionPack {
                 return false;
             }
             @Override
-            void inactiveTick(Player player, IDoll doll, Action action)
+            void inactiveTick(Player player, IServerPlayerExt serverPlayerExt, Action action)
             {
-                EntityPlayerActionPack ap = doll.getActionPack();
+                EntityPlayerActionPack ap = serverPlayerExt.getActionPack();
                 if (ap.currentBlock == null) return;
                 ap.player_level_destroyBlockProgress(-1,ap.currentBlock,-1);
                 ap.player_gameMode_handleBlockBreakAction(ap.currentBlock, "ABORT_DESTROY_BLOCK", "DOWN", -1);
@@ -580,30 +580,30 @@ public class EntityPlayerActionPack {
         JUMP(true)
             {
                 @Override
-                boolean execute(Player player, IDoll doll, Action action)
+                boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action)
                 {
                     if (action.limit == 1)
                     {
-                        if (player.isOnGround()) doll._jumpFromGround(); // onGround
+                        if (player.isOnGround()) serverPlayerExt._jumpFromGround(); // onGround
                     }
                     else
                     {
-                        doll._setJumping(true);
+                        serverPlayerExt._setJumping(true);
                     }
                     return false;
                 }
                 @Override
-                void inactiveTick(Player player, IDoll doll, Action action)
+                void inactiveTick(Player player, IServerPlayerExt serverPlayerExt, Action action)
                 {
-                    doll._setJumping(false);
+                    serverPlayerExt._setJumping(false);
                 }
             },
         DROP_ITEM(true)
             {
                 @Override
-                boolean execute(Player player, IDoll doll, Action action)
+                boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action)
                 {
-                    doll._resetLastActionTime();
+                    serverPlayerExt._resetLastActionTime();
                     player.dropItem(false); // dropSelectedItem
                     return false;
                 }
@@ -611,9 +611,9 @@ public class EntityPlayerActionPack {
         DROP_STACK(true)
             {
                 @Override
-                boolean execute(Player player, IDoll doll, Action action)
+                boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action)
                 {
-                    doll._resetLastActionTime();
+                    serverPlayerExt._resetLastActionTime();
                     player.dropItem(true); // dropSelectedItem
                     return false;
                 }
@@ -621,9 +621,9 @@ public class EntityPlayerActionPack {
         SWAP_HANDS(true)
             {
                 @Override
-                boolean execute(Player player, IDoll doll, Action action)
+                boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action)
                 {
-                    doll._resetLastActionTime();
+                    serverPlayerExt._resetLastActionTime();
                     PlayerInventory inv = player.getInventory();
                     ItemStack itemStack_1 = inv.getItemInOffHand();
                     inv.setItemInOffHand(inv.getItemInMainHand());
@@ -634,9 +634,9 @@ public class EntityPlayerActionPack {
         LOOK_AT(true)
                 {
                     @Override
-                    boolean execute(Player player, IDoll doll, Action action)
+                    boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action)
                     {
-                        EntityPlayerActionPack ap = doll.getActionPack();
+                        EntityPlayerActionPack ap = serverPlayerExt.getActionPack();
                         Entity entity = ap.getEntity(ap.lookingAtEntity);
                         if (entity != null) ap.lookAt(entity);
                         return false;
@@ -650,12 +650,12 @@ public class EntityPlayerActionPack {
             this.preventSpectator = preventSpectator;
         }
 
-        void start(Player player, IDoll doll, Action action) {}
-        abstract boolean execute(Player player, IDoll doll, Action action);
-        void inactiveTick(Player player, IDoll doll, Action action) {}
-        void stop(Player player, IDoll doll, Action action)
+        void start(Player player, IServerPlayerExt serverPlayerExt, Action action) {}
+        abstract boolean execute(Player player, IServerPlayerExt serverPlayerExt, Action action);
+        void inactiveTick(Player player, IServerPlayerExt serverPlayerExt, Action action) {}
+        void stop(Player player, IServerPlayerExt serverPlayerExt, Action action)
         {
-            inactiveTick(player, doll, action);
+            inactiveTick(player, serverPlayerExt, action);
         }
     }
 
@@ -710,18 +710,18 @@ public class EntityPlayerActionPack {
                     // actions are 20 tps, so need to clear status mid tick, allowing entities process it till next time
                     if (!type.preventSpectator || actionPack.player.getGameMode() != GameMode.SPECTATOR)
                     {
-                        type.inactiveTick(actionPack.player, actionPack.doll, this);
+                        type.inactiveTick(actionPack.player, actionPack.serverPlayerExt, this);
                     }
                 }
 
                 if (!type.preventSpectator || actionPack.player.getGameMode() != GameMode.SPECTATOR)
                 {
-                    cancel = type.execute(actionPack.player, actionPack.doll, this);
+                    cancel = type.execute(actionPack.player, actionPack.serverPlayerExt, this);
                 }
                 count++;
                 if (count == limit)
                 {
-                    type.stop(actionPack.player, actionPack.doll, null);
+                    type.stop(actionPack.player, actionPack.serverPlayerExt, null);
                     done = true;
                     return cancel;
                 }
@@ -731,7 +731,7 @@ public class EntityPlayerActionPack {
             {
                 if (!type.preventSpectator || actionPack.player.getGameMode() != GameMode.SPECTATOR)
                 {
-                    type.inactiveTick(actionPack.player, actionPack.doll, this);
+                    type.inactiveTick(actionPack.player, actionPack.serverPlayerExt, this);
                 }
             }
             return cancel;
@@ -742,12 +742,12 @@ public class EntityPlayerActionPack {
             //assuming action run but was unsuccesful that tick, but opportunity emerged to retry it, lets retry it.
             if (!type.preventSpectator || actionPack.player.getGameMode() != GameMode.SPECTATOR)
             {
-                type.execute(actionPack.player, actionPack.doll, this);
+                type.execute(actionPack.player, actionPack.serverPlayerExt, this);
             }
             count++;
             if (count == limit)
             {
-                type.stop(actionPack.player, actionPack.doll, null);
+                type.stop(actionPack.player, actionPack.serverPlayerExt, null);
                 done = true;
             }
         }

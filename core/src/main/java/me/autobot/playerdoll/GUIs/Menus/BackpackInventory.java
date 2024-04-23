@@ -4,6 +4,7 @@ import me.autobot.playerdoll.Command.CommandType;
 import me.autobot.playerdoll.Command.SubCommands.Drop;
 import me.autobot.playerdoll.Command.SubCommands.Slot;
 import me.autobot.playerdoll.Command.SubCommands.Use;
+import me.autobot.playerdoll.GUIs.ButtonSetter;
 import me.autobot.playerdoll.GUIs.DollInvHolder;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.LangFormatter;
@@ -53,10 +54,15 @@ public class BackpackInventory extends DollInvHolder {
         if (event.getCurrentItem() == EMPTY_ITEM) {
             return;
         }
-
+        Player whoClicked = (Player) event.getWhoClicked();
         if (event.getClickedInventory() == null) {
-            event.getWhoClicked().openInventory(PlayerDoll.dollInvStorage.get(fullDollName).getInventoryPage());
+            whoClicked.openInventory(PlayerDoll.dollInvStorage.get(fullDollName).getInventoryPage());
         }
+        if (event.getSlot() == 8) {
+            // Real backpack
+            whoClicked.openInventory(dollInv);
+        }
+
         if (event.getSlot() < 5 || event.getSlot() > 8) {
             switch (event.getClick()) {
                 case LEFT,RIGHT -> mouseClick(event);
@@ -67,12 +73,16 @@ public class BackpackInventory extends DollInvHolder {
             }
         }
         Runnable task = () -> inventory.setContents(updateInventory());
+        PlayerDoll.getScheduler().entityTask(doll, task, 4);
+        /*
         if (PlayerDoll.isFolia) {
             PlayerDoll.getFoliaHelper().entityTask(doll, task, 4);
             //FoliaSupport.entityTask(doll,task,4);
         } else {
             Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),task,4);
         }
+
+         */
 
     }
 
@@ -97,6 +107,7 @@ public class BackpackInventory extends DollInvHolder {
             //buttons.set(27+i,doll.getInventory().getContents()[i+27]);  //inv row3
             //buttons.set(36+i,doll.getInventory().getContents()[i]); //hotbar
         }
+        items[8] = ButtonSetter.setItem(Material.CHEST,null,LangFormatter.YAMLReplace("inventorymenu.actualinv"), null);
         return items;
     }
 

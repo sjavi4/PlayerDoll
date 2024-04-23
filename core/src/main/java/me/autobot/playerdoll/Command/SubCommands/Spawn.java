@@ -6,7 +6,8 @@ import me.autobot.playerdoll.Command.ArgumentType;
 import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Dolls.IDoll;
+
+import me.autobot.playerdoll.Dolls.IServerDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.Util.Configs.PermConfig;
@@ -63,7 +64,7 @@ public class Spawn extends SubCommand {
         PermChecker permChecker = (perm) ->{
             boolean pass = true;
             int count = 0;
-            for (IDoll d : DollManager.ONLINE_DOLL_MAP.values()) {
+            for (IServerDoll d : DollManager.ONLINE_DOLL_MAP.values()) {
                 if (DollConfig.getOnlineDollConfig(d.getBukkitPlayer().getUniqueId()).ownerUUID.getValue().equals(ownerUUID)) {
                     count++;
                 }
@@ -129,7 +130,6 @@ public class Spawn extends SubCommand {
         }
 
          */
-        boolean align = args != null && args.length > 0 && checkArgumentValid(ArgumentType.ALIGN_IN_GRID,args[0]);
         //dollConfig = dollYAML.reloadConfig().getConfig();
         //UUID configUUID = UUID.fromString(dollConfig.getString("UUID"));
         if (PlayerDoll.useBungeeCord && !BasicConfig.get().dollMultiInstance.getValue()) {
@@ -138,7 +138,6 @@ public class Spawn extends SubCommand {
             output.writeUTF(dollConfig.dollUUID.getValue()); // doll UUID
             output.writeUTF(dollName); // doll Name
             output.writeUTF(sender.getUniqueId().toString()); // caller UUID
-            output.writeBoolean(align); // align
 
             Bukkit.getServer().sendPluginMessage(PlayerDoll.getPlugin(),"playerdoll:doll", output.toByteArray());
             //sender.sendPluginMessage(PlayerDoll.getPlugin(), "playerdoll:player", output.toByteArray());
@@ -151,6 +150,6 @@ public class Spawn extends SubCommand {
             Bukkit.reloadWhitelist();
         }
 
-        DollManager.getInstance().spawnDoll(dollName, UUID.fromString(dollConfig.dollUUID.getValue()),sender,align);
+        DollManager.getInstance().spawnDoll(dollName, UUID.fromString(dollConfig.dollUUID.getValue()),sender);
     }
 }

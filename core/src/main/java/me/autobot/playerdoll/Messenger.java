@@ -38,12 +38,11 @@ public class Messenger implements PluginMessageListener {
             String dollUUID = input.readUTF(); // doll UUID
             String dollName = input.readUTF(); // doll Name
             String callerUUID = input.readUTF(); // caller UUID
-            boolean align = input.readBoolean(); // align
-            success(dollUUID, dollName, callerUUID, align);
+            success(dollUUID, dollName, callerUUID);
         }
     }
 
-    private void success(String dollUUID, String dollName, String callerUUID, boolean align) {
+    private void success(String dollUUID, String dollName, String callerUUID) {
         Player sender = Bukkit.getPlayer(UUID.fromString(callerUUID));
         if (sender == null) {
             return;
@@ -52,6 +51,6 @@ public class Messenger implements PluginMessageListener {
             Bukkit.getOfflinePlayer(UUID.fromString(dollUUID)).setWhitelisted(true);
             Bukkit.reloadWhitelist();
         }
-        DollManager.getInstance().spawnDoll(dollName, UUID.fromString(dollUUID),sender,align);
+        DollManager.getInstance().spawnDoll(dollName, UUID.fromString(dollUUID),sender);
     }
 }

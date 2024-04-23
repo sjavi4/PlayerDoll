@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.Command;
 
+import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.Util.LangFormatter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,9 +30,11 @@ public class CommandHelper implements CommandExecutor, TabCompleter {
                 if (!player.isOp()) {
                     if (commandType.checkPermission(player, dollName)) {
                         commandType.execute(player, dollName, arguments);
-                    };
+                    }
                 } else {
-                    if (commandType.onlineStatus.valid(dollName)) {
+                    if (dollName.equals("!") && BasicConfig.get().convertPlayer.getValue()) {
+                        commandType.execute(player, dollName, arguments);
+                    }else if (commandType.onlineStatus.valid(dollName)) {
                         commandType.execute(player, dollName, arguments);
                     } else {
                         player.sendMessage(LangFormatter.YAMLReplaceMessage("OnlineStatus.Invalid"));

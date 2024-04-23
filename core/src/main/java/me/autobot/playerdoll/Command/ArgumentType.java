@@ -2,6 +2,7 @@ package me.autobot.playerdoll.Command;
 
 import me.autobot.playerdoll.Dolls.DollManager;
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.YAMLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -11,10 +12,27 @@ import java.io.File;
 import java.util.*;
 
 public enum ArgumentType {
+    /*
+    PLAYER_SELF {
+        @Override
+        List<String> get() {
+            return List.of("!");
+        }
+        @Override
+        boolean argumentValid(String s) {
+            return s.equals("!") && BasicConfig.get().convertPlayer.getValue();
+        }
+    },
+
+     */
     ONLINE_DOLL {
         @Override
         List<String> get() {
-            return Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith("-")).map(s -> s.substring(1)).toList();
+            return Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .filter(name -> name.startsWith("-"))
+                    .map(s -> s.substring(1))
+                    .toList();
         }
         @Override
         boolean argumentValid(String s) {
@@ -28,7 +46,7 @@ public enum ArgumentType {
         }
         @Override
         boolean argumentValid(String s) {
-            return ONLINE_DOLL.argumentValid(s);
+            return ONLINE_DOLL.argumentValid(s);// || PLAYER_SELF.argumentValid(s);
         }
     }, OFFLINE_DOLL {
         @Override

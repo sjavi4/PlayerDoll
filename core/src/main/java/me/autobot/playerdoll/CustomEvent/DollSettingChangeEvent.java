@@ -1,17 +1,18 @@
 package me.autobot.playerdoll.CustomEvent;
 
 import me.autobot.playerdoll.Dolls.DollConfig;
-import me.autobot.playerdoll.Dolls.IDoll;
+
+import me.autobot.playerdoll.Dolls.IServerDoll;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
 public class DollSettingChangeEvent extends PlayerEvent {
     private static final HandlerList handlerList = new HandlerList();
-    private final IDoll doll;
+    private final IServerDoll doll;
     private boolean toggle;
     private final DollConfig.SettingType type;
-    public DollSettingChangeEvent(Player who, IDoll whoChanged, DollConfig.SettingType type, boolean b) {
+    public DollSettingChangeEvent(Player who, IServerDoll whoChanged, DollConfig.SettingType type, boolean b) {
         super(who);
         this.doll = whoChanged;
         this.type = type;
@@ -26,7 +27,7 @@ public class DollSettingChangeEvent extends PlayerEvent {
     public static HandlerList getHandlerList() {
         return handlerList;
     }
-    public IDoll getWhoChanged() {
+    public IServerDoll getWhoChanged() {
         return doll;
     }
     public boolean getToggleState() {

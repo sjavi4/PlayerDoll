@@ -4,7 +4,6 @@ import me.autobot.playerdoll.Command.SubCommand;
 import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollConfigHelper;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Dolls.IDoll;
 import me.autobot.playerdoll.Util.Configs.PermConfig;
 import me.autobot.playerdoll.Util.LangFormatter;
 import me.autobot.playerdoll.Util.PermChecker;

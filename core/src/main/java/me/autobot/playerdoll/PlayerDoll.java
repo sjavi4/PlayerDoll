@@ -5,11 +5,9 @@ import me.autobot.playerdoll.Command.Utils.CommandHelp;
 import me.autobot.playerdoll.Command.Utils.CommandLimit;
 import me.autobot.playerdoll.Command.Utils.CommandList;
 import me.autobot.playerdoll.Command.Utils.CommandReload;
-import me.autobot.playerdoll.Dolls.DollConfig;
-import me.autobot.playerdoll.Dolls.DollHelper;
-import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Dolls.IDoll;
+import me.autobot.playerdoll.Dolls.*;
 import me.autobot.playerdoll.EventListener.*;
+import me.autobot.playerdoll.Util.scheduler.BukkitScheduler;
 import me.autobot.playerdoll.folia.FoliaHelper;
 import me.autobot.playerdoll.GUIs.Doll.DollInvStorage;
 import me.autobot.playerdoll.GUIs.GUIEventListener;
@@ -19,6 +17,7 @@ import me.autobot.playerdoll.Util.ConfigLoader;
 import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.Util.Configs.FlagConfig;
 import me.autobot.playerdoll.Util.Configs.PermConfig;
+import me.autobot.playerdoll.folia.FoliaScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -50,9 +49,8 @@ public final class PlayerDoll extends JavaPlugin {
     private static int maxPlayer;
     public static final String dollIdentifier = "-";
     private static String dollDirectory = "";
-
     private static FoliaHelper foliaHelper = null;
-
+    private static BukkitScheduler scheduler = null;
 
     public static Plugin getPlugin() {
         return plugin;
@@ -66,6 +64,9 @@ public final class PlayerDoll extends JavaPlugin {
     public static boolean isFolia = false;
     public static FoliaHelper getFoliaHelper() {
         return foliaHelper;
+    }
+    public static BukkitScheduler getScheduler() {
+        return scheduler;
     }
     public static Logger getPluginLogger() {
         return logger;
@@ -97,7 +98,6 @@ public final class PlayerDoll extends JavaPlugin {
         basicConfig = BasicConfig.get();
         FlagConfig.get();
         PermConfig.get();
-        //if (basicConfig.)
         getServerBranch();
 
         initialGUI(pluginManager);
@@ -138,11 +138,15 @@ public final class PlayerDoll extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
+        scheduler.globalTaskDelayed(this::prepareDollSpawn,5);
+        /*
         if (isFolia) {
-            getFoliaHelper().globalTaskDelayed(this::prepareDollSpawn,5);
+            //getFoliaHelper().globalTaskDelayed(this::prepareDollSpawn,5);
         } else {
             Bukkit.getScheduler().runTaskLater(this, this::prepareDollSpawn,5);
         }
+
+         */
 
     }
 
@@ -151,6 +155,8 @@ public final class PlayerDoll extends JavaPlugin {
         if (basicConfig.adjustableMaxPlayer.getValue()) {
             Bukkit.setMaxPlayers(maxPlayer);
         }
+
+        IConnectionManager.instances.forEach(c -> c.getThread().interrupt());
         /*
         YamlConfiguration config = ConfigManager.getConfig();
         if (config != null && config.getBoolean("Global.FlexibleServerMaxPlayer")) {
@@ -159,11 +165,28 @@ public final class PlayerDoll extends JavaPlugin {
 
          */
         dollInvStorage.values().forEach(DollInvStorage::closeAllInv);
-        if (isFolia) {
-            DollManager.ONLINE_DOLL_MAP.values().forEach((DollManager::Folia_Disconnect));
-        } else {
-            DollManager.ONLINE_DOLL_MAP.values().forEach(IDoll::_disconnect);
+        DollManager.ONLINE_DOLL_MAP.values().forEach(doll -> {
+            /*
+            Runnable task = () -> {
+                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "kick " + doll.getBukkitPlayer().getName());
+            };
+            PlayerDoll.getScheduler().globalTask(task);
+
+             */
+            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "kick " + doll.getBukkitPlayer().getName());
+            doll.getBukkitPlayer().kickPlayer("PlayerDoll Disabled");
+        });
+        if (!isFolia) {
+            DollManager.ONLINE_PLAYER_MAP.values().forEach(player -> player.getBukkitPlayer().kickPlayer("Server Closed"));
         }
+        /*
+        if (isFolia) {
+            DollManager.ONLINE_DOLL_MAP.values().forEach(DollManager::Folia_Disconnect);
+        } else {
+            DollManager.ONLINE_DOLL_MAP.values().forEach(IServerDoll::dollDisconnect);
+        }
+
+         */
         //PermissionManager.save();
 
         /*
@@ -212,6 +235,7 @@ public final class PlayerDoll extends JavaPlugin {
         getCommand("dollList").setExecutor(list);
         getCommand("dollList").setTabCompleter(list);
         //getCommand("dollUpgrade").setExecutor(new CommandUpgrade());
+        //getCommand("dollTransform").setExecutor(new TransCmd());
     }
     private void registerEvent(PluginManager pluginManager) {
         pluginManager.registerEvents(new DollDisconnectEvent(), this);
@@ -307,16 +331,29 @@ public final class PlayerDoll extends JavaPlugin {
             if (getClass("io.papermc.paper.threadedregions.RegionizedServer")) {
                 isFolia = true;
                 foliaHelper = new FoliaHelper(this);
+                scheduler = new FoliaScheduler(this);
+                return;
             } else if (getClass("com.destroystokyo.paper.PaperConfig") || getClass("io.papermc.paper.configuration.Configuration")) {
                 isPaperSeries = true;
             } else if (getClass(("org.spigotmc.SpigotConfig"))) {
                 isSpigot = true;
             }
+            scheduler = new BukkitScheduler(this);
         } else {
             switch (mod.toLowerCase()) {
-                case "spigot" -> PlayerDoll.isSpigot = true;
-                case "paperseries" -> PlayerDoll.isPaperSeries = true;
-                case "folia" -> PlayerDoll.isFolia = true;
+                case "spigot" -> {
+                    PlayerDoll.isSpigot = true;
+                    scheduler = new BukkitScheduler(this);
+                }
+                case "paperseries" -> {
+                    PlayerDoll.isPaperSeries = true;
+                    scheduler = new BukkitScheduler(this);
+                }
+                case "folia" -> {
+                    PlayerDoll.isFolia = true;
+                    foliaHelper = new FoliaHelper(this);
+                    scheduler = new FoliaScheduler(this);
+                }
                 default -> {
                     logger.log(Level.WARNING,"Unknown mod, Disabled Plugin.");
                     getPluginLoader().disablePlugin(this);

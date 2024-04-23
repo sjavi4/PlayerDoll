@@ -18,16 +18,20 @@ public class PlayerJoin implements Listener {
         if (!DollManager.ONLINE_DOLL_MAP.containsKey(player.getUniqueId())) {
             return;
         }
+        /*
         if (player.getName().length() == 1) {
             // Wrong Joining
             PlayerDoll.getPluginLogger().log(Level.INFO, "Did not capture this Doll, please Respawn");
             Runnable task = () -> player.kickPlayer("Wrong Joining");
+
             if (PlayerDoll.isFolia) {
                 PlayerDoll.getFoliaHelper().entityTask(player,task,1);
             } else {
                 task.run();
             }
         }
+
+         */
 
         if (!BasicConfig.get().broadcastDollJoin.getValue()) {
             event.setJoinMessage(null);

@@ -3,13 +3,14 @@ package me.autobot.playerdoll.EventListener;
 import me.autobot.playerdoll.CustomEvent.DollJoinEvent;
 import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Dolls.IDoll;
+
+import me.autobot.playerdoll.Dolls.IServerDoll;
 import me.autobot.playerdoll.GUIs.Doll.DollInvStorage;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import me.autobot.playerdoll.Util.Configs.PermConfig;
-import me.autobot.playerdoll.Util.LangFormatter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,11 @@ public class DollJoin implements Listener {
     public void onDollJoin(DollJoinEvent event) {
         // Doll Joining
         Player player = event.getPlayer();
+        Player caller = event.getCaller();
+        IServerDoll doll = event.getDoll();
+        if (caller != null) {
+            player.teleport(caller);
+        }
 
         PermissionAttachment attachment = player.addAttachment(PlayerDoll.getPlugin());
 
@@ -46,7 +52,6 @@ public class DollJoin implements Listener {
         }
 
          */
-        IDoll doll = event.getDoll();
 
         DollConfig dollConfig = DollConfig.getOnlineDollConfig(player.getUniqueId());
         doll.setDollConfig(dollConfig);
@@ -188,11 +193,15 @@ public class DollJoin implements Listener {
                 }
                 String replaced = s.replaceAll("%name%",player.getName()).replaceAll("%uuid%",player.getUniqueId().toString());
                 Runnable task = () -> player.chat(replaced);
+                PlayerDoll.getScheduler().entityTask(player, task, 1 + count*interval);
+                /*
                 if (PlayerDoll.isFolia) {
                     PlayerDoll.getFoliaHelper().entityTask(player,task, 1+count*interval);
                 } else {
                     Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),task,1+count*interval);
                 }
+
+                 */
                 count++;
             }
         }

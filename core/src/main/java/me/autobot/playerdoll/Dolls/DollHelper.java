@@ -14,6 +14,8 @@ public class DollHelper {
         try {
             //Trigger Static block to initialize itself
             Class.forName("me.autobot.playerdoll." + version + ".Event.SettingChangeEvent");
+            //Class.forName("me.autobot.playerdoll." + version + ".Event.TransformEvent");
+            Class.forName("me.autobot.playerdoll." + version + ".Network.ConnectionManager");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException();
         }

@@ -28,6 +28,7 @@ public class DollDamageEvent implements Listener {
 
                  */
             }
+            /*
             if (player.isBlocking() && event.getDamage(EntityDamageEvent.DamageModifier.BLOCKING) != 0) {
                 // Fix weird knock-back while holding shield
                 AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
@@ -38,6 +39,8 @@ public class DollDamageEvent implements Listener {
                 else Bukkit.getScheduler().runTask(PlayerDoll.getPlugin(),r);
                 player.getWorld().playSound(player, Sound.ITEM_SHIELD_BLOCK,0.8F, 0.8F + new Random().nextFloat()*0.4F);
             }
+
+             */
         }
     }
 }

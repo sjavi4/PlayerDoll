@@ -19,15 +19,21 @@ public class DollDisconnectEvent implements Listener {
         Player player = event.getPlayer();
         String name = player.getName();
         UUID uuid = player.getUniqueId();
+
+        BasicConfig basicConfig = BasicConfig.get();
+
         var dollMap = DollManager.ONLINE_DOLL_MAP;
         if (!dollMap.containsKey(uuid)) {
+            if (basicConfig.convertPlayer.getValue()) {
+                DollManager.ONLINE_PLAYER_MAP.remove(uuid);
+            }
             //playerDisconnect(event);
             return;
         }
         dollMap.get(uuid).getCaller().sendMessage( LangFormatter.YAMLReplaceMessage("DollDisconnected",name));
         event.getPlayer().setFallDistance(0.0f);
 
-        BasicConfig basicConfig = BasicConfig.get();
+
         if (basicConfig.adjustableMaxPlayer.getValue()) {
             Bukkit.setMaxPlayers(Bukkit.getMaxPlayers()-1);
         }

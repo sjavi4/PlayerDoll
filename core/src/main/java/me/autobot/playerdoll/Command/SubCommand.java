@@ -4,7 +4,9 @@ package me.autobot.playerdoll.Command;
 import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
 import me.autobot.playerdoll.Dolls.DollConfig;
 import me.autobot.playerdoll.Dolls.DollManager;
-import me.autobot.playerdoll.Dolls.IDoll;
+
+import me.autobot.playerdoll.Dolls.IServerDoll;
+import me.autobot.playerdoll.Util.Configs.BasicConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -13,18 +15,21 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class SubCommand {
     public Player player;
     public Player dollPlayer;
-    public IDoll doll;
+    public IServerDoll doll;
     public EntityPlayerActionPack actionPack;
     //public DollConfigManager dollConfigManager;
     //public YAMLManager dollYAML;
     //public YamlConfiguration dollConfig;
     public DollConfig dollConfig;
     public DollDataValidator validator;
-    private final String dollName;
     public SubCommand(Player sender, String dollName) {
         this.player = sender;
-        this.dollName = dollName;
         this.dollPlayer = Bukkit.getPlayer(dollName);
+
+        if (DollManager.dollShortName(dollName).equals("!") && BasicConfig.get().convertPlayer.getValue()) {
+            this.actionPack = DollManager.ONLINE_PLAYER_MAP.get(sender.getUniqueId()).getActionPack();
+            return;
+        }
 
         if (dollPlayer == null) {
             dollConfig = DollConfig.getOfflineDollConfig(dollName);

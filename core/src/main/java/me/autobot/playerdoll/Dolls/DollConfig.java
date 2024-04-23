@@ -23,7 +23,7 @@ public class DollConfig extends AbstractConfig {
     public static final Map<UUID,DollConfig> DOLL_CONFIGS = new HashMap<>();
     public static final Map<String,DollConfig> OFFLINE_DOLL_CONFIGS = new HashMap<>();
     public static final String NULL_UUID = "00000000-0000-0000-0000-000000000000";
-    public IDoll doll;
+    public IServerDoll doll;
     public String name;
     public static final DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
     private String today;
@@ -79,7 +79,7 @@ public class DollConfig extends AbstractConfig {
         if (DOLL_CONFIGS.containsKey(dollUUID)) {
             return DOLL_CONFIGS.get(dollUUID);
         }
-        IDoll doll = DollManager.ONLINE_DOLL_MAP.get(dollUUID);
+        IServerDoll doll = DollManager.ONLINE_DOLL_MAP.get(dollUUID);
         File file = new File(PlayerDoll.getDollDirectory(), doll.getBukkitPlayer().getName()+".yml");
         return new DollConfig(doll, YamlConfiguration.loadConfiguration(file));
     }
@@ -94,7 +94,7 @@ public class DollConfig extends AbstractConfig {
         //saveConfig();
     }
 
-    public DollConfig(IDoll doll, YamlConfiguration config) {
+    public DollConfig(IServerDoll doll, YamlConfiguration config) {
         super(config);
         this.doll = doll;
         //this.dollName = new ConfigKey<>(this, "Doll-Name", doll.getBukkitPlayer().getName());
