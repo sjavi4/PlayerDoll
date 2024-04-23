@@ -1,7 +1,7 @@
 package me.autobot.playerdoll.v1_20_R4.CarpetMod;
 
 import me.autobot.playerdoll.CarpetMod.EntityPlayerActionPack;
-import me.autobot.playerdoll.Dolls.IDoll;
+import me.autobot.playerdoll.Dolls.IServerPlayerExt;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +25,7 @@ public class NMSPlayerEntityActionPack extends EntityPlayerActionPack {
 
     private final ServerPlayer player;
     public NMSPlayerEntityActionPack(ServerPlayer playerIn) {
-        super(playerIn.getBukkitEntity(), (IDoll) playerIn);
+        super(playerIn.getBukkitEntity(), (IServerPlayerExt) playerIn);
         player = playerIn;
         tracer = new NMSTracer();
     }
@@ -118,7 +118,7 @@ public class NMSPlayerEntityActionPack extends EntityPlayerActionPack {
         return ((EntityHitResult)entityHit).getLocation().subtract(e.getX(), e.getY(), e.getZ());
     }
     @Override
-    protected String entityInteractAt(Object entity, IDoll doll, Object relativeHitPos, Object hand) {
+    protected String entityInteractAt(Object entity, IServerPlayerExt serverPlayerExt, Object relativeHitPos, Object hand) {
         return ((Entity)entity).interactAt(player ,(Vec3) relativeHitPos, (InteractionHand) hand).toString();
     }
     @Override

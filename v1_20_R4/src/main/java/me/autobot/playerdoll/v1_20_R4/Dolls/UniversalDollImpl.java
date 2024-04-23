@@ -2,12 +2,14 @@ package me.autobot.playerdoll.v1_20_R4.Dolls;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import me.autobot.playerdoll.CustomEvent.DollJoinEvent;
 import me.autobot.playerdoll.Dolls.DollConfig;
-import me.autobot.playerdoll.Dolls.IDoll;
+
+import me.autobot.playerdoll.Dolls.IDollLegacy;
+import me.autobot.playerdoll.Dolls.IServerDoll;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.v1_20_R4.CarpetMod.NMSPlayerEntityActionPack;
 import me.autobot.playerdoll.v1_20_R4.Network.CursedConnections;
+import me.autobot.playerdoll.v1_20_R4.player.ServerPlayerExt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -26,11 +28,12 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Collections;
 import java.util.UUID;
 
-public class UniversalDollImpl extends ServerPlayer implements IDoll {
+public class UniversalDollImpl extends ServerPlayer implements IDollLegacy {
     DollConfig dollConfig;
     public Connection serverConnection;
     ServerPlayer player;
@@ -45,20 +48,24 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
         actionPack.onUpdate();
     };
     int dollTickCount = -1;
-    public static IDoll callSpawn(String name, UUID uuid) {
+    public static IDollLegacy callSpawn(String name, UUID uuid) {
         MinecraftServer server = CursedConnections.server;
         ServerLevel serverLevel = server.overworld();
         GameProfile profile = new GameProfile(uuid,name);
         return new UniversalDollImpl(server,serverLevel,profile);
     }
+    public UniversalDollImpl(ServerPlayer realPlayer) {
+        super(realPlayer.server, realPlayer.serverLevel(), realPlayer.getGameProfile(), realPlayer.clientInformation());
+    }
     public UniversalDollImpl(MinecraftServer minecraftserver, ServerLevel worldserver, GameProfile gameprofile) {
         super(minecraftserver, worldserver, gameprofile, ClientInformation.createDefault());
     }
 
+
     public void setup(Player caller) {
         this.player = caller == null ? this : ((CraftPlayer)caller).getHandle();
 
-        Bukkit.getPluginManager().callEvent(new DollJoinEvent(this.getBukkitEntity(), player == null ? null : player.getBukkitEntity(), this));
+        //Bukkit.getPluginManager().callEvent(new DollJoinEvent(this.getBukkitEntity(), player == null ? null : player.getBukkitEntity(), this));
         //this.dollConfig = DollConfig.getOnlineDollConfig(this.uuid);
 
         this.unsetRemoved();
@@ -79,8 +86,7 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
 
         this.actionPack = new NMSPlayerEntityActionPack(this);
 
-        IDoll.setSkin(this.getBukkitEntity(), this);
-
+        IDollLegacy.setSkin(this.getBukkitEntity(), this);
     }
 
     protected void sendPacket(Packet<?> packet) {
@@ -102,7 +108,8 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
                 updateActionTask.run();
             } else {
                 if (PlayerDoll.isFolia) {
-                    PlayerDoll.getFoliaHelper().entityTask(this.getBukkitEntity(),updateActionTask,1);
+                    PlayerDoll.getFoliaHelper().addTask(updateActionTask);
+                    //PlayerDoll.getFoliaHelper().entityTask(this.getBukkitEntity(),updateActionTask,1);
                 } else {
                     server.tell(server.wrapRunnable(updateActionTask));
                 }
@@ -114,15 +121,16 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
             if (dollTickCount % 10 == 0) {
                 connection.resetPosition();
                 this.serverLevel().getChunkSource().move(this);
-                if (noPhantom) IDoll.resetPhantomStatistic(this.getBukkitEntity());
+                if (noPhantom) IDollLegacy.resetPhantomStatistic(this.getBukkitEntity());
             }
         } catch (NullPointerException ignored) {
             //System.out.println(ignored);
         }
     }
+
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
-        return IDoll.executeHurt(this,getBukkitEntity(),super.hurt(damageSource,f));
+        return IDollLegacy.executeHurt(this,getBukkitEntity(),super.hurt(damageSource,f));
     }
     @Override
     public boolean canBeSeenAsEnemy() {
@@ -140,6 +148,7 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
         this.setHealth(20.0f);
         super.disconnect();
         sendPacket(new ClientboundPlayerInfoRemovePacket(Collections.singletonList(this.getUUID())));
+        /*
         Runnable kickTask = () -> Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "kick " + this.getBukkitEntity().getName());
 
         if (PlayerDoll.isFolia) {
@@ -147,6 +156,8 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
         } else {
             kickTask.run();
         }
+
+         */
     }
 
     @Override
@@ -154,11 +165,7 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
         doCheckFallDamage(0.0, y, 0.0, onGround);
     }
 
-    @Override
-    public void setPortalCooldown() {
-        super.setPortalCooldown();
-        this.changeDimension(this.serverLevel());
-    }
+    // IDK-why-Way to fix portal cooldown counter not working
     @Override
     public Entity changeDimension(ServerLevel serverLevel) {
         if (wonGame) {
@@ -169,6 +176,11 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
             connection.player.hasChangedDimension();
         }
         return connection.player;
+    }
+    @Override
+    public Entity changeDimension(ServerLevel serverLevel, PlayerTeleportEvent.TeleportCause cause) {
+        super.changeDimension(serverLevel, cause);
+        return this.changeDimension(serverLevel);
     }
 
 
@@ -189,7 +201,7 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
         //return Bukkit.getOfflinePlayer(UUID.fromString(configManager.config.getString("Owner.UUID")));
     }
 
-    
+
     @Override
     public void _kill() {
         kill();
@@ -252,4 +264,5 @@ public class UniversalDollImpl extends ServerPlayer implements IDoll {
     public void setDollConfig(DollConfig config) {
         this.dollConfig = config;
     }
+
 }

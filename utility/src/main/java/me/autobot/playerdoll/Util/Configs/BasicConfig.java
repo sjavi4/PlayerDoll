@@ -31,6 +31,7 @@ public class BasicConfig extends AbstractConfig {
     public final ConfigKey<BasicConfig,Integer> dollChatWhenJoinInterval;
     public final ConfigKey<BasicConfig,List<String>> dollChatWhenJoin;
     public final ConfigKey<BasicConfig,Boolean> dollMultiInstance;
+    public final ConfigKey<BasicConfig,Boolean> convertPlayer;
 
     @SuppressWarnings("unchecked")
     public BasicConfig(YamlConfiguration conf) {
@@ -55,6 +56,7 @@ public class BasicConfig extends AbstractConfig {
         this.dollChatWhenJoinInterval = new ConfigKey<>(this, "chat-when-join-interval", 10);
         this.dollChatWhenJoin = new ConfigKey<>(this,"chat-when-join", DEFAULT_STRING_LIST);
         this.dollMultiInstance = new ConfigKey<>(this, "doll-multi-instance", false);
+        this.convertPlayer = new ConfigKey<>(this, "convert-player", false);
         ConfigLoader.get().saveConfig(this.yamlConfiguration, ConfigLoader.ConfigType.BASIC);
     }
 

@@ -1,7 +1,8 @@
 package me.autobot.playerdoll.v1_20_R4.CarpetMod;
 
 import me.autobot.playerdoll.CarpetMod.Tracer;
-import me.autobot.playerdoll.v1_20_R4.Dolls.UniversalDollImpl;
+import me.autobot.playerdoll.Dolls.IServerPlayerExt;
+import me.autobot.playerdoll.v1_20_R4.player.ServerDoll;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
@@ -72,6 +73,6 @@ public class NMSTracer extends Tracer {
     }
     @Override
     protected Object castServerPlayer(Object source) {
-        return (UniversalDollImpl)source;
+        return (IServerPlayerExt)source;
     }
 }

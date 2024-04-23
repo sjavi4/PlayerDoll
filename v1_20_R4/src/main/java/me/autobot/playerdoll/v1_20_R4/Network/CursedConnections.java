@@ -28,6 +28,20 @@ public class CursedConnections {
     private static final String serverIP = server.getLocalIp();
     private static final int serverPort = server.getPort();
     private static final InetSocketAddress serverAddress = new InetSocketAddress(serverIP,serverPort);
+
+    private static Field connectionFieldFolia;
+
+    static {
+        if (PlayerDoll.isFolia) {
+            try {
+                Class<?> clazz = FoliaHelper.FOLIA_REGIONIZED_SERVER;
+                connectionFieldFolia = clazz.getDeclaredField("connections");
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public static void doConnection(Player caller, String name, UUID uuid) {
         CursedClientConnection clientConnection = CursedClientConnection.connectToServer(serverAddress);
         CompletableFuture<Void> afterConnected = CompletableFuture.supplyAsync(() -> {
@@ -79,14 +93,15 @@ public class CursedConnections {
     @SuppressWarnings("unchecked")
     public static List<Connection> getServerConnectionList() {
         if (PlayerDoll.isFolia) {
-            try {
-                Class<?> clazz = FoliaHelper.FOLIA_REGIONIZED_SERVER;
-                Object serverInstance = FoliaHelper.REGOINIZED_SERVER;
-                Field connections = clazz.getDeclaredField("connections");
-                connections.setAccessible(true);
-                return (List<Connection>) connections.get(serverInstance);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException(e);
+            if (connectionFieldFolia == null) {
+                return null;
+            } else {
+                try {
+                    connectionFieldFolia.setAccessible(true);
+                    return (List<Connection>) connectionFieldFolia.get(FoliaHelper.REGOINIZED_SERVER);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
             }
         } else {
             return server.getConnection().getConnections();

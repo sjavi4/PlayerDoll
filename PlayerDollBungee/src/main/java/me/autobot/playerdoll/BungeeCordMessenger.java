@@ -52,13 +52,12 @@ public class BungeeCordMessenger implements Listener {
             String dollUUID = input.readUTF(); // doll UUID
             String dollName = input.readUTF(); // doll Name
             String callerUUID = input.readUTF(); // caller UUID
-            boolean align = input.readBoolean(); // align
 
             ProxiedPlayer caller = Proxy.getInstance().getProxy().getPlayer(UUID.fromString(callerUUID));
             if (caller == null) {
                 return;
             }
-            PendingMessage pendingMessage = new PendingMessage(caller, dollUUID, dollName, align);
+            PendingMessage pendingMessage = new PendingMessage(caller, dollUUID, dollName);
             PENDING_MESSAGE.add(pendingMessage);
 
             // Query All Servers
@@ -87,7 +86,6 @@ public class BungeeCordMessenger implements Listener {
                     output.writeUTF(message.dollUUID); // doll UUID
                     output.writeUTF(message.dollName); // doll Name
                     output.writeUTF(message.player.getUniqueId().toString()); // caller UUID
-                    output.writeBoolean(message.align); // align
 
                     message.player.getServer().sendData("playerdoll:doll", output.toByteArray());
                     break;

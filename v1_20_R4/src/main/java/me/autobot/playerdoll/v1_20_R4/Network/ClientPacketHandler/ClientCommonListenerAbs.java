@@ -26,11 +26,15 @@ public abstract class ClientCommonListenerAbs implements ClientCommonPacketListe
         send(new ServerboundResourcePackPacket(clientboundResourcePackPushPacket.id(), ServerboundResourcePackPacket.Action.ACCEPTED));
         send(new ServerboundResourcePackPacket(clientboundResourcePackPushPacket.id(), ServerboundResourcePackPacket.Action.DOWNLOADED));
         Runnable task = () -> send(new ServerboundResourcePackPacket(clientboundResourcePackPushPacket.id(), ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED));
+        PlayerDoll.getScheduler().globalTaskDelayed(task, 25L);
+        /*
         if (PlayerDoll.isFolia) {
             PlayerDoll.getFoliaHelper().globalTaskDelayed(task,25L);
         } else {
             Bukkit.getScheduler().runTaskLater(PlayerDoll.getPlugin(),task,25L);
         }
+
+         */
     }
 
     @Override
