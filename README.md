@@ -27,6 +27,12 @@ Pre-1.20.4 versions are temporary un-supported.
     <td>✓</td>
     <td>✓</td>
   </tr>
+  <tr>
+    <td>1.20.5</td>
+    <td>✓</td>
+    <td>Not Release</td>
+    <td>Not Release</td>
+  </tr>
 </table>
 
 ### Cautions
