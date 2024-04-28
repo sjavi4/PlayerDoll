@@ -3,14 +3,14 @@ package me.autobot.playerdoll.v1_20_R4.Network;
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.folia.FoliaHelper;
+import me.autobot.playerdoll.network.DollPacketInjector;
 import me.autobot.playerdoll.v1_20_R4.Network.ClientPacketHandler.ClientHandshakeListener;
 import me.autobot.playerdoll.v1_20_R4.Network.ServerPacketHandler.ServerLoginListener;
-import net.minecraft.SharedConstants;
 import net.minecraft.network.Connection;
 import net.minecraft.network.PacketListener;
-import net.minecraft.network.protocol.handshake.ClientIntent;
-import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
-import net.minecraft.network.protocol.login.LoginProtocols;
+import net.minecraft.network.protocol.common.ClientboundDisconnectPacket;
+import net.minecraft.network.protocol.common.ClientboundKeepAlivePacket;
+import net.minecraft.network.protocol.game.ClientboundLoginPacket;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
@@ -110,7 +110,17 @@ public class CursedConnections {
                         });
                         waitForLoginListener.thenAccept((serverConnection) -> {
                             PlayerDoll.getPluginLogger().log(Level.INFO, "Found Connection");
-                            new DollPacketInjector(connections);
+                            DollPacketInjector injector = new DollPacketInjector(connections.channel);
+                            injector.sendPacketTask = (msg) -> {
+                                if (injector.allowPacketSend && msg instanceof ClientboundLoginPacket) {
+                                    injector.allowPacketSend = false;
+                                    PlayerDoll.getPluginLogger().log(Level.INFO, "Doll Joined Successfully, Suspend Server-side Packet Sending.");
+                                } else if (!injector.allowPacketSend) {
+                                    return msg instanceof ClientboundKeepAlivePacket || msg instanceof ClientboundDisconnectPacket;
+                                }
+                                return injector.allowPacketSend;
+                            };
+                            //new DollPacketInjector(connections);
                             setPacketListener(connections, new ServerLoginListener(server, connections, profile, caller));
                             //connections.setupInboundProtocol(LoginProtocols.SERVERBOUND, new ServerLoginListener(server, connections, profile, caller));
                             clientConnection.send(new ServerboundHelloPacket(name, UUID));
