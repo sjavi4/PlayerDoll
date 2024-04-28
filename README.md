@@ -30,7 +30,7 @@ Pre-1.20.4 versions are temporary un-supported.
   <tr>
     <td>1.20.5</td>
     <td>✓</td>
-    <td>✓ (experiment build)</td>
+    <td>✓ (experimental build #6)</td>
     <td>Not Release</td>
   </tr>
 </table>
