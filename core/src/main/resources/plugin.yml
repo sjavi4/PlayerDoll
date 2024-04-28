@@ -20,9 +20,6 @@ commands:
   dollLimit:
     description: List Permission Info
     permission: playerdoll.limit
-  dollUpgrade:
-    description: Upgrade Player Permission
-    permission: playerdoll.upgrade
 # Most of them are not used
 permissions:
   playerdoll.doll:
@@ -39,9 +36,6 @@ permissions:
     default: true
   playerdoll.limit:
     description: /dollLimit command
-    default: true
-  playerdoll.upgrade:
-    description: /dollUpgrade command
     default: true
 
   # Commands

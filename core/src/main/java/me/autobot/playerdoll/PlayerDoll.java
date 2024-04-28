@@ -75,11 +75,12 @@ public final class PlayerDoll extends JavaPlugin {
     public static boolean useBungeeCord = false;
     @Override
     public void onEnable() {
-        version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        version = Bukkit.getBukkitVersion().split("-")[0];
+        logger = getLogger();
+        //version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         gameVersionCheck();
 
         plugin = this;
-        logger = getLogger();
         maxPlayer = Bukkit.getMaxPlayers();
 
         if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
@@ -313,7 +314,9 @@ public final class PlayerDoll extends JavaPlugin {
     }
     private void gameVersionCheck() {
         switch (version) {
-            case "v1_20_R3", "v1_20_R4" -> {}
+            case "1.20.3", "1.20.4" -> version = "v1_20_R3";
+            case "1.20.5", "1.20.6" -> version = "v1_20_R4";
+            //case "v1_20_R3", "v1_20_R4" -> {}
             default -> logger.log(Level.WARNING, "Unknown or Unsupported Versions, Please Use with Cautions.");
             //getPluginLoader().disablePlugin(this);
             //yield false;
