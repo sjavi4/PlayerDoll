@@ -11,7 +11,7 @@ Release avaliable on Modrinth.
 Please use it with cautious</b>
 
 
-<i>Features provided by this plugin is not GUARANTEE to be fully working, it is not encouraged to treat this plugin as a pay feature from the server.</i>
+<i>Features provided by this plugin are not GUARANTEE to be fully working, it is not encouraged to treat this plugin as a pay feature from the server.</i>
 
 ## Versions
 Other versions and Server Mods are not guaranteed to 100% work<br>
