@@ -5,6 +5,14 @@ Simple Standalone Fake Player Plugin for Spigot 1.20 [Java 17+]
 
 Release avaliable on Modrinth.
 
+## Disclaimer
+
+<b>This plugin is highly dependent on NMS, slightly changes made by Mojang / Server Jar provider might cause this plugin no longer working.<br>
+Please use it with cautious</b>
+
+
+<i>Features provided by this plugin is not GUARANTEE to be fully working, it is not encouraged to treat this plugin as a pay feature from the server.</i>
+
 ## Versions
 Other versions and Server Mods are not guaranteed to 100% work<br>
 Pre-1.20.4 versions are temporary un-supported.
