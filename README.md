@@ -295,21 +295,6 @@ Otherwise, only OP will be able to use the related action.
     <td>Ability to use /doll subCommands</td>
     <td>true (everyone)</td>
   </tr>
-  <tr>
-    <td>playerdoll.reload</td>
-    <td>/dollReload command</td>
-    <td>op</td>
-  </tr>
-  <tr>
-    <td>playerdoll.help</td>
-    <td>/dollHelp command</td>
-    <td>true (everyone)</td>
-  </tr>
-  <tr>
-    <td>playerdoll.list</td>
-    <td>/dollList command</td>
-    <td>true (everyone)</td>
-  </tr>
 </table>
 
 ### Grouped Permission
