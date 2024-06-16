@@ -30,21 +30,21 @@ Pre-1.20.4 versions are temporary un-supported.
     <th>Folia</th>
   </tr>
   <tr>
-    <td>1.20.3</td>
+    <td>1.20.3-1.20.4</td>
     <td>✓</td>
     <td>✓</td>
     <td>✓</td>
   </tr>
   <tr>
-    <td>1.20.4</td>
+    <td>1.20.5-1.20.6</td>
     <td>✓</td>
     <td>✓</td>
     <td>✓</td>
   </tr>
   <tr>
-    <td>1.20.5</td>
+    <td>1.21</td>
     <td>✓</td>
-    <td>✓ (experimental build #6)</td>
+    <td>Not Release</td>
     <td>Not Release</td>
   </tr>
 </table>
