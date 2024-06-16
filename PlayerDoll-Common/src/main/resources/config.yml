@@ -1,0 +1,61 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 23
+
+# Custom Server Mod
+# If plugin has detected the Mod wrongly,
+# or you are using Unknown Server Mod, you can manually set the Mod.
+# Leave it blank when you are already using main Branches, otherwise write a most suitable one
+# Spigot / PaperSeries (include Paper/Purpur/...) / Folia
+
+server-mod: ''
+# Language file
+# it loads language/EXAMPLE.yml
+plugin-language: default
+check-update: true
+update-replace-config: false
+preserved-doll-name:
+    - ''
+adjustable-max-player: true
+server-max-doll: -1
+
+broadcast-doll-death: true
+broadcast-doll-join: false
+broadcast-doll-disconnect: false
+
+# Add permission to all Dolls
+# It could be helpful in some circumstances
+doll-permission:
+  - ''
+
+# Delay between each message (in tick)
+# Avoid Spamming message too fast
+chat-when-join-interval: 10
+
+# What to say by Doll when Joined
+# Each element represents a message
+# Use "/" to indicate command
+# Execution order : from top to bottom
+# Variables : %name% -> Player Name; %uuid% -> Player UUID
+# write in quoted String: 'msg'
+chat-when-join:
+  - ''
+
+# Manipulate player when Joining Server
+# To support some doll actions
+convert-player: false
+
+# Broadcast kick reason for convert player
+# Call when server is reload or shutdown
+broadcast-convert-shutdown: true
+
+
+# Server IP
+# If 127.0.0.1 is not working, try the method below
+# for Windows, check "ipconfig /all" (IPv4)
+# for Linux, check "curl ipconfig/ip"
+server-ip: 127.0.0.1
+
+# Server Port
+# for joining server
+# see server.properties - server-port
+server-port: 25565
