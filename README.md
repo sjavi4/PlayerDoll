@@ -76,13 +76,11 @@ v1.25 : Doll now will connect to server by Emulating a client.<br>
 ### Note
 Some commands are not usable when Doll is on Spawn Protection Area
 
-All all [action] are specify as this option.
-```
-once : Do the action once (default when not stated)
-interval <intervals> <offset> : Do the action by intervals(ticks) and delayed by offset(ticks)
-continuous : Continuously repeat the action
-```
-`[] represents optional; <> represents reqiured`
+<b>Commands are now registered in vanilla brigadier</b>
+Please report when any problems found on the command system
+
+- playerdoll:doll / doll are commands that obey checkings
+- playerdoll:dollmanage / dollmanage are commands that bypass unnecessary checking (OP only)
 
 <table>
   <tr>
@@ -92,22 +90,16 @@ continuous : Continuously repeat the action
     <th>Note</th>
   </tr>
   <tr>
-    <td>attack [action]</td>
+    <td>attack</td>
     <td>playerdoll.command.attack</td>
     <td>Doll attacks(left click) towards it's line of sight</td>
     <td></td>
   </tr>
   <tr>
-    <td>copy <Target></td>
-    <td>playerdoll.command.copy</td>
-    <td>Copy other Doll's action to Doll</td>
-    <td></td>
-  </tr>
-  <tr>
     <td>create [skinName]</td>
-    <td>playerdoll.command.create</td>
+    <td>playerdoll.command.create<br>playerdoll.argument.create.skin</td>
     <td>Register Doll to server</td>
-    <td>skinName: Any authenticated player name<br>Default using creator's skin<br>Offline server uses default skins</td>
+    <td>skinName: Any authenticated player name<br>Offline server uses default skins</td>
   </tr>
   <tr>
     <td>despawn</td>
@@ -116,10 +108,16 @@ continuous : Continuously repeat the action
     <td></td>
   </tr>
   <tr>
-    <td>drop [stack/single] [slots/action]</td>
+    <td>drop</td>
     <td>playerdoll.command.drop</td>
-    <td>Drop Doll's Item from Slot</td>
-    <td>stack:Drop in maximum amount<br>Default:Drop 1 handheld item</td>
+    <td>Drop item</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dropStack</td>
+    <td>playerdoll.command.drop</td>
+    <td>Drop item in stack</td>
+    <td></td>
   </tr>
   <tr>
     <td>dismount</td>
@@ -155,7 +153,7 @@ continuous : Continuously repeat the action
     <td>inv</td>
     <td>playerdoll.command.inv</td>
     <td>Open Doll's inventory (snapshot)</td>
-    <td></td>
+    <td>access actual inventory inside GUI</td>
   </tr>
   <tr>
     <td>jump [action]</td>
@@ -164,16 +162,16 @@ continuous : Continuously repeat the action
     <td></td>
   </tr>
   <tr>
-    <td>look &lt;yaw&gt; &lt;pitch&gt;<br>look &lt;direction/player&gt;</td>
+    <td>look</td>
     <td>playerdoll.command.look</td>
-    <td>Copy Doll's head to target's orientation</td>
-    <td>[yaw pitch]In +/-ve decimal</td>
+    <td>set Doll head to certain direction</td>
+    <td></td>
   </tr>
   <tr>
-    <td>lookat &lt;X&gt; &lt;Y&gt; &lt;Z&gt;<br>lookat &lt;player&gt;<br>lookat target [action]</td>
+    <td>lookat</td>
     <td>playerdoll.command.lookat</td>
-    <td>Set Doll's head pointing to player/coordinates/Entity</td>
-    <td>[X Y Z]In +/-ve decimal</td>
+    <td>Set Doll's head pointing to Entity</td>
+    <td></td>
   </tr>
   <tr>
     <td>menu</td>
@@ -188,9 +186,9 @@ continuous : Continuously repeat the action
     <td></td>
   </tr>
   <tr>
-    <td>move [forwards/backwards]</td>
+    <td>move</td>
     <td>playerdoll.command.move</td>
-    <td>Assign Doll to move forward(W) or backward(S)</td>
+    <td>Assign Doll to move in 4 directions</td>
     <td></td>
   </tr>
   <tr>
@@ -215,58 +213,64 @@ continuous : Continuously repeat the action
     <td>slot [1-9]</td>
     <td>playerdoll.command.slot</td>
     <td>Set Doll's Handheld Slot</td>
-    <td>Default:Slot 1</td>
+    <td></td>
   </tr>
   <tr>
-    <td>sneak [true/false]</td>
+    <td>sneak</td>
     <td>playerdoll.command.sneak</td>
-    <td>Toggle Doll to (un)sneak</td>
-    <td>Default:Opposite from Current</td>
+    <td>Set sneak</td>
+    <td></td>
   </tr>
   <tr>
-    <td>spawn [gridded]</td>
+    <td>spawn</td>
     <td>playerdoll.command.spawn</td>
-    <td>Spawn Doll at player position and copy player's pitch and yaw</td>
-    <td>gridded: Align at nearest line/quarter center</td>
+    <td>Spawn Doll at player</td>
+    <td></td>
   </tr>
   <tr>
-    <td>sprint [true/false]</td>
+    <td>sprint</td>
     <td>playerdoll.command.sprint</td>
-    <td>Toggle Doll to (un)sprint</td>
-    <td>Default:Opposite from Current</td>
+    <td>Set sprint</td>
+    <td></td>
   </tr>
   <tr>
-    <td>stop [all/movement]</td>
+    <td>stop</td>
     <td>playerdoll.command.stop</td>
-    <td>Stop Doll Action</td>
-    <td>Default:All</td>
-  </tr>
-  <tr>
-    <td>strafe [left/right]</td>
-    <td>playerdoll.command.strafe</td>
-    <td>Assign Doll to move left(A) or right(D)</td>
+    <td>Stop All action</td>
     <td></td>
   </tr>
   <tr>
-    <td>swap [action]</td>
+    <td>swapHands</td>
     <td>playerdoll.command.swap</td>
-    <td>Swap item between Doll's main hand and off hand</td>
+    <td>Swap item between main hand and off hand</td>
     <td></td>
   </tr>
   <tr>
-    <td>tp [gridded]</td>
+    <td>tp</td>
     <td>playerdoll.command.tp</td>
-    <td>Teleport Doll to player and copy player's pitch and yaw</td>
-    <td>gridded: Align at nearest line/quarter center</td>
+    <td>Teleport Doll to player</td>
+    <td></td>
   </tr>
   <tr>
-    <td>turn &lt;yaw&gt; &lt;pitch&gt;</td>
+    <td>turn</td>
     <td>playerdoll.command.turn</td>
     <td>Rotate Doll's head by yaw(horizontal) and pitch(vertical)</td>
-    <td>[yaw pitch]In +/-ve decimal</td>
+    <td></td>
   </tr>
   <tr>
-    <td>use [action]</td>
+    <td>unsneak</td>
+    <td>playerdoll.command.sneak</td>
+    <td>Set unsneak</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>unsprint</td>
+    <td>playerdoll.command.sprint</td>
+    <td>Set unsprint</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>use</td>
     <td>playerdoll.command.use</td>
     <td>Doll uses/interacts(right click) towards it's line of sight</td>
     <td></td>
@@ -354,7 +358,6 @@ Otherwise, only OP will be able to use the related action.
         <li>playerdoll.command.sprint</li>
         <li>playerdoll.command.stop</li>
         <li>playerdoll.command.move</li>
-        <li>playerdoll.command.strafe</li>
         <li>playerdoll.command.jump</li>
         <li>playerdoll.command.tp</li>
       </ul>
@@ -366,7 +369,6 @@ Otherwise, only OP will be able to use the related action.
     <td>
       <ul>
         <li>playerdoll.command.attack</li>
-        <li>playerdoll.command.copy</li>
         <li>playerdoll.command.dismount</li>
         <li>playerdoll.command.drop</li>
         <li>playerdoll.command.jump</li>
@@ -401,7 +403,6 @@ Otherwise, only OP will be able to use the related action.
     <td>A set of permission for managing Doll</td>
     <td>
       <ul>
-        <li>playerdoll.command.rename</li>
         <li>playerdoll.command.give</li>
       </ul>
     </td>
@@ -417,10 +418,6 @@ Otherwise, only OP will be able to use the related action.
     <th>Description</th>
   </tr>
   <tr>
-    <td>playerdoll.globalflag.echest</td>
-    <td>Global Access of Doll Ender Chest</td>
-  </tr>
-  <tr>
     <td>playerdoll.globalflag.glow</td>
     <td>Set Doll to Glow</td>
   </tr>
@@ -431,10 +428,6 @@ Otherwise, only OP will be able to use the related action.
   <tr>
     <td>playerdoll.globalflag.hostility</td>
     <td>Set Doll to be targeted by mobs</td>
-  </tr>
-  <tr>
-    <td>playerdoll.globalflag.inv</td>
-    <td>Global access of Doll Inventory</td>
   </tr>
   <tr>
     <td>playerdoll.globalflag.invulnerable</td>
@@ -478,10 +471,6 @@ Otherwise, only OP will be able to use the related action.
   </tr>
   <tr>
     <td>playerdoll.personalflag.attack</td>
-    <td>Grant command access for Player</td>
-  </tr>
-  <tr>
-    <td>playerdoll.personalflag.copy</td>
     <td>Grant command access for Player</td>
   </tr>
   <tr>
@@ -582,6 +571,14 @@ Otherwise, only OP will be able to use the related action.
   </tr>
   <tr>
     <td>playerdoll.personalflag.turn</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.unsneak</td>
+    <td>Grant command access for Player</td>
+  </tr>
+  <tr>
+    <td>playerdoll.personalflag.unsprint</td>
     <td>Grant command access for Player</td>
   </tr>
   <tr>
