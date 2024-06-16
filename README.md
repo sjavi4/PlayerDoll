@@ -77,6 +77,7 @@ v1.25 : Doll now will connect to server by Emulating a client.<br>
 Some commands are not usable when Doll is on Spawn Protection Area
 
 <b>Commands are now registered in vanilla brigadier</b>
+
 Please report when any problems found on the command system
 
 - playerdoll:doll / doll are commands that obey checkings
