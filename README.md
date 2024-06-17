@@ -9,7 +9,7 @@ Updated Readme for v1.28
 
 ## Notice
 
-<b>The plugin is finished re-construction and started Test publicly.
+<b>The plugin is finished re-construction and start Testing publicly.
 
 If problems found on newer version, please write an issue. </b>
 
