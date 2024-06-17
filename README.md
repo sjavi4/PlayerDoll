@@ -9,9 +9,9 @@ Updated Readme for v1.28
 
 ## Notice
 
-<b>The plugin is under re-construction, releases for updates and bug fix will be delayed.
+<b>The plugin is finished re-construction and started Test publicly.
 
-If problems found on newer version, try to use an old one. </b>
+If problems found on newer version, please write an issue. </b>
 
 ## Disclaimer
 
