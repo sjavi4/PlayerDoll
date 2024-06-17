@@ -5,6 +5,8 @@ Simple Standalone Fake Player Plugin for Spigot 1.20 [Java 17+]
 
 Release avaliable on Modrinth.
 
+Updated Readme for v1.28
+
 ## Notice
 
 <b>The plugin is under re-construction, releases for updates and bug fix will be delayed.
@@ -50,42 +52,98 @@ Pre-1.20.4 versions are temporary un-supported.
 </table>
 
 ### Cautions
+
 Things like database, multiverse, bungeecord might went wrong (not tested or coded to handle)
 
 Welcome to report any issues (performance, bugs, suggestions, feedback, compatibility tests)
 
-v1.25 : Doll now will connect to server by Emulating a client.<br>
+Doll now will connect to server by Emulating a client.
 - This Should provide a better support in the future.
 
+## How to use
+
+### Upgrade from old version
+1. Backup and delete the old configs, (except doll configs).
+   * Then start up server to regenerate new configs (with comments and usages)
+2. Copy settings from old config to the new one, and set for new config keys according their usage
+
+### In game
+1. player without permission will not display the corrisponding command (or arguments)
+   * `doll` or `playerdoll:doll` are the main commands
+   * `dollmanage` or `playerdoll:dollmanage` are the same from above, but they bypass some optional checking. OP are reqiured by default
+   * To create doll, enter `/doll create <name> [skin]` and wait for server to setup the config.
+   * After creating doll, ender `/doll spawn <name>` to let the doll connect to the server.
+2. Most of the Doll data modification are require Doll to be online.
+   * Except `Remove`
+   * `/doll set` command is Doll specific settings (Doll behavior)
+   * `/doll gset` command is settings for <b>all players</b> (command permission)
+   * `/doll pset` command is settings for <b>specific players</b> (Override Gset if set)
+
+3. Doll Shortcut
+   * Open Doll menu GUI using `sneak` and `right-click` with <b>empty hand</b> (same as /doll menu)
+
+4. Doll inventories
+   * An alternative way to manipulate Doll inventory (`/doll inv`). It is not a direct modification. Detailed usages belows
+   * <b>Actual Doll inventory</b> can be aceessed from the above GUI, by clicking the top right item. Items can be put and take directly
+   * Doll's ender chest (`/doll echest`). Items can be put and take directly
+
+Put items to Doll : Drop item and let Doll pick up
+
+Take items from Doll : Command Drop or perform actions through Doll inventory GUI
 
 
-## Functionalities
-- Do most as player does
-- Able to make changes to the world
-- Support automatic actions
+Similar to vanilla player backpack shortcuts
+```
+Left Click slots in hotbar -> Set handheld slot to target slot
+Right Click slots in hotbar -> Set handheld slot and perform <use> command (not placing block)
+Q (Shift + Q) -> Perform Drop (Drop stack) command on target slot
+F -> Swap between target slot and offhand slot
+Shift Click slots -> Move hotbar/backpack slot to merge or put to the last empty backpack/hotbar slot (if avaliable)
+Number keys -> Move / Swap target slot to the corresponding number key slot in hotbar
+```
+
 
 ## Properties
-1. Once Doll has spawned, playerdata will be created
-2. Once Doll has created, config data will be created
-3. All doll have "-" prefix as identifier to distinguish Real players and Doll
-4. Doll data are expected to not to clash with Real players data (maybe there are players with "-" at the start on their name)
-5. Based on the previous, Doll name has only 15 of name length (obey real player name rule)
-6. Doll are not gaining crafing recipes to reduce storage.
+1. All doll have "-" prefix as identifier to distinguish Real players and Doll
+2. Because of the prefix, Doll name has only 15 of name length (obey real player name rule)
+3. Doll are not gaining crafing recipes to reduce storage.
+4. Doll are not count into sleeping percentage
+5. Doll are default to be surivial mode
+6. Doll quit the game immediate if died (not dropping loot and exp)
+7. Doll being Removed by command will execute die process (loot and exp are determined by gamerule `keepinventory`),<br>all related data will be deleted
 
-## Commands
-### Note
-Some commands are not usable when Doll is on Spawn Protection Area
+## Convert Player
+
+Convert Player is a feature can be set from config `convert-player`.
+- Player will be convert to modified entity when Connect to server
+- Converted Player has the ability to perform doll commands to self
+  * attack, use, swapHands, drop, dropStack, lookat
+- When enabled, some commands will display `_` as self indication
+
+### Notes
+
+If enabled, Server Reload command is not recommanded.
+
+Converted players will be kicked from the server.
+
+(Once reloaded, the plugin has no access to player entity anymore)
+
+
+
+## Commands & Permissions
+
+Some commands are not usable when Doll is on <b>Spawn Protection Area</b>
 
 <b>Commands are now registered in vanilla brigadier</b>
 
 Please report when any problems found on the command system
 
-- playerdoll:doll / doll are commands that obey checkings
-- playerdoll:dollmanage / dollmanage are commands that bypass unnecessary checking (OP only)
+Command are followed by this format
+```/doll <subcommand> <target> <arguments>```
 
 <table>
   <tr>
-    <th>Command<br>(/doll &lt;target&gt; ?)</th>
+    <th>Command</th>
     <th>Permission</th>
     <th>Description</th>
     <th>Note</th>
@@ -97,7 +155,7 @@ Please report when any problems found on the command system
     <td></td>
   </tr>
   <tr>
-    <td>create [skinName]</td>
+    <td>create name [skinName]</td>
     <td>playerdoll.command.create<br>playerdoll.argument.create.skin</td>
     <td>Register Doll to server</td>
     <td>skinName: Any authenticated player name<br>Offline server uses default skins</td>
@@ -157,10 +215,10 @@ Please report when any problems found on the command system
     <td>access actual inventory inside GUI</td>
   </tr>
   <tr>
-    <td>jump [action]</td>
+    <td>jump</td>
     <td>playerdoll.command.jump</td>
     <td>Make Doll jumps</td>
-    <td></td>
+    <td>Not support covert-player</td>
   </tr>
   <tr>
     <td>look</td>
@@ -193,7 +251,7 @@ Please report when any problems found on the command system
     <td></td>
   </tr>
   <tr>
-    <td>pset &lt;player&gt;</td>
+    <td>pset doll player</td>
     <td>playerdoll.command.pset</td>
     <td>Set Doll settings for Specific player</td>
     <td>This will override gset</td>
@@ -211,7 +269,7 @@ Please report when any problems found on the command system
     <td></td>
   </tr>
   <tr>
-    <td>slot [1-9]</td>
+    <td>slot</td>
     <td>playerdoll.command.slot</td>
     <td>Set Doll's Handheld Slot</td>
     <td></td>
@@ -572,27 +630,3 @@ Otherwise, only OP will be able to use the related action.
     <td>Grant command access for Player</td>
   </tr>
 </table>
-
-
-## Shortcut
-- Player sneaks and right click Doll with bare hand can open Doll status GUI (same as Menu)
-
-## Doll inventories
-- Players with permission can access Doll's ender chest directly (put&take)
-- Doll inventory are not supported to do so because of there is no access for armor/offhand slot in GUI view
-
-Put items to Doll : Drop item and let Doll pick up
-
-Take items from Doll : Command Drop or perform actions through Doll inventory navigation GUI
-
-An indirect solution to interact with Doll inventory (upper inventory navigation action) is provided
-
-Similar to vanilla player backpack shortcuts
-```
-Left Click slots in hotbar -> Set handheld slot to target slot
-Right Click slots in hotbar -> Set handheld slot and perform <use> command (not placing block)
-Q (Shift + Q) -> Perform Drop (Drop stack) command on target slot
-F -> Swap between target slot and offhand slot
-Shift Click slots -> Move hotbar/backpack slot to merge or put to the last empty backpack/hotbar slot (if avaliable)
-Number keys -> Move / Swap target slot to the corresponding number key slot in hotbar
-```
