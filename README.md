@@ -110,7 +110,7 @@ Number keys -> Move / Swap target slot to the corresponding number key slot in h
 4. Doll are not count into sleeping percentage
 5. Doll are default to be surivial mode
 6. Doll quit the game immediate if died (not dropping loot and exp)
-7. Doll being Removed by command will execute die process (loot and exp are determined by gamerule `keepinventory`),<br>all related data will be deleted
+7. Doll being Removed by command will execute die process<br>(loot and exp are determined by gamerule `keepinventory`)<br>All related data will be deleted
 
 ## Convert Player
 
