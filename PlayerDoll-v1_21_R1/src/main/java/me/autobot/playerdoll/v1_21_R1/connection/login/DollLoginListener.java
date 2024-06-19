@@ -59,7 +59,7 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl {
 
     @Override
     public void handleLoginAcknowledgement(ServerboundLoginAcknowledgedPacket serverboundloginacknowledgedpacket) {
-        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.SPIGOT) {
+        if (PlayerDoll.serverBranch != PlayerDoll.ServerBranch.FOLIA) {
             // Avoid IllegalStateException "Asynchronous Chunk getEntities call!"
             PacketUtils.ensureRunningOnSameThread(serverboundloginacknowledgedpacket, this, (MinecraftServer) ReflectionUtil.getDedicatedServerInstance());
         }

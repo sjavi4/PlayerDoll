@@ -33,8 +33,9 @@ public class BasicConfig extends AbstractConfig {
 //    public final ConfigKey<BasicConfig,Boolean> dollMultiInstance;
     public final ConfigKey<BasicConfig,Boolean> convertPlayer;
     public final ConfigKey<BasicConfig,Boolean> broadcastConvertShutdown;
-    public final ConfigKey<BasicConfig,String> serverIP;
-    public final ConfigKey<BasicConfig,Integer> serverPort;
+    public final ConfigKey<BasicConfig,String> proxyIP;
+    public final ConfigKey<BasicConfig,Integer> proxyPort;
+    public final ConfigKey<BasicConfig,Integer> proxyAutoJoinDelay;
 
     @SuppressWarnings("unchecked")
     public BasicConfig(YamlConfiguration conf) {
@@ -61,8 +62,9 @@ public class BasicConfig extends AbstractConfig {
 //        this.dollMultiInstance = new ConfigKey<>(this, "doll-multi-instance", false);
         this.convertPlayer = new ConfigKey<>(this, "convert-player", false);
         this.broadcastConvertShutdown = new ConfigKey<>(this, "broadcast-convert-shutdown", true);
-        this.serverIP = new ConfigKey<>(this, "server-ip", "127.0.0.1");
-        this.serverPort = new ConfigKey<>(this, "server-port", 25565);
+        this.proxyIP = new ConfigKey<>(this, "proxy-ip", "127.0.0.1");
+        this.proxyPort = new ConfigKey<>(this, "proxy-port", 25565);
+        this.proxyAutoJoinDelay = new ConfigKey<>(this, "proxy-auto-join-delay", 1);
         ConfigLoader.get().saveConfig(this.yamlConfiguration, ConfigLoader.ConfigType.BASIC);
     }
 

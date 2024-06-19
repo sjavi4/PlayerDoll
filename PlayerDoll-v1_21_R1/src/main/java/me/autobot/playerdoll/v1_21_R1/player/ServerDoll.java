@@ -56,7 +56,7 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     @Override
     public void dollDisconnect(String r) {
         shakeOff();
-        Runnable t = () -> this.connection.disconnect(new DisconnectionDetails(Component.literal(r)));
+        Runnable t = () -> this.connection.disconnect(Component.literal(r));
         if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
             PlayerDoll.scheduler.entityTask(t, getBukkitPlayer());
         } else {
