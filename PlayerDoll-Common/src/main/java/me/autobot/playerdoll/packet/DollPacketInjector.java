@@ -13,6 +13,10 @@ public class DollPacketInjector extends ChannelDuplexHandler {
     //private static final Class<?> playStartConfigPacketClass = ReflectionUtil.getClass("net.minecraft.network.protocol.common.ClientboundStartConfigurationPacket");
     //private static final Class<?> playerPositionClass = ReflectionUtil.getClass("net.minecraft.network.protocol.game.PacketPlayOutPosition");
     public DollPacketInjector(Channel connectionChannel) {
+        ChannelPipeline pipeline = connectionChannel.pipeline();
+        if (pipeline.get("doll_packet_injector") != null) {
+            return;
+        }
         connectionChannel.pipeline().addBefore("packet_handler", "doll_packet_injector", this);
     }
 

@@ -106,16 +106,26 @@ public class CursedConnection {
         //final GameProfile profile = new GameProfile(UUID,name);
         List<Object> serverConnectionList = getServerConnectionList();
         synchronized (serverConnectionList) {
+            //PlayerDoll.LOGGER.info("Connection Size: " + serverConnectionList.size());
             for (Object connections : serverConnectionList) {
-                String addressServer = getChannel(connections).remoteAddress().toString();
-                if (clientAddress.equals(addressServer)) {
+                Channel channel = getChannel(connections);
+                String addressServer = channel.remoteAddress().toString();
+                boolean checkAddress;
+                if (PlayerDoll.BUNGEECORD) {
+                    int clientPort = Integer.parseInt(clientAddress.split(":")[1]);
+                    int checkingPort = Integer.parseInt(addressServer.split(":")[1]);
+                    checkAddress = clientPort < checkingPort && checkingPort - clientPort <= 5;
+                } else {
+                    checkAddress = clientAddress.equals(addressServer);
+                }
+                if (checkAddress) {
                     if (!loginListenerClass.isInstance(getPacketListener(connections))) {
                         //System.out.println("Not login listener");
                         return false;
                     }
-                    new DollPacketInjector(getChannel(connections));
+                    new DollPacketInjector(channel);
                     //System.out.println("set Login Listener");
-                    // Skin skin here
+                    // set skin here
                     profile.getProperties().clear();
                     DollConfig dollConfig = DollConfig.getTemporaryConfig(profile.getName());
                     profile.getProperties().put("textures", new Property("textures", dollConfig.skinProperty.getValue(), dollConfig.skinSignature.getValue()));

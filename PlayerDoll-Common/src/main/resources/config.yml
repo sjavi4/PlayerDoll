@@ -49,13 +49,19 @@ convert-player: false
 broadcast-convert-shutdown: true
 
 
-# Server IP
+# Proxy IP (BungeeCord)
 # If 127.0.0.1 is not working, try the method below
 # for Windows, check "ipconfig /all" (IPv4)
 # for Linux, check "curl ipconfig/ip"
-server-ip: 127.0.0.1
+proxy-ip: 127.0.0.1
 
-# Server Port
+# Proxy Port (BungeeCord)
 # for joining server
 # see server.properties - server-port
-server-port: 25565
+proxy-port: 25565
+
+# Auto Join Delay (BungeeCord)
+# Delay Joining of each Doll
+# Adjust by real performance
+# in second
+proxy-auto-join-delay: 1

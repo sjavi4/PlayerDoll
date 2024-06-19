@@ -14,16 +14,19 @@ public class ClientSocket {
 
     private final GameProfile profile;
     private final Player caller;
+    private SocketReader socketReader;
     public ClientSocket(String dollName, UUID dollUUID, Player caller) {
         this(new GameProfile(dollUUID, dollName), caller);
     }
+
     public ClientSocket(GameProfile profile, Player caller) {
         this.profile = profile;
         this.caller = caller;
         startListen();
         if (connected) {
             SocketHelper.DOLL_CLIENTS.put(profile.getId(), this);
-            new SocketReader(this).start();
+            socketReader = new SocketReader(this);
+            socketReader.start();
         }
     }
 
@@ -34,7 +37,6 @@ public class ClientSocket {
             socket.connect(SocketHelper.HOST, 3000);
             connected = true;
         } catch (IOException e) {
-            e.printStackTrace();
             connected = false;
         }
     }
@@ -45,6 +47,9 @@ public class ClientSocket {
     }
     public Player getCaller() {
         return caller;
+    }
+    public SocketReader getSocketReader() {
+        return socketReader;
     }
 
 }

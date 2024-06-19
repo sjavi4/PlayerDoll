@@ -21,7 +21,8 @@ public class PlayerInteractAtEntity implements Listener {
         }
         Player player = event.getPlayer();
         if (player.isSneaking() && player.getInventory().getItemInMainHand().getType().isAir()) {
-            player.chat("/playerdoll:doll menu " + doll.getName());
+            player.performCommand("playerdoll:doll menu " + doll.getName());
+            //player.performCommand("playerdoll:doll menu " + doll.getName());
         }
     }
 }

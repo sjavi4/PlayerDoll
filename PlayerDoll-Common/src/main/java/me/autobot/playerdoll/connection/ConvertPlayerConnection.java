@@ -16,7 +16,7 @@ public class ConvertPlayerConnection extends Thread {
 
     @Override
     public void run() {
-        PlayerDoll.LOGGER.info("Start Listening Player Connection...");
+        //PlayerDoll.LOGGER.info("Start Listening Player Connection...");
         while (!Thread.currentThread().isInterrupted()) {
             List<Object> connectionList = CursedConnection.getServerConnectionList();
             synchronized (connectionList) {

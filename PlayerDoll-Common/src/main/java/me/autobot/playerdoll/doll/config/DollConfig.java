@@ -54,6 +54,9 @@ public class DollConfig extends AbstractConfig {
     public ConfigKey<DollConfig,Boolean> dollPhantom;
     public ConfigKey<DollConfig,Boolean> dollRealPlayerTickUpdate;
     public ConfigKey<DollConfig,Boolean> dollRealPlayerTickAction;
+    // For BungeeCord record (when Auto-re-join)
+    public ConfigKey<DollConfig,String> dollLastJoinServer;
+
     public Map<FlagConfig.GlobalFlagType, ConfigKey<DollConfig,Boolean>> dollSetting = new EnumMap<>(FlagConfig.GlobalFlagType.class);
     public Map<FlagConfig.PersonalFlagType, Boolean> generalSetting = new EnumMap<>(FlagConfig.PersonalFlagType.class);
     public Map<UUID, EnumMap<FlagConfig.PersonalFlagType, Boolean>> playerSetting = new LinkedHashMap<>();
@@ -125,6 +128,7 @@ public class DollConfig extends AbstractConfig {
         this.ownerUUID = new ConfigKey<> (this,"Owner-UUID", NULL_UUID);
         this.skinProperty = new ConfigKey<>(this, "skin-property", "");
         this.skinSignature = new ConfigKey<>(this, "skin-signature", "");
+        this.dollLastJoinServer = new ConfigKey<>(this, "last-join-server", "");
         getDollSetting();
         getPlayerSetting();
         getGeneralSetting();
@@ -153,6 +157,7 @@ public class DollConfig extends AbstractConfig {
         this.ownerUUID = new ConfigKey<> (this,"Owner-UUID", NULL_UUID);
         this.skinProperty = new ConfigKey<>(this, "skin-property", "");
         this.skinSignature = new ConfigKey<>(this, "skin-signature", "");
+        this.dollLastJoinServer = new ConfigKey<>(this, "last-join-server", "");
 //        this.skinName = new ConfigKey<>(this,"Skin-Data.Name","");
 //        this.skinImageEncoded = new ConfigKey<>(this,"Skin-Data.Skin", "");
 //        this.skinCape = new ConfigKey<>(this,"Skin-Data.Cape","");

@@ -37,29 +37,29 @@ public class DollDataMenu extends AbstractMenu {
         ItemStack slot0 = ItemSetter.setItem(Material.RESPAWN_ANCHOR, ButtonAction.RETURN, 1, LangFormatter.YAMLReplace("control-button.back"),null);
         inventory.setItem(0,slot0);
         buttonMap.put(getPDC(slot0), (player) -> {
-            String commandMenu = String.format("/playerdoll:doll menu %s", dollPlayer.getName());
-            player.chat(commandMenu);
+            String commandMenu = String.format("playerdoll:doll menu %s", dollPlayer.getName());
+            player.performCommand(commandMenu);
         });
 
         ItemStack slot2 = ItemSetter.setItem(Material.OAK_CHEST_BOAT, ButtonAction.OPEN_BACKPACK, 1, LangFormatter.YAMLReplace("inv-menu.inv"),null);
         inventory.setItem(2,slot2);
         buttonMap.put(getPDC(slot2), (player) -> {
-            String commandBackpack = String.format("/playerdoll:doll inv %s", dollPlayer.getName());
-            player.chat(commandBackpack);
+            String commandBackpack = String.format("playerdoll:doll inv %s", dollPlayer.getName());
+            player.performCommand(commandBackpack);
         });
         ItemStack slot3 = ItemSetter.setItem(Material.SHULKER_BOX,ButtonAction.OPEN_ENDER_CHEST, 1, LangFormatter.YAMLReplace("inv-menu.echest"),null);
         ItemSetter.setShulkerBoxPreview(slot3, dollPlayer.getEnderChest().getContents());
         inventory.setItem(3, slot3);
         buttonMap.put(getPDC(slot3), (player) -> {
-            String commandEnderChest = String.format("/playerdoll:doll echest %s", dollPlayer.getName());
-            player.chat(commandEnderChest);
+            String commandEnderChest = String.format("playerdoll:doll echest %s", dollPlayer.getName());
+            player.performCommand(commandEnderChest);
         });
 
         ItemStack slot6 = updateLevel();
         inventory.setItem(6,slot6);
         buttonMap.put(getPDC(slot6), (player)-> {
-            String commandEXP = String.format("/playerdoll:doll exp %s", dollPlayer.getName());
-            player.chat(commandEXP);
+            String commandEXP = String.format("playerdoll:doll exp %s", dollPlayer.getName());
+            player.performCommand(commandEXP);
             inventory.setItem(6, updateLevel());
         });
     }

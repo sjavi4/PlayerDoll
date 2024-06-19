@@ -32,9 +32,9 @@ public abstract class SubCommand {
         return input.split(" ")[0].endsWith("dollmanage");
     }
     protected boolean outputValidProfile(Player sender, GameProfile profile) {
-        if (PlayerDoll.BUNGEECORD) {
-            PlayerDoll.LOGGER.warning("This command is not yet tested in BungeeCord");
-        }
+        //if (PlayerDoll.BUNGEECORD) {
+        //    PlayerDoll.LOGGER.warning("This command is not yet tested in BungeeCord");
+        //}
         if (!validProfile(profile)) {
             ComponentBuilder builder = new ComponentBuilder();
             builder.color(ChatColor.RED).append(new TranslatableComponent("argument.player.unknown"));

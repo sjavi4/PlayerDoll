@@ -20,6 +20,8 @@ public class DollManager {
     public static final Map<UUID, ExtendPlayer> ONLINE_PLAYERS = new ConcurrentHashMap<>();
     public static final Map<UUID, Integer> PLAYER_CREATION_COUNTS = new Object2IntOpenHashMap<>();
     public static final Map<UUID, PermissionAttachment> DOLL_PERMISSIONS = new HashMap<>();
+
+    public static final Map<UUID, String> DOLL_BUNGEE_SERVERS = new HashMap<>();
     //private static final String NAME_PATTERN = "^[a-zA-Z0-9_]*$";
     // Word argument filters most characters
     private static final String NAME_PATTERN_COMMAND = ".*[.+\\-].*";

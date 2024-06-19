@@ -48,8 +48,8 @@ public class DollPSetMenu extends AbstractMenu {
 
         FlagConfig.PersonalFlagType flagType = (FlagConfig.PersonalFlagType) getPDC(item);
 
-        String commandSet = String.format("/playerdoll:doll pset %s %s %s %b", dollPlayer.getName(), targetPlayer.getName(), flagType.getCommand().toLowerCase(), leftClick);
-        whoClicked.chat(commandSet);
+        String commandSet = String.format("playerdoll:doll pset %s %s %s %b", dollPlayer.getName(), targetPlayer.getName(), flagType.getCommand().toLowerCase(), leftClick);
+        whoClicked.performCommand(commandSet);
         return true;
     }
 

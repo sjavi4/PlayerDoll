@@ -1,10 +1,13 @@
 package me.autobot.playerdoll;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import me.autobot.playerdoll.brigadier.CommandBuilder;
 import me.autobot.playerdoll.brigadier.CommandRegister;
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.connection.ConvertPlayerConnection;
+import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.GUIManager;
@@ -36,13 +39,12 @@ import java.util.logging.Logger;
 
 public final class PlayerDoll extends JavaPlugin {
     public static final boolean isDev = true;
-    public static Plugin PLUGIN;
+    public static PlayerDoll PLUGIN;
     public static Logger LOGGER;
     public static String SERVER_VERSION;
     public static String INTERNAL_VERSION;
     public static ServerBranch serverBranch;
     public static boolean BUNGEECORD;
-
     public static Scheduler scheduler;
 
     // SPIGOT < PAPER < FOLIA
@@ -73,6 +75,11 @@ public final class PlayerDoll extends JavaPlugin {
     public static void sendServerCommand(String command) {
         Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
     }
+    public static void sendBungeeCordMessage(byte[] b) {
+        //scheduler.globalTask(() -> {
+            Bukkit.getServer().sendPluginMessage(PLUGIN, "playerdoll:doll", b);
+        //});
+    }
 
     private BasicConfig basicConfig;
     private int maxPlayer;
@@ -97,7 +104,7 @@ public final class PlayerDoll extends JavaPlugin {
 
 
         registerEventHandlers();
-        registerCommands();
+        //registerCommands();
 
         checkUpdate();
 
@@ -106,7 +113,13 @@ public final class PlayerDoll extends JavaPlugin {
             convertConnection.start();
         }
 
-        scheduler.globalTaskDelayed(this::prepareDollSpawn,5);
+        // in BungeeCord mode, messaging require 1 player in Game
+        // Trigger this in PlayerJoin
+        if (!BUNGEECORD) {
+            scheduler.globalTaskDelayed(() -> prepareDollSpawn(0), 5);
+        }
+
+        //Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> System.out.println(CursedConnection.getServerConnectionList().size()), 1, 20);
     }
 
     @Override
@@ -118,11 +131,7 @@ public final class PlayerDoll extends JavaPlugin {
         if (serverBranch != ServerBranch.FOLIA) {
             // folia should not have Server Reload
             String kickReason = basicConfig.broadcastConvertShutdown.getValue() ? "(ConvertPlayer) Server Closed" : null;
-//            if (basicConfig.broadcastConvertShutdown.getValue()) {
-//                kickReason = "(ConvertPlayer) Server Closed";
-//            } else {
-//                kickReason = null;
-//            }
+
             DollManager.ONLINE_PLAYERS.values().forEach(extendPlayer -> {
                 extendPlayer.getBukkitPlayer().kickPlayer(kickReason);
             });
@@ -132,10 +141,15 @@ public final class PlayerDoll extends JavaPlugin {
             Bukkit.setMaxPlayers(maxPlayer);
         }
         // Folia don't call playerQuitEvent when shutdown
-        if (serverBranch == ServerBranch.FOLIA) {
+        //if (serverBranch == ServerBranch.FOLIA) {
             DollConfig.DOLL_CONFIGS.values().forEach(DollConfig::saveConfig);
-        }
+        //}
         DollManager.ONLINE_DOLLS.values().forEach(doll -> doll.dollDisconnect("Server Shutdown"));
+
+        if (BUNGEECORD) {
+            getServer().getMessenger().unregisterOutgoingPluginChannel(this,"playerdoll:doll");
+            getServer().getMessenger().unregisterIncomingPluginChannel(this, "playerdoll:doll");
+        }
     }
 
     private void registerEventHandlers() {
@@ -148,6 +162,8 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDisconnect(), this);
         pluginManager.registerEvents(new PlayerDeath(), this);
         pluginManager.registerEvents(new AsyncPlayerPreLogin(), this);
+        // Event for Register command
+        pluginManager.registerEvents(new ServerLoad(), this);
 
         pluginManager.registerEvents(new MenuWatcher(new GUIManager()), this);
 
@@ -161,12 +177,6 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(new DollJoin(), this);
         pluginManager.registerEvents(new DollSetting(), this);
     }
-    private void registerCommands() {
-        // Non Bukkit Command
-        CommandBuilder.COMMANDS.forEach(CommandRegister::registerCommand);
-
-    }
-
     private void initServerVersion() {
         SERVER_VERSION = Bukkit.getBukkitVersion().split("-")[0];
         switch (SERVER_VERSION) {
@@ -210,6 +220,12 @@ public final class PlayerDoll extends JavaPlugin {
     }
     private void checkBungeeCord() {
         BUNGEECORD = getServer().spigot().getConfig().getBoolean("settings.bungeecord");
+        if (BUNGEECORD) {
+            LOGGER.info("Server Is on BungeeCord Mode");
+            LOGGER.warning("Doll Auto Rejoin can ONLY be triggered after the First Player has Joined");
+            getServer().getMessenger().registerOutgoingPluginChannel(this, "playerdoll:doll");
+            getServer().getMessenger().registerIncomingPluginChannel(this, "playerdoll:doll", new PluginMessenger());
+        }
     }
     private void checkUpdate() {
         if (isDev) {
@@ -238,17 +254,23 @@ public final class PlayerDoll extends JavaPlugin {
         }).start();
     }
 
-    private void prepareDollSpawn() {
+    public void prepareDollSpawn(long delayOfEach) {
         FileUtil fileUtil = FileUtil.INSTANCE;
         File[] dollConfigs = fileUtil.getDollDir().toFile().listFiles((file, name) -> name.endsWith(".yml"));
         if (dollConfigs == null) {
             return;
         }
+        int index = 1;
         for (File dollFile : dollConfigs) {
             String fileName = dollFile.getName();
             DollConfig config = DollConfig.getTemporaryConfig(fileName.substring(0, fileName.length() - ".yml".length()));
             if (config.dollSetting.get(FlagConfig.GlobalFlagType.JOIN_AT_START).getValue()) {
-                SocketHelper.createConnection(config.dollName.getValue(), UUID.fromString(config.dollUUID.getValue()), null);
+                if (config.dollLastJoinServer.getValue().isEmpty()) {
+                    continue;
+                }
+                Runnable r = () -> SocketHelper.createConnection(config.dollName.getValue(), UUID.fromString(config.dollUUID.getValue()), null);
+                scheduler.globalTaskDelayed(r, delayOfEach * 20 * index);
+                index++;
             }
         }
     }

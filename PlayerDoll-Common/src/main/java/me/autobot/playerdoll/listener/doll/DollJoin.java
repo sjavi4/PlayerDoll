@@ -1,5 +1,7 @@
 package me.autobot.playerdoll.listener.doll;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.PermConfig;
@@ -9,6 +11,7 @@ import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.event.DollJoinEvent;
 import me.autobot.playerdoll.event.DollSettingEvent;
 import me.autobot.playerdoll.gui.DollGUIHolder;
+import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -40,6 +43,7 @@ public class DollJoin implements Listener {
             };
             PlayerDoll.scheduler.entityTask(runnable, player);
         }
+
         Player caller = event.getCaller();
         Doll doll = event.getDoll();
         DollGUIHolder.getGUIHolder(doll);
@@ -69,6 +73,22 @@ public class DollJoin implements Listener {
         player.setSleepingIgnored(true);
 
         DollConfig dollConfig = DollConfig.getOnlineDollConfig(player.getUniqueId());
+
+        if (PlayerDoll.BUNGEECORD) {
+            PlayerDoll.LOGGER.info("Capture Login Success");
+            // Reply Capture Success, Close packet listener
+            ByteArrayDataOutput output = ByteStreams.newDataOutput();
+            output.writeInt(1);
+            output.writeUTF(player.getUniqueId().toString());
+            PlayerDoll.sendBungeeCordMessage(output.toByteArray());
+
+            String serverName = DollManager.DOLL_BUNGEE_SERVERS.remove(player.getUniqueId());
+            if (serverName != null) {
+                dollConfig.dollLastJoinServer.setNewValue(serverName);
+            }
+        }
+
+
 
         // Sync data
         Arrays.stream(DollConfig.DollSettings.values())
@@ -141,7 +161,7 @@ public class DollJoin implements Listener {
                     continue;
                 }
                 String replaced = s.replaceAll("%name%",player.getName()).replaceAll("%uuid%",player.getUniqueId().toString());
-                Runnable task = () -> player.chat(replaced);
+                Runnable task = () -> player.performCommand(replaced);
                 PlayerDoll.scheduler.entityTaskDelayed(task, player, 1 + count*interval);
                 count++;
             }

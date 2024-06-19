@@ -13,11 +13,24 @@
     <version>${project.parent.version}</version>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <bungee.version>1.20-R0.3-SNAPSHOT</bungee.version>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <outputDirectory>../PlayerDoll-Dist/target/</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
     <dependencies>

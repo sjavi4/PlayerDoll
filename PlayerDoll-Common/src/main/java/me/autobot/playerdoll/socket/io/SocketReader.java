@@ -1,10 +1,15 @@
 package me.autobot.playerdoll.socket.io;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.connection.CursedConnection;
+import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.packet.IPacketFactory;
 import me.autobot.playerdoll.packet.Packets;
 import me.autobot.playerdoll.socket.ClientSocket;
+import org.bukkit.entity.Player;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -32,12 +37,14 @@ public class SocketReader extends Thread {
         this.clientSocket = clientSocket;
         this.socket = clientSocket.socket;
         localAddress = socket.getLocalAddress().toString() + ":" + socket.getLocalPort();
-
         try {
             protocol = Packets.protocolNumber.valueOf(PlayerDoll.INTERNAL_VERSION);
         } catch (IllegalArgumentException e) {
             PlayerDoll.LOGGER.severe("Not supported Game Version");
             throw new IllegalArgumentException(e);
+        }
+        if (PlayerDoll.BUNGEECORD) {
+            setupBungeeDollData();
         }
         packetFactory = protocol.getFactory(this);
         currentState = ConnectionState.HANDSHAKE;
@@ -48,10 +55,32 @@ public class SocketReader extends Thread {
             output = new DataOutputStream(socket.getOutputStream());
             input = new DataInputStream(socket.getInputStream());
             packetFactory = protocol.getFactory(this);
+
             startHandshake();
-            boolean pass = captureLogin();
-            if (!pass) {
-                close();
+            // BungeeCord: wait until packet Received (Timed out 10s)
+
+            //PlayerDoll.LOGGER.info("Send the bungeeCord Make login 1");
+//            if (PlayerDoll.BUNGEECORD) {
+//                //PlayerDoll.LOGGER.info("Send the bungeeCord Make login 2");
+//                //long delay = clientSocket.getCaller() == null ? 200 : 0;
+//                Thread.sleep(400);
+//                ByteArrayDataOutput output = ByteStreams.newDataOutput();
+//                // Send Socket Address
+//                output.writeInt(2);
+//                output.writeUTF(localAddress);
+//                GameProfile profile = clientSocket.getProfile();
+//                output.writeUTF(profile.getId().toString());
+//                output.writeUTF(profile.getName());
+//                PlayerDoll.sendBungeeCordMessage(output.toByteArray());
+//
+//                synchronized (this) {
+//                    PlayerDoll.LOGGER.info("Start Wait Thread");
+//                    currentThread().wait(10000);
+//                }
+//            }
+            boolean passLogin = captureLogin();
+            if (!passLogin) {
+                endStream = true;
             }
             while (!endStream) {
                 if (enableCompression()) {
@@ -59,6 +88,9 @@ public class SocketReader extends Thread {
                 } else {
                     readPacketUncompressed();
                 }
+            }
+            if (!passLogin && PlayerDoll.BUNGEECORD) {
+                failedProcessDoll();
             }
             PlayerDoll.LOGGER.info("Client Connection Closed");
             //System.out.println("Client Is Closed.");
@@ -95,13 +127,51 @@ public class SocketReader extends Thread {
             PlayerDoll.LOGGER.warning("Error caught on Closing Connection");
         }
     }
+
     public void endStream() {
         endStream = true;
     }
     public boolean enableCompression() {
         return compressionThreshold >= 0;
     }
-    private void startHandshake() {
+
+    private void failedProcessDoll() {
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        // Finish Process
+        output.writeInt(2);
+        output.writeUTF(clientSocket.getProfile().getId().toString());
+        PlayerDoll.sendBungeeCordMessage(output.toByteArray());
+
+    }
+
+    private void setupBungeeDollData() {
+        GameProfile profile = clientSocket.getProfile();
+
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        output.writeInt(0);
+        output.writeUTF(localAddress);
+        output.writeUTF(profile.getId().toString());
+        output.writeUTF(profile.getName());
+
+        Player caller = clientSocket.getCaller();
+        output.writeBoolean(caller == null);
+        if (caller == null) {
+            DollConfig dollConfig = DollConfig.getTemporaryConfig(profile.getName());
+            output.writeUTF(dollConfig.dollLastJoinServer.getValue());
+        } else {
+            output.writeUTF(caller.getUniqueId().toString());
+        }
+        PlayerDoll.sendBungeeCordMessage(output.toByteArray());
+
+    }
+
+    private void startHandshake() throws InterruptedException {
+        if (PlayerDoll.BUNGEECORD) {
+            // Make sure no packet delay
+            synchronized (this) {
+                Thread.currentThread().wait(10000);
+            }
+        }
         try {
             byte[] handshakeMessage = packetFactory.clientIntent();
 
@@ -112,13 +182,19 @@ public class SocketReader extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (PlayerDoll.BUNGEECORD) {
+            synchronized (this) {
+                Thread.currentThread().wait(10000);
+                //Thread.sleep(2000);
+            }
+        }
     }
 
     private boolean captureLogin() throws InterruptedException {
         int asks = 0;
         while (getCurrentState() == ConnectionState.LOGIN) {
             if (CursedConnection.startCursedConnection(localAddress, clientSocket.getProfile(), clientSocket.getCaller())) {
-                System.out.println("Succeed to login");
+                //System.out.println("Succeed to login");
                 return true;
             } else {
                 if (asks == 10) {
@@ -225,112 +301,6 @@ public class SocketReader extends Thread {
             }
         }
     }
-
-//    private void readLogin(int id, DataInputStream in, int size) throws IOException {
-//        switch (id) {
-//            // Disconnect Packet
-//            case 0x00 -> {
-//                System.out.println("disconnected");
-//                endStream = true;
-//            }
-//            // Encryption Packet
-//            case 0x01 -> {
-//                System.out.println("Encrypt");
-//            }
-//            // Login Success (Profile)
-//            case 0x02 -> {
-//                System.out.println("Login Success");
-//                output.write(OldPacketFactory.serverLoginAck());
-//                nextState();
-//            }
-//            // Setup Compression
-//            case 0x03 -> {
-//                System.out.println("Setup Compression");
-//                compressionThreshold = Packets.readVarInt(in);
-//                System.out.println("Compression Threshold: " + compressionThreshold);
-//            }
-//            // Plugin Message
-//            case 0x04 -> System.out.println("Login Plugin Message");
-//            default -> System.out.println("Unknown Login Packet ID: " + id);
-//        }
-//    }
-//    private void readConfiguration(int id, DataInputStream in, int size) throws IOException {
-//        switch (id) {
-//            // Plugin Message
-//            case 0x00 -> System.out.println("Config Plugin message");
-//            // Disconnect
-//            case 0x01 -> {
-//                System.out.println("Config Disconnect");
-//                endStream = true;
-//            }
-//            // Finish Configuration
-//            case 0x02 -> {
-//                System.out.println("Finish Config");
-//                output.write(OldPacketFactory.serverConfigAck());
-//                nextState();
-//            }
-//            // Keep Alive
-//            //case 0x03 -> output.write(OldPacketFactory.keepAlive(getCurrentState(), in.readLong()));
-//            // Pong
-//            case 0x04 -> System.out.println("Pong Packet");
-//            // Registry
-//            case 0x05 -> System.out.println("Registry");
-//            // Remove Resource Pack (resourcePack Pop) Config
-//            case 0x06 -> System.out.println("Resource Pack Pop (config)");
-//            // Add Resource Pack (resource Pack Push) Config
-//            case 0x07 -> System.out.println("Resource Pack Push (config)");
-//            // Feature Flags
-//            case 0x08 -> System.out.println("data packs");
-//            // Tags
-//            case 0x09 -> System.out.println("tags");
-//            default -> System.out.println("Unknown Config Packet ID: " + id);
-//        }
-//    }
-//    private void readPlay(int id, DataInputStream in, int size) throws IOException {
-//        switch (id) {
-//            // Disconnect
-//            case 0x1B -> {
-//                System.out.println("Play Disconnect Packet");
-//                endStream = true;
-//            }
-//            // Keep Alive
-//            //case 0x24 -> output.write(OldPacketFactory.keepAlive(getCurrentState(), in.readLong()));
-//            case 0x43 -> System.out.println("ResourcePack Pop (Play)");
-//            case 0x44 -> {
-//                // Weird problem when sending resource pack respond
-//                // Skip using other way
-//                System.out.println("ResourcePack Push (Play)");
-//                UUID uuid = Packets.readUUID(in);
-//                String url = Packets.readString(in);
-//                String hash = Packets.readString(in);
-//                boolean forced = in.readBoolean();
-//                if (forced) {
-//                    System.out.println("It is a forced Resource Pack");
-//                    System.out.println("Not implemented, not respond to this");
-////                    byte[] accept = PacketFactory.replyResourcePackPush(clientSocket.getCurrentState(), uuid, PacketFactory.resourcePackStatus.ACCEPTED);
-////                    byte[] downloaded = PacketFactory.replyResourcePackPush(clientSocket.getCurrentState(), uuid, PacketFactory.resourcePackStatus.DOWNLOADED);
-////                    byte[] loaded = PacketFactory.replyResourcePackPush(clientSocket.getCurrentState(), uuid, PacketFactory.resourcePackStatus.DOWNLOAD_SUCCESSFULLY);
-////
-////                    output.write(accept);
-////                    //output.write(downloaded);
-////                    final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-////                    executor.schedule(() -> {
-////                                try {
-////                                    output.write(loaded);
-////                                } catch (IOException e) {
-////                                    throw new RuntimeException(e);
-////                                }
-////                            },
-////                            2, TimeUnit.SECONDS);
-////                    //PacketFactory.replyResourcePackPush(clientSocket.getCurrentState(), uuid, PacketFactory.resourcePackStatus.DOWNLOAD_SUCCESSFULLY);
-//                } else {
-//                    System.out.println("It is an optional Resource Pack, Skip");
-//                    //OldPacketFactory.replyResourcePackPush(getCurrentState(), uuid, OldPacketFactory.resourcePackStatus.DECLINED);
-//                }
-//            }
-//            default -> System.out.println("Unknown Play Packet ID: " + id);
-//        }
-//    }
 
     public void setCompressionThreshold(int compressionThreshold) {
         this.compressionThreshold = compressionThreshold;

@@ -53,8 +53,11 @@ public class CommandRegister {
 
     @SuppressWarnings("unchecked")
     public static void registerCommand(LiteralCommandNode<?> node) {
-        dispatcher.getRoot().removeCommand(node.getName());
+        //dispatcher.getRoot().removeCommand(node.getName());
         dispatcher.getRoot().addChild((CommandNode<Object>) node);
+    }
+    public static void unregisterCommand(LiteralCommandNode<?> node) {
+        dispatcher.getRoot().removeCommand(node.getName());
     }
     /*
     public static void registerCommand(String label) {
