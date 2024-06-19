@@ -46,12 +46,14 @@ Pre-1.20.4 versions are temporary un-supported.
   <tr>
     <td>1.21</td>
     <td>✓</td>
-    <td>Not Release</td>
+    <td>✓ (Exp Build #9)</td>
     <td>Not Release</td>
   </tr>
 </table>
 
 ### Cautions
+
+For BungeeCord connections, check [here](https://modrinth.com/plugin/playerdoll/version/lbTw2Mzy)
 
 Things like database, multiverse, bungeecord might went wrong (not tested or coded to handle)
 
