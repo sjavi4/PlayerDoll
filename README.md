@@ -1,5 +1,5 @@
 # PlayerDoll
-Simple Standalone Fake Player Plugin for Spigot 1.20 [Java 17+]
+Simple Standalone Fake Player Plugin for Spigot, Paper, Folia 1.20 [Java 17+]
 
 [Modrinth](https://modrinth.com/plugin/playerdoll)
 
