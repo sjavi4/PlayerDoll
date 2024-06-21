@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 23
+version: 24
 
 ###
 # &0 black
@@ -57,6 +57,8 @@ Message:
 # Spawn cmd
   in-world: '&cDoll already spawned'
   max-capacity: '&cServer is full for Doll'
+  spawn-error: '&cDoll %a% failed to spawn, Please Try again Later'
+  spawn-success: '&aDoll spawned successfully'
 # Jump cmd
   self-jump: '&cJump is not support for Self action'
 # Lookat cmd

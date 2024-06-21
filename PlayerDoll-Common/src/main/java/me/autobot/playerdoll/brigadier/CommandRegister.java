@@ -3,14 +3,24 @@ package me.autobot.playerdoll.brigadier;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.util.ReflectionUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.command.Command;
+import org.bukkit.command.SimpleCommandMap;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class CommandRegister {
-    private static final CommandDispatcher<Object> dispatcher;
+    private static final CommandDispatcher<Object> brigadierDispatcher;
+    private static final Object vanillaCommandDispatcherInstance;
+    private static final Constructor<?> vanillaCommandWrapperConstructor;
+    private static final SimpleCommandMap simpleCommandMap;
+    //public static final Map<String, Command> craftCommandMap;
     //private static final Object wrapperInstance;
     //private static final Method registerMethod;
 
@@ -25,7 +35,7 @@ public class CommandRegister {
                     .findFirst()
                     .orElseThrow();
             commandsMethod.setAccessible(true);
-            Object vanillaCommandDispatcherInstance = ReflectionUtil.invokeMethod(commandsMethod, minecraftServerInstance);
+            vanillaCommandDispatcherInstance = ReflectionUtil.invokeMethod(commandsMethod, minecraftServerInstance);
 
             //Object vanillaCommandDispatcherInstance = commandsMethod.invoke(minecraftServerInstance);
             Field commandDispatcherField = Arrays.stream(vanillaCommandDispatcherInstance.getClass().getDeclaredFields())
@@ -34,8 +44,17 @@ public class CommandRegister {
                     .orElseThrow();
             commandDispatcherField.setAccessible(true);
 
-            dispatcher = (CommandDispatcher<Object>) commandDispatcherField.get(vanillaCommandDispatcherInstance);
+            brigadierDispatcher = (CommandDispatcher<Object>) commandDispatcherField.get(vanillaCommandDispatcherInstance);
 
+
+            vanillaCommandWrapperConstructor = ReflectionUtil.getCBClass("command.VanillaCommandWrapper").getDeclaredConstructors()[0];
+
+            Server server = Bukkit.getServer();
+            Field craftCommandMapField = server.getClass().getDeclaredField("commandMap");
+            craftCommandMapField.setAccessible(true);
+            simpleCommandMap = (SimpleCommandMap) craftCommandMapField.get(server);
+
+            //craftCommandMap = (Map<String, Command>) simpleCommandMap.getClass().getMethod("getKnownCommands").invoke(simpleCommandMap);
             /*
 
             Class<?> bukkitCommandWrapperClass = ReflectionUtil.getCBClass("command.BukkitCommandWrapper");
@@ -44,21 +63,25 @@ public class CommandRegister {
             wrapperInstance = bukkitCommandWrapperConstructor.newInstance(Bukkit.getServer(), null);
 
              */
-        } catch (IllegalAccessException
-                //| NoSuchMethodException | InvocationTargetException | InstantiationException
-                  e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }
 
     @SuppressWarnings("unchecked")
     public static void registerCommand(LiteralCommandNode<?> node) {
-        //dispatcher.getRoot().removeCommand(node.getName());
-        dispatcher.getRoot().addChild((CommandNode<Object>) node);
+        brigadierDispatcher.getRoot().removeCommand(node.getName());
+        brigadierDispatcher.getRoot().addChild((CommandNode<Object>) node);
+
+        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.SPIGOT || PlayerDoll.INTERNAL_VERSION.equals("v1_20_R3")) {
+            Command wrapperCommand = (Command) ReflectionUtil.newInstance(vanillaCommandWrapperConstructor, vanillaCommandDispatcherInstance, node);
+            simpleCommandMap.register("minecraft", wrapperCommand);
+        }
+
     }
-    public static void unregisterCommand(LiteralCommandNode<?> node) {
-        dispatcher.getRoot().removeCommand(node.getName());
-    }
+//    public static void unregisterCommand(LiteralCommandNode<?> node) {
+//        dispatcher.getRoot().removeCommand(node.getName());
+//    }
     /*
     public static void registerCommand(String label) {
         try {

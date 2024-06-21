@@ -5,7 +5,7 @@ import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.v1_20_R3.wrapper.NMSEntity;
 import me.autobot.playerdoll.v1_20_R3.wrapper.NMSServerLevel;
 import me.autobot.playerdoll.v1_20_R3.wrapper.NMSServerPlayerGamemode;
-import me.autobot.playerdoll.wrapper.*;
+import me.autobot.playerdoll.wrapper.WrapperServerLevel;
 import me.autobot.playerdoll.wrapper.block.WrapperBlockPos;
 import me.autobot.playerdoll.wrapper.entity.WrapperEntity;
 import me.autobot.playerdoll.wrapper.entity.WrapperInteractionResult;

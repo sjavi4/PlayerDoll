@@ -1,5 +1,6 @@
 package me.autobot.playerdoll.listener;
 
+import me.autobot.playerdoll.DollProxy;
 import me.autobot.playerdoll.doll.DollData;
 import me.autobot.playerdoll.wrapper.InitialHandler;
 import net.md_5.bungee.api.connection.PendingConnection;
@@ -17,26 +18,21 @@ public class HandshakeListener implements Listener {
         if (intent != 2) {
             return;
         }
-        System.out.println("Found Login Intent");
         PendingConnection connection = event.getConnection();
         String address = connection.getSocketAddress().toString();
         DollData.DOLL_DATA_LIST.stream().filter(dollData -> dollData.getAddress().equals(address))
                 .findFirst()
                 .ifPresent(dollData -> {
-                    System.out.println("Found Doll Address in Handshake");
-                    System.out.println("Setup Packet Listener");
+                    DollProxy.PLUGIN.getLogger().info(String.format("Doll %s captured successfully during Handshake", dollData.getFullName()));
                     InitialHandler handler = new InitialHandler(connection);
-                    //dollData.setPacketListener(new PlayerToBungeeListener(dollData, handler.channelWrapper().channel()));
                     modifyLoginStatus(handler, dollData.getUuid(), dollData.getFullName());
                 });
     }
 
     private static void modifyLoginStatus(InitialHandler handler, UUID dollUUID, String dollName) {
-        System.out.println("Modify Doll Login");
         handler.setUUID(dollUUID);
         handler.setName(dollName);
         handler.setState(InitialHandler.stateEnums[InitialHandler.stateEnums.length -1]);
-        System.out.println("Doll modify call Finish (Start Login)");
         handler.finish();
     }
 }

@@ -1,7 +1,6 @@
 package me.autobot.playerdoll.command.subcommand.actionpack;
 
 import com.mojang.brigadier.context.CommandContext;
-import me.autobot.playerdoll.carpetmod.EntityPlayerActionPack;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
 import me.autobot.playerdoll.config.FlagConfig;

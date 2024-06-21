@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 
 public class ServerLoad implements Listener {
+
     @EventHandler
     public void onReload(ServerLoadEvent event) {
         // Register and unregister command here (brigadier command)

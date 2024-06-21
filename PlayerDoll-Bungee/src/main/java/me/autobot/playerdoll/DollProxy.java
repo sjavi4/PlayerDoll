@@ -24,7 +24,6 @@ public class DollProxy extends Plugin {
 
     @Override
     public void onDisable() {
-        //ADDRESS_LISTENERS.values().forEach(PacketToClientListener::close);
         getProxy().unregisterChannel("playerdoll:doll");
     }
 }

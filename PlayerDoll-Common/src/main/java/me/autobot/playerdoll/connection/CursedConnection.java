@@ -10,7 +10,10 @@ import me.autobot.playerdoll.packet.DollPacketInjector;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

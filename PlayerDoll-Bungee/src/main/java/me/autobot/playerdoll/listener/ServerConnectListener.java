@@ -10,6 +10,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -22,6 +23,7 @@ public class ServerConnectListener implements Listener {
         DollData.DOLL_DATA_LIST.stream().filter(dollData -> dollData.getUuid().equals(player.getUniqueId()))
                 .findFirst()
                 .ifPresent(dollData -> {
+                    //dollData.getListener().close();
                     dollData.setDollPlayer(player);
                     modifyDollName(player, dollData.getStripName());
                     modifyDollName(event.getPlayer().getPendingConnection(), dollData.getFullName());
@@ -39,8 +41,6 @@ public class ServerConnectListener implements Listener {
                     ProxyServer.getInstance().getScheduler().schedule(DollProxy.PLUGIN, () -> {
                         modifyDollName(player, dollData.getFullName());
                     }, 1, TimeUnit.SECONDS);
-
-                    DollData.DOLL_DATA_LIST.remove(dollData);
                 });
     }
 

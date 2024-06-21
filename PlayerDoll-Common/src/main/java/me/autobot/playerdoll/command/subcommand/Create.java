@@ -6,20 +6,16 @@ import com.mojang.brigadier.context.CommandContext;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
 import me.autobot.playerdoll.config.BasicConfig;
-import me.autobot.playerdoll.config.PermConfig;
-import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.util.FileUtil;
 import me.autobot.playerdoll.util.LangFormatter;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
-import java.util.*;
+import java.util.Collection;
+import java.util.UUID;
 
 public class Create extends SubCommand implements DollCommandExecutor {
     private Player sender;

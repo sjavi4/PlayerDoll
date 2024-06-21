@@ -1,13 +1,12 @@
 package me.autobot.playerdoll.doll;
 
-import me.autobot.playerdoll.packet.PlayerToBungeeListener;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DollData {
     public static final List<DollData> DOLL_DATA_LIST = new CopyOnWriteArrayList<>();
@@ -17,7 +16,6 @@ public class DollData {
     private final String stripName;
     private ProxiedPlayer dollPlayer;
     private final ServerInfo targetServer;
-    private PlayerToBungeeListener listener;
 
     public DollData(String address, UUID dollUUID, String dollName, UUID callerUUID) {
         this.address = address;
@@ -48,14 +46,6 @@ public class DollData {
     public String getStripName() {
         return stripName;
     }
-
-    public void setPacketListener(PlayerToBungeeListener listener) {
-        this.listener = listener;
-    }
-    public PlayerToBungeeListener getListener() {
-        return listener;
-    }
-
     public ServerInfo getTargetServer() {
         return targetServer;
     }

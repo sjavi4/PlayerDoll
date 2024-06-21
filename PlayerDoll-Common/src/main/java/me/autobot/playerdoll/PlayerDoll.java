@@ -1,13 +1,8 @@
 package me.autobot.playerdoll;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import me.autobot.playerdoll.brigadier.CommandBuilder;
-import me.autobot.playerdoll.brigadier.CommandRegister;
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.connection.ConvertPlayerConnection;
-import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.GUIManager;
@@ -104,7 +99,7 @@ public final class PlayerDoll extends JavaPlugin {
 
 
         registerEventHandlers();
-        //registerCommands();
+        registerCommands();
 
         checkUpdate();
 
@@ -166,7 +161,6 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(new ServerLoad(), this);
 
         pluginManager.registerEvents(new MenuWatcher(new GUIManager()), this);
-
         // Paper Event
 //        if (serverBranch == ServerBranch.PAPER || serverBranch == ServerBranch.FOLIA) {
 //            ReflectionUtil.getPluginClass("listener.paper.PlayerConnectionClose");
@@ -177,6 +171,10 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(new DollJoin(), this);
         pluginManager.registerEvents(new DollSetting(), this);
     }
+
+    private void registerCommands() {
+    }
+
     private void initServerVersion() {
         SERVER_VERSION = Bukkit.getBukkitVersion().split("-")[0];
         switch (SERVER_VERSION) {

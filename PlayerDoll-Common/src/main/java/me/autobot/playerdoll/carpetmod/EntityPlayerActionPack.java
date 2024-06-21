@@ -2,7 +2,7 @@ package me.autobot.playerdoll.carpetmod;
 
 import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.Doll;
-import me.autobot.playerdoll.wrapper.*;
+import me.autobot.playerdoll.wrapper.WrapperServerLevel;
 import me.autobot.playerdoll.wrapper.block.WrapperBlockPos;
 import me.autobot.playerdoll.wrapper.block.WrapperBlockState;
 import me.autobot.playerdoll.wrapper.block.WrapperDirection;

@@ -9,7 +9,6 @@ import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.util.LangFormatter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

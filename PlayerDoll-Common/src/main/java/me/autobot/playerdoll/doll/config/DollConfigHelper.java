@@ -1,25 +1,9 @@
 package me.autobot.playerdoll.doll.config;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.util.FileUtil;
-import me.autobot.playerdoll.util.LangFormatter;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.UUID;
-import java.util.logging.Level;
 
 public class DollConfigHelper {
     public static final FileUtil FILE_UTIL = FileUtil.INSTANCE;

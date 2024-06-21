@@ -1,13 +1,6 @@
 package me.autobot.playerdoll.packet.factory;
 
-import me.autobot.playerdoll.packet.PacketFactory;
-import me.autobot.playerdoll.packet.Packets;
-import me.autobot.playerdoll.socket.ClientSocket;
 import me.autobot.playerdoll.socket.io.SocketReader;
-
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.UUID;
 
 public class Packet_v1_21_R1 extends Packet_v1_20_R4 {
     public Packet_v1_21_R1(SocketReader socketReader) {

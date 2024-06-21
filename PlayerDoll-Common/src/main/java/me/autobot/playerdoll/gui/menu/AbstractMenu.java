@@ -21,7 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class AbstractMenu implements Menu {

@@ -9,6 +9,7 @@ import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.packet.IPacketFactory;
 import me.autobot.playerdoll.packet.Packets;
 import me.autobot.playerdoll.socket.ClientSocket;
+import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayInputStream;
@@ -89,16 +90,21 @@ public class SocketReader extends Thread {
                     readPacketUncompressed();
                 }
             }
-            if (!passLogin && PlayerDoll.BUNGEECORD) {
-                failedProcessDoll();
+            if (getCurrentState() != ConnectionState.PLAY) {
+                Player caller = clientSocket.getCaller();
+                if (caller != null) {
+                    caller.sendMessage(LangFormatter.YAMLReplaceMessage("spawn-error", clientSocket.getProfile().getName()));
+                } else {
+                    PlayerDoll.LOGGER.warning(String.format("Doll %s failed to Join, Please Try again Later", clientSocket.getProfile().getName()));
+                }
             }
             PlayerDoll.LOGGER.info("Client Connection Closed");
-            //System.out.println("Client Is Closed.");
             close();
         } catch (InterruptedException | IOException e) {
             PlayerDoll.LOGGER.warning("Error caught on Client");
             e.printStackTrace();
             close();
+
         }
         PlayerDoll.LOGGER.info("Client Thread End");
     }
@@ -119,7 +125,6 @@ public class SocketReader extends Thread {
             input.close();
             output.close();
             socket.close();
-
             PlayerDoll.LOGGER.info("Connection Closed Successfully");
             //System.out.println("Closed connections for Client.");
         } catch (IOException e) {
@@ -133,15 +138,6 @@ public class SocketReader extends Thread {
     }
     public boolean enableCompression() {
         return compressionThreshold >= 0;
-    }
-
-    private void failedProcessDoll() {
-        ByteArrayDataOutput output = ByteStreams.newDataOutput();
-        // Finish Process
-        output.writeInt(2);
-        output.writeUTF(clientSocket.getProfile().getId().toString());
-        PlayerDoll.sendBungeeCordMessage(output.toByteArray());
-
     }
 
     private void setupBungeeDollData() {

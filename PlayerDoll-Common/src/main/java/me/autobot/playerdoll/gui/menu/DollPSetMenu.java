@@ -16,7 +16,10 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
 
 public class DollPSetMenu extends AbstractMenu {
     private final Player dollPlayer;

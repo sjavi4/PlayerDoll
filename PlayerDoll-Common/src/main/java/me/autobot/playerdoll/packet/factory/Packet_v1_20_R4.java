@@ -1,7 +1,6 @@
 package me.autobot.playerdoll.packet.factory;
 
 import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.packet.PacketFactory;
 import me.autobot.playerdoll.packet.Packets;
 import me.autobot.playerdoll.socket.io.SocketReader;
 

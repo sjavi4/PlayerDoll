@@ -4,8 +4,8 @@ import com.mojang.brigadier.context.CommandContext;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Objects;
@@ -58,6 +58,9 @@ public class DollCommandSource {
     }
     public static int execute(CommandContext<Object> commandSourceStack, DollCommandExecutor executor) {
         DollCommandSource source = new DollCommandSource(commandSourceStack, executor);
+        if (source.sender instanceof ProxiedCommandSender proxiedCommandSender) {
+            return executor.onCommand(proxiedCommandSender.getCallee(), source.context);
+        }
         return executor.onCommand(source.sender, source.context);
     }
 }

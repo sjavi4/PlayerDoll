@@ -2,7 +2,6 @@ package me.autobot.playerdoll.gui;
 
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.persistantdatatype.Button;
-import me.autobot.playerdoll.persistantdatatype.ButtonAction;
 import me.autobot.playerdoll.persistantdatatype.ButtonType;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

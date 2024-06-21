@@ -1,7 +1,7 @@
 package me.autobot.playerdoll.carpetmod;
 
 import me.autobot.playerdoll.util.ReflectionUtil;
-import me.autobot.playerdoll.wrapper.*;
+import me.autobot.playerdoll.wrapper.WrapperServerLevel;
 import me.autobot.playerdoll.wrapper.block.WrapperBlockPos;
 import me.autobot.playerdoll.wrapper.entity.WrapperEntity;
 import me.autobot.playerdoll.wrapper.entity.WrapperInteractionResult;
@@ -11,7 +11,6 @@ import me.autobot.playerdoll.wrapper.phys.WrapperVec3;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 public abstract class ActionPackPlayer {
 

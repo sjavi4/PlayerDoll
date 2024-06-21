@@ -1,13 +1,11 @@
 package me.autobot.playerdoll.listener.bukkit;
 
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.DollGUIHolder;
 import me.autobot.playerdoll.gui.menu.Menu;
-import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;

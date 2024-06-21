@@ -1,6 +1,5 @@
 package me.autobot.playerdoll.command.subcommand;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
@@ -12,8 +11,6 @@ import me.autobot.playerdoll.gui.DollGUIHolder;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Collection;
 
 public class GSet extends SubCommand implements DollCommandExecutor {
     private Player sender;

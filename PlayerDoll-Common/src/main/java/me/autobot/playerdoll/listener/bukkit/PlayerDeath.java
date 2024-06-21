@@ -2,14 +2,9 @@ package me.autobot.playerdoll.listener.bukkit;
 
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.doll.DollManager;
-import me.autobot.playerdoll.doll.config.DollConfig;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.PlayerInventory;
-
-import java.util.Arrays;
 
 public class PlayerDeath implements Listener {
     @EventHandler

@@ -6,7 +6,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.lang.reflect.Field;
 
 public class UserConnection {
-    private static final Class<?> userConnectionClass;
+    public static final Class<?> userConnectionClass;
     private static final Field nameField;
     private static final Field channelWrapperField;
     private static final Field unsafeField;

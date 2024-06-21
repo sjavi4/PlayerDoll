@@ -4,7 +4,6 @@ import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.socket.io.SocketReader;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

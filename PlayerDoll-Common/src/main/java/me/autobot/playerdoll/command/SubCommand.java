@@ -1,7 +1,6 @@
 package me.autobot.playerdoll.command;
 
 import com.mojang.authlib.GameProfile;
-import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.util.LangFormatter;

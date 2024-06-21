@@ -1,7 +1,6 @@
 package me.autobot.playerdoll.listener.bukkit;
 
 import me.autobot.playerdoll.doll.DollManager;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

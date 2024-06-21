@@ -6,10 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.util.ReflectionUtil;
-import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class PlayerConvertInjector extends ChannelDuplexHandler {
     private static final Class<?> loginAckPacketClass = ReflectionUtil.getClass("net.minecraft.network.protocol.login.ServerboundLoginAcknowledgedPacket");

@@ -11,22 +11,20 @@ import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.event.DollJoinEvent;
 import me.autobot.playerdoll.event.DollSettingEvent;
 import me.autobot.playerdoll.gui.DollGUIHolder;
-import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.LangFormatter;
-import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class DollJoin implements Listener {
 
@@ -49,6 +47,7 @@ public class DollJoin implements Listener {
         DollGUIHolder.getGUIHolder(doll);
 
         if (caller != null) {
+            caller.sendMessage(LangFormatter.YAMLReplaceMessage("spawn-success"));
             if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
                 PlayerDoll.scheduler.foliaTeleportAync(player, caller.getLocation());
             } else {
@@ -76,7 +75,6 @@ public class DollJoin implements Listener {
 
         if (PlayerDoll.BUNGEECORD) {
             PlayerDoll.LOGGER.info("Capture Login Success");
-            // Reply Capture Success, Close packet listener
             ByteArrayDataOutput output = ByteStreams.newDataOutput();
             output.writeInt(1);
             output.writeUTF(player.getUniqueId().toString());

@@ -9,18 +9,19 @@ commands:
   #doll:
   #  usage: /<command> <subcommand> <doll> <args>
   #  permission: playerdoll.doll
-  dollReload:
-    description: Reload
-    permission: playerdoll.reload
-  dollHelp:
-    description: Show Help
-    permission: playerdoll.help
-  dollList:
-    description: List Dolls
-    permission: playerdoll.list
-  dollLimit:
-    description: List Permission Info
-    permission: playerdoll.limit
+  #dollReload:
+  #  description: Reload
+  #  permission: playerdoll.reload
+  #dollHelp:
+  #  description: Show Help
+  #  permission: playerdoll.help
+  #dollList:
+  #  description: List Dolls
+  #  permission: playerdoll.list
+  #dollLimit:
+  #  description: List Permission Info
+  #  permission: playerdoll.limit
+
 # Most of them are not used
 permissions:
   playerdoll.doll:
@@ -29,6 +30,7 @@ permissions:
   playerdoll.dollmanage:
     description: Ability to use /dollmanage subCommands (bypass /doll checks)
     default: op
+
   playerdoll.reload:
     description: /dollReload command
     default: op

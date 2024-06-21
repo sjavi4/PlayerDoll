@@ -1,11 +1,8 @@
 package me.autobot.playerdoll;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.doll.DollManager;
-import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.socket.ClientSocket;
 import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.socket.io.SocketReader;
@@ -51,32 +48,6 @@ public class PluginMessenger implements PluginMessageListener {
                     reader.notify();
                 }
             }
-
-
-
-            // Capture Login Success Packet (GameProfile)
-//            case 2 -> {
-//                PlayerDoll.LOGGER.info("Plugin get GameProfile");
-//                UUID dollUUID = UUID.fromString(input.readUTF());
-//                String address = input.readUTF();
-//                ClientSocket socket = SocketHelper.DOLL_CLIENTS.get(dollUUID);
-//                if (socket == null) {
-//                    PlayerDoll.LOGGER.warning("Should Exist Client Socket for Doll" + dollUUID);
-//                    return;
-//                }
-//                PlayerDoll.LOGGER.info("Get Socket notify packet");
-//                // Awake the thread to continue Login
-//                SocketReader socketReader = socket.getSocketReader();
-//                synchronized (socketReader) {
-//                    PlayerDoll.LOGGER.info("Notify Wait Thread");
-////                    ByteArrayDataOutput output = ByteStreams.newDataOutput();
-////                    output.writeInt(3);
-////                    output.writeUTF(address); // address
-////                    PlayerDoll.sendBungeeCordMessage(output.toByteArray());
-//                    socketReader.notify();
-//
-//                }
-//            }
         }
     }
 }

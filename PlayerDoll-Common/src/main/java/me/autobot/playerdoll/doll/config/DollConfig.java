@@ -8,9 +8,7 @@ import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.util.FileUtil;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
