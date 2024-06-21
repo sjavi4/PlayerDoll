@@ -1,9 +1,7 @@
 package me.autobot.playerdoll.wrapper.entity;
 
 import me.autobot.playerdoll.util.ReflectionUtil;
-import me.autobot.playerdoll.wrapper.Wrapper;
 import me.autobot.playerdoll.wrapper.phys.WrapperVec3;
-import net.minecraft.world.entity.Entity;
 
 public interface WrapperEntity {
 

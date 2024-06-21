@@ -3,7 +3,6 @@ package me.autobot.playerdoll.v1_20_R3.player;
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.carpetmod.EntityPlayerActionPack;
 import me.autobot.playerdoll.doll.BaseEntity;
-import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.v1_20_R3.carpetmod.NMSActionPackPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;

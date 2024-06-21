@@ -6,7 +6,6 @@ import me.autobot.playerdoll.wrapper.phys.WrapperVec3;
 import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
 import net.minecraft.world.phys.Vec3D;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;

@@ -3,7 +3,6 @@ package me.autobot.playerdoll.wrapper.argument;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.commands.arguments.ArgumentEntity;
 import net.minecraft.commands.arguments.ArgumentProfile;
 
 import java.lang.reflect.InvocationTargetException;

@@ -7,7 +7,6 @@ import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.event.DollJoinEvent;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
 import net.minecraft.server.MinecraftServer;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import javax.annotation.Nullable;
 

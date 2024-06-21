@@ -2,7 +2,6 @@ package me.autobot.playerdoll.wrapper.block;
 
 import me.autobot.playerdoll.wrapper.Wrapper;
 import me.autobot.playerdoll.wrapper.WrapperServerLevel;
-import net.minecraft.core.BlockPosition;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.state.IBlockData;

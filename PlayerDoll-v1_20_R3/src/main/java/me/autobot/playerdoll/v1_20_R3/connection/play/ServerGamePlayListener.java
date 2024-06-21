@@ -1,8 +1,6 @@
 package me.autobot.playerdoll.v1_20_R3.connection.play;
 
 import com.mojang.authlib.GameProfile;
-import me.autobot.playerdoll.config.FlagConfig;
-import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.v1_20_R3.player.ServerDoll;
 import net.minecraft.network.Connection;
 import net.minecraft.server.network.CommonListenerCookie;

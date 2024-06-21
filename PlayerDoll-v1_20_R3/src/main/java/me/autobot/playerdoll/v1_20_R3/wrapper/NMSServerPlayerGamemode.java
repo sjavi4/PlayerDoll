@@ -1,10 +1,11 @@
 package me.autobot.playerdoll.v1_20_R3.wrapper;
 
-import me.autobot.playerdoll.wrapper.*;
-import me.autobot.playerdoll.wrapper.entity.WrapperServerPlayerGameMode;
-import me.autobot.playerdoll.wrapper.phys.WrapperBlockHitResult;
+import me.autobot.playerdoll.wrapper.Wrapper;
+import me.autobot.playerdoll.wrapper.WrapperServerLevel;
 import me.autobot.playerdoll.wrapper.block.WrapperBlockPos;
 import me.autobot.playerdoll.wrapper.entity.WrapperInteractionResult;
+import me.autobot.playerdoll.wrapper.entity.WrapperServerPlayerGameMode;
+import me.autobot.playerdoll.wrapper.phys.WrapperBlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;

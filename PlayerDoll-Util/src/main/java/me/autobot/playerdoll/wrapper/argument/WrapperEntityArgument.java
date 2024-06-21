@@ -1,15 +1,5 @@
 package me.autobot.playerdoll.wrapper.argument;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.commands.arguments.ArgumentEntity;
-import net.minecraft.server.level.EntityPlayer;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-
 public interface WrapperEntityArgument {
 /*
     Method getPlayerMethod = Arrays.stream(ArgumentEntity.class.getMethods())

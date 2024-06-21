@@ -1,32 +1,23 @@
 package me.autobot.playerdoll.v1_20_R3.player;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.event.DollJoinEvent;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.util.Vector;
-
-import java.io.IOException;
 
 
 public class ServerDoll extends ExtServerPlayer implements Doll {

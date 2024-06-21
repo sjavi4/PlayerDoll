@@ -1,7 +1,6 @@
 package me.autobot.playerdoll.wrapper.phys;
 
 import me.autobot.playerdoll.wrapper.Wrapper;
-import me.autobot.playerdoll.wrapper.entity.WrapperEntity;
 import net.minecraft.world.phys.MovingObjectPosition;
 import net.minecraft.world.phys.MovingObjectPositionEntity;
 

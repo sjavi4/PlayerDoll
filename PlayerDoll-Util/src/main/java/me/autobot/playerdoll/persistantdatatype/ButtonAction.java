@@ -1,12 +1,5 @@
 package me.autobot.playerdoll.persistantdatatype;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permissible;
-
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 public enum ButtonAction implements Button {
 
     // Common Buttons

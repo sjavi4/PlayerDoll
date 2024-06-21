@@ -2,13 +2,10 @@ package me.autobot.playerdoll.v1_20_R4.connection.login;
 
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.PlayerDoll;
-import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import me.autobot.playerdoll.v1_20_R4.connection.configuration.ServerConfigurationListener;
 import me.autobot.playerdoll.v1_20_R4.player.ServerDoll;
 import net.minecraft.network.Connection;
-import net.minecraft.network.ConnectionProtocol;
-import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;

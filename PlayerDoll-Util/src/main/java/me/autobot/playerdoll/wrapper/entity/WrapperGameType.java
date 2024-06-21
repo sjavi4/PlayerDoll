@@ -1,6 +1,5 @@
 package me.autobot.playerdoll.wrapper.entity;
 
-import net.minecraft.network.protocol.game.PacketPlayInBlockDig;
 import net.minecraft.world.level.EnumGamemode;
 import org.bukkit.GameMode;
 
