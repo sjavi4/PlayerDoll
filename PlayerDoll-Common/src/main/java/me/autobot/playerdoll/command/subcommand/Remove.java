@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +33,7 @@ public class Remove extends SubCommand implements DollCommandExecutor {
             onlinePlayer.setHealth(0);
         }
         // remove config
+        UUID ownerUUID = UUID.fromString(dollConfig.ownerUUID.getValue());
         String dollUUID = dollConfig.dollUUID.getValue();
 
         FileUtil fileUtil = FileUtil.INSTANCE;
@@ -45,13 +47,14 @@ public class Remove extends SubCommand implements DollCommandExecutor {
         ScheduledExecutorService delayedExecutor = Executors.newSingleThreadScheduledExecutor();
         delayedExecutor.schedule(task, 2, TimeUnit.SECONDS);
         delayedExecutor.shutdown();
+
         PermConfig permConfig = PermConfig.get();
         if (permConfig.enable.getValue()) {
-            Integer count = DollManager.PLAYER_CREATION_COUNTS.get(sender.getUniqueId());
+            Integer count = DollManager.PLAYER_CREATION_COUNTS.get(ownerUUID);
             if (count == null || count == 0) {
                 return;
             }
-            DollManager.PLAYER_CREATION_COUNTS.put(sender.getUniqueId(), count-1);
+            DollManager.PLAYER_CREATION_COUNTS.put(ownerUUID, count-1);
         }
     }
 

@@ -95,6 +95,7 @@ public final class PlayerDoll extends JavaPlugin {
         initServerVersion();
         ReflectionUtil.gameVersion = INTERNAL_VERSION;
         initServerBranch();
+
         checkBungeeCord();
 
 
@@ -113,8 +114,6 @@ public final class PlayerDoll extends JavaPlugin {
         if (!BUNGEECORD) {
             scheduler.globalTaskDelayed(() -> prepareDollSpawn(0), 5);
         }
-
-        //Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> System.out.println(CursedConnection.getServerConnectionList().size()), 1, 20);
     }
 
     @Override
@@ -157,6 +156,7 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDisconnect(), this);
         pluginManager.registerEvents(new PlayerDeath(), this);
         pluginManager.registerEvents(new AsyncPlayerPreLogin(), this);
+
         // Event for Register command
         pluginManager.registerEvents(new ServerLoad(), this);
 
@@ -217,6 +217,7 @@ public final class PlayerDoll extends JavaPlugin {
         serverBranch.setupScheduler(this);
     }
     private void checkBungeeCord() {
+
         BUNGEECORD = getServer().spigot().getConfig().getBoolean("settings.bungeecord");
         if (BUNGEECORD) {
             LOGGER.info("Server Is on BungeeCord Mode");

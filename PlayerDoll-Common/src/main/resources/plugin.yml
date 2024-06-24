@@ -45,7 +45,7 @@ permissions:
     default: true
 
   # Perm config predefined values
-  playerdoll.perm.max-doll-spawn.default:
+  playerdoll.perm.max-doll-create.default:
     description: default
     default: true
 

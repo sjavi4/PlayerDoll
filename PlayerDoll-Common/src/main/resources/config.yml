@@ -48,16 +48,14 @@ convert-player: false
 # Call when server is reload or shutdown
 broadcast-convert-shutdown: true
 
-
 # Proxy IP (BungeeCord)
-# If 127.0.0.1 is not working, try the method below
-# for Windows, check "ipconfig /all" (IPv4)
-# for Linux, check "curl ipconfig/ip"
+# Doll will connect to this when proxy-type is not empty
+# see proxy server config
 proxy-ip: 127.0.0.1
 
 # Proxy Port (BungeeCord)
 # for joining server
-# see server.properties - server-port
+# see proxy server config
 proxy-port: 25565
 
 # Auto Join Delay (BungeeCord)
