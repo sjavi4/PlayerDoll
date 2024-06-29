@@ -57,7 +57,6 @@ public class DollGSetMenu extends AbstractMenu {
         FlagConfig.PersonalFlagType[] personalFlagTypes = FlagConfig.PersonalFlagType.values();
         for (int i = 0; i < Math.min(inventory.getSize(), personalFlagTypes.length); i++) {
 
-
             FlagConfig.PersonalFlagType flagType = personalFlagTypes[i];
             boolean toggleState = dollConfig.generalSetting.get(flagType);
 

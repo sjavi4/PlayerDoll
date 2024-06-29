@@ -17,6 +17,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.zip.DataFormatException;
 
 public class SocketReader extends Thread {
@@ -101,6 +102,10 @@ public class SocketReader extends Thread {
             PlayerDoll.LOGGER.info("Client Connection Closed");
             close();
         } catch (InterruptedException | IOException e) {
+            if (e instanceof SocketException) {
+                PlayerDoll.LOGGER.warning("Client ShutDown");
+                return;
+            }
             PlayerDoll.LOGGER.warning("Error caught on Client");
             e.printStackTrace();
             close();

@@ -74,7 +74,8 @@ public class DollConfig extends AbstractConfig {
             return existConfig.get();
         }
         FileUtil fileUtil = FileUtil.INSTANCE;
-        return new DollConfig(fullName, YamlConfiguration.loadConfiguration(fileUtil.getFile(fileUtil.getDollDir(), name + ".yml")));
+        File dollFile = fileUtil.getFile(fileUtil.getDollDir(), name + ".yml");
+        return new DollConfig(fullName, dollFile, YamlConfiguration.loadConfiguration(dollFile));
     }
     public static DollConfig getDollConfigForOnline(Doll doll, String dollName, UUID dollUUID) {
         String fullName = DollManager.dollFullName(dollName);
@@ -118,8 +119,9 @@ public class DollConfig extends AbstractConfig {
 //        //Bukkit.getPluginManager().callEvent(new DollConfigLoadEvent(this.doll,this));
 //        //saveConfig();
 //    }
-    private DollConfig(String dollName, YamlConfiguration config) {
+    private DollConfig(String dollName, File dollFile , YamlConfiguration config) {
         super(config);
+        this.dollFile = dollFile;
         this.dollName = new ConfigKey<> (this,"Doll-Name", dollName);
         this.dollUUID = new ConfigKey<> (this,"Doll-UUID", NULL_UUID);
         this.ownerName = new ConfigKey<> (this,"Owner-Name", "");
@@ -259,18 +261,13 @@ public class DollConfig extends AbstractConfig {
         if (yamlConfiguration.contains("Player-Setting")) {
             Map<String, Object> uuidMap = yamlConfiguration.getConfigurationSection("Player-Setting").getValues(false);
             uuidMap.forEach((uuid,o) -> {
-                String[] split = uuid.split("\\.");
-                if (split.length == 2) {
-                    UUID playerUUID = UUID.fromString(split[1]);
-                    Map<FlagConfig.PersonalFlagType,Boolean> map = this.playerSetting.put(playerUUID, new EnumMap<>(FlagConfig.PersonalFlagType.class));
-                    Map<String, Object> settingMap = yamlConfiguration.getConfigurationSection("Player-Setting."+split[1]).getValues(true);
-                    settingMap.forEach((s,b) -> {
-                        String[] splits = s.split("\\n");
-                        if (splits.length == 2) {
-                            map.put(FlagConfig.PersonalFlagType.valueOf(splits[1].toUpperCase()),(boolean)b);
-                        }
-                    });
-                }
+                UUID playerUUID = UUID.fromString(uuid);
+                EnumMap<FlagConfig.PersonalFlagType,Boolean> map = new EnumMap<>(FlagConfig.PersonalFlagType.class);
+                this.playerSetting.put(playerUUID, map);
+                Map<String, Object> settingMap = yamlConfiguration.getConfigurationSection("Player-Setting." + playerUUID).getValues(true);
+                settingMap.forEach((s, b) -> {
+                    map.put(FlagConfig.PersonalFlagType.valueOf(s.toUpperCase()), (boolean) b);
+                });
             });
         }
     }

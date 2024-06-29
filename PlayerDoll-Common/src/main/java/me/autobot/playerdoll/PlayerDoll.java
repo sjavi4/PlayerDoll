@@ -3,6 +3,7 @@ package me.autobot.playerdoll;
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.connection.ConvertPlayerConnection;
+import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.GUIManager;
@@ -33,7 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class PlayerDoll extends JavaPlugin {
-    public static final boolean isDev = true;
+    public static final boolean isDev = false;
     public static PlayerDoll PLUGIN;
     public static Logger LOGGER;
     public static String SERVER_VERSION;
@@ -138,7 +139,8 @@ public final class PlayerDoll extends JavaPlugin {
         //if (serverBranch == ServerBranch.FOLIA) {
             DollConfig.DOLL_CONFIGS.values().forEach(DollConfig::saveConfig);
         //}
-        DollManager.ONLINE_DOLLS.values().forEach(doll -> doll.dollDisconnect("Server Shutdown"));
+
+        DollManager.ONLINE_DOLLS.values().forEach(Doll::dollDisconnect);
 
         if (BUNGEECORD) {
             getServer().getMessenger().unregisterOutgoingPluginChannel(this,"playerdoll:doll");
@@ -217,7 +219,6 @@ public final class PlayerDoll extends JavaPlugin {
         serverBranch.setupScheduler(this);
     }
     private void checkBungeeCord() {
-
         BUNGEECORD = getServer().spigot().getConfig().getBoolean("settings.bungeecord");
         if (BUNGEECORD) {
             LOGGER.info("Server Is on BungeeCord Mode");
@@ -263,6 +264,10 @@ public final class PlayerDoll extends JavaPlugin {
         for (File dollFile : dollConfigs) {
             String fileName = dollFile.getName();
             DollConfig config = DollConfig.getTemporaryConfig(fileName.substring(0, fileName.length() - ".yml".length()));
+            // count Creation
+            UUID ownerUUID = UUID.fromString(config.ownerUUID.getValue());
+            DollManager.PLAYER_CREATION_COUNTS.merge(ownerUUID, 1, Integer::sum);
+            // auto Join
             if (config.dollSetting.get(FlagConfig.GlobalFlagType.JOIN_AT_START).getValue()) {
                 if (config.dollLastJoinServer.getValue().isEmpty()) {
                     continue;

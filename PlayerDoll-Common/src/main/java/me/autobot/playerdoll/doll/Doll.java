@@ -4,7 +4,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 public interface Doll extends BaseEntity {
-    void dollDisconnect(String reason);
+    void dollDisconnect();
 //    void dollKill();
     void setDollMaxUpStep(double d);
     Player getCaller();

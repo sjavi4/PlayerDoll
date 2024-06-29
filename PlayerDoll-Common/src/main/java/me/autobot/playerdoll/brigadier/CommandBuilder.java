@@ -223,14 +223,38 @@ public class CommandBuilder {
     static {
         LiteralCommandNode<Object> give = literal("give")
                 .requires(o -> testPermission(o, player -> player.hasPermission("playerdoll.command.give")))
-                .then(getDollTarget()
+                .then(argument("target", StringArgumentType.word())
+                        .suggests((commandContext, suggestionsBuilder) -> {
+                            FileUtil fileUtil = FileUtil.INSTANCE;
+                            String[] fileNames = fileUtil.getDollDir().toFile().list((dir, name) -> name.endsWith(".yml"));
+                            if (fileNames == null) {
+                                return suggestionsBuilder.buildFuture();
+                            }
+                            for (String fileName : fileNames) {
+                                String dollName = fileName.substring(0, fileName.length() - ".yml".length());
+                                DollConfig config = DollConfig.getTemporaryConfig(dollName);
+                                if (DollConfig.DOLL_CONFIGS.containsKey(UUID.fromString(config.dollUUID.getValue()))) {
+                                    // Filter Online Doll
+                                    continue;
+                                }
+                                Predicate<CommandSender> predicate = player -> {
+                                    if (!(player instanceof Player playerSender)) {
+                                        return true;
+                                    }
+                                    return SubCommand.hasDollPermission(playerSender, config, FlagConfig.PersonalFlagType.SPAWN);
+                                };
+                                if (testPermission(commandContext.getSource(), predicate)) {
+                                    suggestionsBuilder.suggest(dollName);
+                                }
+                            }
+                            return suggestionsBuilder.buildFuture();
+                        })
                         .then(argument("players", WrapperGameProfileArgument.gameProfile)
                                 .suggests(suggestOnlinePlayer())
                                 .executes(commandContext -> {
                                     String target = StringArgumentType.getString(commandContext, "target");
-                                    Player targetPlayer = Bukkit.getPlayerExact(DollManager.dollFullName(target));
                                     Collection<GameProfile> profiles = WrapperGameProfileArgument.getGameProfiles(commandContext, "players");
-                                    return DollCommandSource.execute(commandContext, new Give(targetPlayer, profiles));
+                                    return DollCommandSource.execute(commandContext, new Give(DollManager.dollFullName(target), profiles));
                                 })))
                 .build();
         builtRoot.addChild(give);

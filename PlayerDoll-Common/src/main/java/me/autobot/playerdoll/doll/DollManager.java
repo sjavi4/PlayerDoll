@@ -157,13 +157,17 @@ public class DollManager {
 
         Map<UUID, Integer> countMap = DollManager.PLAYER_CREATION_COUNTS;
         Integer currentCount = countMap.get(player.getUniqueId());
-        currentCount = currentCount == null ? 1 : currentCount + 1;
+        if (currentCount == null) {
+            currentCount = 0;
+        }
+
+        int futureCount = currentCount + 1;
 
         boolean exceed = false;
         Map<String, Integer> maxCreationMap = permConfig.groupPerCreateLimits;
         for (String group : maxCreationMap.keySet()) {
             if (player.hasPermission(PermConfig.PERM_CREATE_STRING + group)) {
-                exceed = currentCount >= maxCreationMap.get(group);
+                exceed = futureCount > maxCreationMap.get(group);
                 // iterate all
             }
         }
@@ -171,25 +175,14 @@ public class DollManager {
             return false;
         }
 
+        countMap.put(player.getUniqueId(), futureCount);
 
-        if (countMap.containsKey(player.getUniqueId())) {
-            int c = countMap.get(player.getUniqueId());
-            countMap.put(player.getUniqueId(), c+1);
-        } else {
-            countMap.put(player.getUniqueId(), 1);
-        }
+//        if (countMap.containsKey(player.getUniqueId())) {
+//            int c = countMap.get(player.getUniqueId());
+//            countMap.put(player.getUniqueId(), c+1);
+//        } else {
+//            countMap.put(player.getUniqueId(), 1);
+//        }
         return true;
     }
-//    public static boolean isPlayerDoll(Player player) {
-//        return ONLINE_DOLLS.containsKey(player.getUniqueId());
-//    }
-
-//    public static void Folia_Disconnect(Doll doll) {
-//        PlayerDoll.scheduler.entityTask(doll::dollDisconnect, doll.getBukkitPlayer());
-//        //PlayerDoll.getFoliaHelper().entityTask(iDoll.getBukkitPlayer(), iDoll::_disconnect, 1);
-//    }
-//    public static void Folia_Kill(Doll doll) {
-//        PlayerDoll.scheduler.entityTask(doll::dollKill, doll.getBukkitPlayer());
-//        //PlayerDoll.getFoliaHelper().entityTask(iDoll.getBukkitPlayer(), iDoll::_kill, 1);
-//    }
 }

@@ -1,12 +1,14 @@
 package me.autobot.playerdoll.command.subcommand;
 
 import com.mojang.brigadier.context.CommandContext;
+import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
+import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,7 +21,9 @@ public class Despawn extends SubCommand implements DollCommandExecutor {
 
     @Override
     public void execute() {
-        DollManager.ONLINE_DOLLS.get(target.getUniqueId()).dollDisconnect("Despawn by " + sender.getName());
+        DollManager.ONLINE_DOLLS.get(target.getUniqueId()).dollDisconnect();
+        String disconnect = String.format("Doll %s Despawned by %s", target.getName(), sender.getName());
+        PlayerDoll.LOGGER.info(disconnect);
     }
 
     @Override

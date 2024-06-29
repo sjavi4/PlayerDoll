@@ -23,26 +23,37 @@ public class Tp extends SubCommand implements DollCommandExecutor {
 
     @Override
     public void execute() {
-        String tpToPlayer = String.format("tp %s %s", target.getName(), sender.getName());
-        Runnable toPlayerTask = () -> PlayerDoll.sendServerCommand(tpToPlayer);
+//        String tpToPlayer = String.format("tp %s %s", target.getName(), sender.getName());
+//        Runnable toPlayerTask = () -> PlayerDoll.sendServerCommand(tpToPlayer);
+//
+//        Location loc = sender.getLocation();
+//        String tpToBlock = String.format("tp %d %d %d", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+//        Runnable toBlockTask = () ->PlayerDoll.sendServerCommand(tpToBlock);
 
-        Location loc = sender.getLocation();
-        String tpToBlock = String.format("tp %d %d %d", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-        Runnable toBlockTask = () ->PlayerDoll.sendServerCommand(tpToBlock);
-
-
-        if (sender.getWorld() == target.getWorld()) {
-            if (center) {
-                PlayerDoll.scheduler.globalTask(toBlockTask);
-            } else {
-                PlayerDoll.scheduler.globalTask(toPlayerTask);
-            }
-            return;
-        }
-        PlayerDoll.scheduler.globalTask(toPlayerTask);
+        Location o = sender.getLocation();
         if (center) {
-            PlayerDoll.scheduler.globalTask(toBlockTask);
+            o.setX(o.getBlockX() + 0.5);
+            o.setZ(o.getBlockZ() + 0.5);
         }
+        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
+            PlayerDoll.scheduler.foliaTeleportAync(target, o);
+        } else {
+            target.teleport(o);
+        }
+
+
+//        if (sender.getWorld() == target.getWorld()) {
+//            if (center) {
+//                PlayerDoll.scheduler.globalTask(toBlockTask);
+//            } else {
+//                PlayerDoll.scheduler.globalTask(toPlayerTask);
+//            }
+//            return;
+//        }
+//        PlayerDoll.scheduler.globalTask(toPlayerTask);
+//        if (center) {
+//            PlayerDoll.scheduler.globalTask(toBlockTask);
+//        }
     }
 
     @Override

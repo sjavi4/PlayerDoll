@@ -21,7 +21,7 @@ public class Give extends SubCommand implements DollCommandExecutor {
     private Player sender;
     private final GameProfile profile;
     private DollConfig dollConfig;
-    public Give(Player target, Collection<GameProfile> profiles) {
+    public Give(String target, Collection<GameProfile> profiles) {
         super(target);
         profile = profiles.stream().findFirst().orElseThrow();
     }
@@ -30,12 +30,20 @@ public class Give extends SubCommand implements DollCommandExecutor {
     public void execute() {
         if (PermConfig.get().enable.getValue()) {
             Map<UUID, Integer> creationCounts = DollManager.PLAYER_CREATION_COUNTS;
-            int oldOwnerCount = creationCounts.get(sender.getUniqueId());
-            int newOwnerCount = creationCounts.get(profile.getId());
+            UUID oldOwnerUUID = UUID.fromString(dollConfig.ownerUUID.getValue());
 
-            creationCounts.put(sender.getUniqueId(),oldOwnerCount-1);
-            creationCounts.put(profile.getId(),newOwnerCount+1);
+            // Prevent OP / bypass permission give affect the count
+            if (!oldOwnerUUID.equals(profile.getId())) {
+                int oldOwnerCount = creationCounts.get(oldOwnerUUID);
+                Integer newOwnerCount = creationCounts.get(profile.getId());
+                if (newOwnerCount == null) {
+                    newOwnerCount = 0;
+                }
 
+                creationCounts.put(oldOwnerUUID,oldOwnerCount-1);
+                creationCounts.put(profile.getId(),newOwnerCount+1);
+
+            }
         }
 
 
@@ -44,7 +52,7 @@ public class Give extends SubCommand implements DollCommandExecutor {
         dollConfig.ownerName.setNewValue(profile.getName());
         dollConfig.ownerUUID.setNewValue(profile.getId().toString());
         dollConfig.saveConfig();
-        sender.sendMessage(LangFormatter.YAMLReplaceMessage("DollGiver",target.getName()));
+        sender.sendMessage(LangFormatter.YAMLReplaceMessage("DollGiver",targetString));
         //target.sendMessage(LangFormatter.YAMLReplaceMessage("DollGetter",player.getName()));
     }
     @Override
@@ -76,7 +84,7 @@ public class Give extends SubCommand implements DollCommandExecutor {
             return 0;
         }
 
-        if (target.getUniqueId() == profile.getId()) {
+        if (targetString.equalsIgnoreCase(profile.getName())) {
             playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("self-give"));
             return 0;
         }
