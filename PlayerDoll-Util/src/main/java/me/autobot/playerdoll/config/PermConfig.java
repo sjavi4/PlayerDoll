@@ -30,9 +30,10 @@ public class PermConfig extends AbstractConfig {
         //this.opBypass = new ConfigKey<>(this, "op-bypass", false);
         //this.maxDollSpawn = new ConfigKey<>(this,"playerdoll.perm.max-doll-spawn",new Object2IntOpenHashMap<>());
         this.maxDollCreate = new PermKey<>(this,"playerdoll.perm.max-doll-create",new Object2IntLinkedOpenHashMap<>());
-        this.groupPerCreateLimits.putAll(maxDollCreate.getValue());
         this.dollPrefix = new PermKey<>(this,"playerdoll.perm.doll-prefix",new LinkedHashMap<>());
         this.dollSuffix = new PermKey<>(this,"playerdoll.perm.doll-suffix",new LinkedHashMap<>());
+
+        this.groupPerCreateLimits.putAll(maxDollCreate.getValue());
         this.dollPrefixes.putAll(dollPrefix.getValue());
         this.dollSuffixes.putAll(dollSuffix.getValue());
         //this.restrictSkin = new ConfigKey<>(this,"playerdoll.perm.restrict-skin",new HashMap<>());

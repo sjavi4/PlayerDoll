@@ -5,6 +5,7 @@ import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.event.DollJoinEvent;
+import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -52,14 +53,15 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     }
 
     @Override
-    public void dollDisconnect(String r) {
+    public void dollDisconnect() {
         shakeOff();
-        Runnable t = () -> this.connection.disconnect(Component.literal(r));
-        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
-            PlayerDoll.scheduler.entityTask(t, getBukkitPlayer());
-        } else {
-            t.run();
-        }
+        SocketHelper.DOLL_CLIENTS.get(uuid).getSocketReader().close();
+//        Runnable t = () -> this.connection.disconnect(Component.literal(r));
+//        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
+//            PlayerDoll.scheduler.entityTask(t, getBukkitPlayer());
+//        } else {
+//            t.run();
+//        }
         //this.connection.disconnect(r);
         //this.connection.onDisconnect(Component.literal(r));
         //this.connection.disconnect(r);
@@ -195,7 +197,7 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     }
     @Override
     public void kill() {
-        dollDisconnect("Killed");
+        dollDisconnect();
     }
     @Override
     public void die(DamageSource cause)
@@ -204,6 +206,6 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
         super.die(cause);
         //setHealth(20);
         //this.foodData = new FoodData();
-        dollDisconnect(getCombatTracker().getDeathMessage().getString());
+        dollDisconnect();
     }
 }

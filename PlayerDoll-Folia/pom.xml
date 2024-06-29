@@ -7,7 +7,7 @@
     <parent>
         <groupId>me.autobot</groupId>
         <artifactId>PlayerDoll-Parent</artifactId>
-        <version>1.29</version>
+        <version>1.30</version>
     </parent>
     <artifactId>PlayerDoll-Folia</artifactId>
     <version>${project.parent.version}</version>
