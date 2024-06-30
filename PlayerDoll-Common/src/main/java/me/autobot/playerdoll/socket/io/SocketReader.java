@@ -35,9 +35,12 @@ public class SocketReader extends Thread {
 
     private Packets.protocolNumber protocol;
 
+    public GameProfile profile;
+
     public SocketReader(ClientSocket clientSocket) {
         this.clientSocket = clientSocket;
         this.socket = clientSocket.socket;
+        this.profile = clientSocket.getProfile();
         localAddress = socket.getLocalAddress().toString() + ":" + socket.getLocalPort();
         try {
             protocol = Packets.protocolNumber.valueOf(PlayerDoll.INTERNAL_VERSION);
@@ -94,9 +97,9 @@ public class SocketReader extends Thread {
             if (getCurrentState() != ConnectionState.PLAY) {
                 Player caller = clientSocket.getCaller();
                 if (caller != null) {
-                    caller.sendMessage(LangFormatter.YAMLReplaceMessage("spawn-error", clientSocket.getProfile().getName()));
+                    caller.sendMessage(LangFormatter.YAMLReplaceMessage("spawn-error", profile.getName()));
                 } else {
-                    PlayerDoll.LOGGER.warning(String.format("Doll %s failed to Join, Please Try again Later", clientSocket.getProfile().getName()));
+                    PlayerDoll.LOGGER.warning(String.format("Doll %s failed to Join, Please Try again Later", profile.getName()));
                 }
             }
             PlayerDoll.LOGGER.info("Client Connection Closed");
@@ -146,7 +149,6 @@ public class SocketReader extends Thread {
     }
 
     private void setupBungeeDollData() {
-        GameProfile profile = clientSocket.getProfile();
 
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         output.writeInt(0);
@@ -194,7 +196,7 @@ public class SocketReader extends Thread {
     private boolean captureLogin() throws InterruptedException {
         int asks = 0;
         while (getCurrentState() == ConnectionState.LOGIN) {
-            if (CursedConnection.startCursedConnection(localAddress, clientSocket.getProfile(), clientSocket.getCaller())) {
+            if (CursedConnection.startCursedConnection(localAddress, profile, clientSocket.getCaller())) {
                 //System.out.println("Succeed to login");
                 return true;
             } else {

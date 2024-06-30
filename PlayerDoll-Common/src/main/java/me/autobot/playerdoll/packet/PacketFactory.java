@@ -73,6 +73,20 @@ public abstract class PacketFactory implements IPacketFactory {
         return buffer.toByteArray();
     }
 
+    protected abstract int getRespawnPacketId();
+    protected byte[] requestRespawn() throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream respond = new DataOutputStream(buffer);
+
+        Packets.writeVarInt(respond, 0x03); // length of compressed size + packet id + packet data
+        Packets.writeVarInt(respond, 0x00); // no compression
+        Packets.writeVarInt(respond, getRespawnPacketId()); // id
+        // id
+        Packets.writeVarInt(respond, 0x00); // respawn Enum
+
+        return buffer.toByteArray();
+    }
+
     protected byte[] resourcePackPush(SocketReader.ConnectionState state, UUID packID, ResourcePackStatus status) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         DataOutputStream respond = new DataOutputStream(buffer);

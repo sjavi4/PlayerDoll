@@ -10,6 +10,8 @@ public class DollPacketInjector extends ChannelDuplexHandler {
     private static final Class<?> loginPacketClass = ReflectionUtil.getClass("net.minecraft.network.protocol.game.PacketPlayOutLogin");
     private static final Class<?> keepAlivePacketClass = ReflectionUtil.getClass("net.minecraft.network.protocol.common.ClientboundKeepAlivePacket");
     private static final Class<?> disconnectPacketClass = ReflectionUtil.getClass("net.minecraft.network.protocol.common.ClientboundDisconnectPacket");
+    private static final Class<?> deathScreenPacketClass = ReflectionUtil.getClass("net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket");
+
     //private static final Class<?> playStartConfigPacketClass = ReflectionUtil.getClass("net.minecraft.network.protocol.common.ClientboundStartConfigurationPacket");
     //private static final Class<?> playerPositionClass = ReflectionUtil.getClass("net.minecraft.network.protocol.game.PacketPlayOutPosition");
     public DollPacketInjector(Channel connectionChannel) {
@@ -28,7 +30,7 @@ public class DollPacketInjector extends ChannelDuplexHandler {
             PlayerDoll.LOGGER.info("Doll Joined Successfully, Suspend Server-side Packet Sending.");
             return;
         } else if (!allowPacketSend) {
-            if (keepAlivePacketClass.isInstance(msg) || disconnectPacketClass.isInstance(msg) ){ //|| playerPositionClass.isInstance(msg)) {
+            if (keepAlivePacketClass.isInstance(msg) || disconnectPacketClass.isInstance(msg) || deathScreenPacketClass.isInstance(msg)){ //|| playerPositionClass.isInstance(msg)) {
 //                if (keepAlivePacketClass.isInstance(msg)) {
 //                    System.out.println("Server send KeepAlive: " + keepAlivePacketClass.getMethod("a").invoke(msg));
 //                }

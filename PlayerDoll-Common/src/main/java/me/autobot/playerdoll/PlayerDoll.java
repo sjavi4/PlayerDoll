@@ -10,6 +10,7 @@ import me.autobot.playerdoll.gui.GUIManager;
 import me.autobot.playerdoll.gui.MenuWatcher;
 import me.autobot.playerdoll.listener.bukkit.*;
 import me.autobot.playerdoll.listener.doll.DollJoin;
+import me.autobot.playerdoll.listener.doll.DollRespawn;
 import me.autobot.playerdoll.listener.doll.DollSetting;
 import me.autobot.playerdoll.scheduler.BukkitScheduler;
 import me.autobot.playerdoll.scheduler.FoliaScheduler;
@@ -172,6 +173,7 @@ public final class PlayerDoll extends JavaPlugin {
         // Custom Event
         pluginManager.registerEvents(new DollJoin(), this);
         pluginManager.registerEvents(new DollSetting(), this);
+        pluginManager.registerEvents(new DollRespawn(), this);
     }
 
     private void registerCommands() {

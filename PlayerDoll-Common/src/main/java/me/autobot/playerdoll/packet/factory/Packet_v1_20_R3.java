@@ -1,9 +1,13 @@
 package me.autobot.playerdoll.packet.factory;
 
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.doll.DollManager;
+import me.autobot.playerdoll.event.DollRespawnEvent;
 import me.autobot.playerdoll.packet.PacketFactory;
 import me.autobot.playerdoll.packet.Packets;
 import me.autobot.playerdoll.socket.io.SocketReader;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -27,6 +31,11 @@ public class Packet_v1_20_R3 extends PacketFactory {
     @Override
     protected int getKeepAlivePacketId(SocketReader.ConnectionState state) {
         return state == SocketReader.ConnectionState.PLAY ? 0x15 : 0x03;
+    }
+
+    @Override
+    protected int getRespawnPacketId() {
+        return 0x08;
     }
 
     @Override
@@ -85,6 +94,15 @@ public class Packet_v1_20_R3 extends PacketFactory {
             }
             // Keep Alive
             case 0x24 -> output.write(keepAlive(socketReader.getCurrentState(), data.readLong()));
+            // Death Screen
+            case 0x3A -> {
+                int entityId = Packets.readVarInt(data);
+                Player player = DollManager.ONLINE_DOLLS.get(socketReader.profile.getId()).getBukkitPlayer();
+                if (entityId == player.getEntityId()) {
+                    output.write(requestRespawn());
+                    PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.callSyncEvent(new DollRespawnEvent(player)), 5);
+                }
+            }
             case 0x44 -> {
                 // Weird problem when sending resource pack respond
                 //System.out.println("ResourcePack Push (Play)");
