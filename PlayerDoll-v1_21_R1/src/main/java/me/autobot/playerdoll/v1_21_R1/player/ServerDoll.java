@@ -197,7 +197,9 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     }
     @Override
     public void kill() {
-        dollDisconnect();
+        shakeOff();
+        super.kill();
+        //dollDisconnect();
     }
     @Override
     public void die(DamageSource cause)
@@ -206,6 +208,6 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
         super.die(cause);
         //setHealth(20);
         //this.foodData = new FoodData();
-        dollDisconnect();
+        //dollDisconnect();
     }
 }
