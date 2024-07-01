@@ -7,6 +7,27 @@ Release avaliable on Modrinth.
 
 Updated Readme for v1.28
 
+#### Currently supported Languages
+<table>
+  <tr>
+    <th>Language</th>
+    <th>Author</th>
+    <th>Location</th>
+  </tr>
+  <tr>
+    <td>default (English)</td>
+    <td></td>
+    <td>built-in</td>
+  </tr>
+  <tr>
+    <td>Tranditional Chinese</td>
+    <td>anonymous</td>
+    <td>[zh.yml](https://github.com/sjavi4/PlayerDoll/blob/main/customlanguages/zh.yml)</td>
+  </tr>
+</table>
+
+Download link available from above
+
 ## Notice
 
 <b>The plugin is finished re-construction and start Testing publicly.
@@ -64,12 +85,12 @@ Doll now will connect to server by Emulating a client.
 
 ## How to use
 
-### Upgrade from old version
+### Upgrade from old version (v1.28 above)
 1. Backup and delete the old configs, (except doll configs).
    * Then start up server to regenerate new configs (with comments and usages)
 2. Copy settings from old config to the new one, and set for new config keys according their usage
 
-### In game
+### In game (v1.28 above)
 1. player without permission will not display the corrisponding command (or arguments)
    * `doll` or `playerdoll:doll` are the main commands
    * `dollmanage` or `playerdoll:dollmanage` are the same from above, but they bypass some optional checking. OP are reqiured by default
