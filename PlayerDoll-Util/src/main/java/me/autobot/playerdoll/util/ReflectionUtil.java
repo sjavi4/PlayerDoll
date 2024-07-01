@@ -139,13 +139,6 @@ public final class ReflectionUtil {
     public static Class<?> getFoliaRegoinizedServerClass() {
         return C_FOLIA_REGIONIZED_SERVER;
     }
-    public static void foliaAddTask(Runnable r) {
-        try {
-            M_REGOINIZED_SERVER_ADDTASK.invoke(FOLIA_REGOINIZED_SERVER, r);
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static Player getBukkitPlayer(Object nmsPlayer) {
         if (getBukkitPlayerMethod == null) {

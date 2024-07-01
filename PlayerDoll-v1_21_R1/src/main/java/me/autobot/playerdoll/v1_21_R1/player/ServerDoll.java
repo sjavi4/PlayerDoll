@@ -97,8 +97,8 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
         } else {
             // Add Network task
             if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
-                ReflectionUtil.foliaAddTask(this::updateActionPack);
-                //PlayerDoll.scheduler.entityTask(this::updateActionPack, getBukkitPlayer());
+                // Run on entityTask as Folia's implementation
+                PlayerDoll.scheduler.entityTaskDelayed(this::updateActionPack, getBukkitPlayer(), 1L);
             } else {
                 server.tell(server.wrapRunnable(this::updateActionPack));
             }
