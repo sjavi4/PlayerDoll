@@ -8,6 +8,7 @@ Release avaliable on Modrinth.
 Updated Readme for v1.28
 
 #### Currently supported Languages
+<
 <table>
   <tr>
     <th>Language</th>
@@ -22,9 +23,7 @@ Updated Readme for v1.28
   <tr>
     <td>Tranditional Chinese</td>
     <td>anonymous</td>
-    <td>
-      [zh.yml](https://github.com/sjavi4/PlayerDoll/blob/main/customlanguages/zh.yml)
-    </td>
+    <td><a href="https://github.com/sjavi4/PlayerDoll/blob/main/customlanguages/zh.yml">zh.yml</a></td>
   </tr>
 </table>
 
