@@ -27,7 +27,7 @@ Updated Readme for v1.28
   </tr>
 </table>
 
-Download link available from above
+Download links available from above
 
 ## Notice
 
