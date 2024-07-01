@@ -22,7 +22,9 @@ Updated Readme for v1.28
   <tr>
     <td>Tranditional Chinese</td>
     <td>anonymous</td>
-    <td>[zh.yml](https://github.com/sjavi4/PlayerDoll/blob/main/customlanguages/zh.yml)</td>
+    <td>
+      [zh.yml](https://github.com/sjavi4/PlayerDoll/blob/main/customlanguages/zh.yml)
+    </td>
   </tr>
 </table>
 
