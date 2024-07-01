@@ -26,6 +26,10 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
+**Setting of Doll**
+Doll's current setting. From config or GUI. This might be helpful when clarifing the problem
+i.e. Hostility = true / Gravity: false
+
 **Screenshots or Videos**
 If applicable, add screenshots or videos to help explain your problem.
 
