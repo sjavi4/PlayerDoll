@@ -87,6 +87,21 @@ public abstract class PacketFactory implements IPacketFactory {
         return buffer.toByteArray();
     }
 
+    //protected abstract int getAcceptTeleportPacketId();
+
+    protected byte[] acceptTeleport(int id) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream respond = new DataOutputStream(buffer);
+
+        Packets.writeVarInt(respond, 0x03); // length of compressed size + packet id + packet data
+        Packets.writeVarInt(respond, 0x00); // no compression
+        Packets.writeVarInt(respond, 0x00); // id
+        // id
+        Packets.writeVarInt(respond, id); // tp id
+
+        return buffer.toByteArray();
+    }
+
     protected byte[] resourcePackPush(SocketReader.ConnectionState state, UUID packID, ResourcePackStatus status) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         DataOutputStream respond = new DataOutputStream(buffer);

@@ -96,6 +96,15 @@ public class Packet_v1_20_R4 extends Packet_v1_20_R3 {
                 //System.out.println("Play Disconnect Packet");
                 socketReader.endStream();
             }
+            // Game Event (Folia end Credits)
+            case 0x22 -> {
+                byte event = data.readByte();
+                //float value = data.readFloat();
+                // end Credits
+                if (event == 0x04) {
+                    output.write(requestRespawn());
+                }
+            }
             // Keep Alive
             case 0x26 -> output.write(keepAlive(socketReader.getCurrentState(), data.readLong()));
             // Death Screen
@@ -106,6 +115,17 @@ public class Packet_v1_20_R4 extends Packet_v1_20_R3 {
                     output.write(requestRespawn());
                     PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.callSyncEvent(new DollRespawnEvent(player)), 5);
                 }
+            }
+            // Sync Pos (Folia End portal Tp)
+            case 0x40 -> {
+                double x = data.readDouble();
+                double y = data.readDouble();
+                double z = data.readDouble();
+                float yaw = data.readFloat();
+                float pitch = data.readFloat();
+                byte flag = data.readByte();
+                int id = Packets.readVarInt(data);
+                output.write(acceptTeleport(id));
             }
             case 0x46 -> {
                 // Weird problem when sending resource pack respond

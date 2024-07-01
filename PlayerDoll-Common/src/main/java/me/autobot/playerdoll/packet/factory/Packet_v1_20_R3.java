@@ -92,6 +92,15 @@ public class Packet_v1_20_R3 extends PacketFactory {
                 PlayerDoll.LOGGER.info("Client Disconnected (play phase)");
                 socketReader.endStream();
             }
+            // Game Event (Folia end Credits)
+            case 0x20 -> {
+                byte event = data.readByte();
+                //float value = data.readFloat();
+                // end Credits
+                if (event == 0x04) {
+                    output.write(requestRespawn());
+                }
+            }
             // Keep Alive
             case 0x24 -> output.write(keepAlive(socketReader.getCurrentState(), data.readLong()));
             // Death Screen
@@ -102,6 +111,17 @@ public class Packet_v1_20_R3 extends PacketFactory {
                     output.write(requestRespawn());
                     PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.callSyncEvent(new DollRespawnEvent(player)), 5);
                 }
+            }
+            // Sync Pos (Folia End portal Tp)
+            case 0x3E -> {
+                double x = data.readDouble();
+                double y = data.readDouble();
+                double z = data.readDouble();
+                float yaw = data.readFloat();
+                float pitch = data.readFloat();
+                byte flag = data.readByte();
+                int id = Packets.readVarInt(data);
+                output.write(acceptTeleport(id));
             }
             case 0x44 -> {
                 // Weird problem when sending resource pack respond
