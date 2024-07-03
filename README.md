@@ -8,7 +8,6 @@ Release avaliable on Modrinth.
 Updated Readme for v1.28
 
 #### Currently supported Languages
-<
 <table>
   <tr>
     <th>Language</th>
