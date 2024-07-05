@@ -156,7 +156,7 @@ public class DollJoin implements Listener {
                     continue;
                 }
                 String replaced = s.replaceAll("%name%",player.getName()).replaceAll("%uuid%",player.getUniqueId().toString());
-                Runnable task = () -> player.performCommand(replaced);
+                Runnable task = () -> player.chat(replaced);
                 PlayerDoll.scheduler.entityTaskDelayed(task, player, 1 + count*interval);
                 count++;
             }
