@@ -1,7 +1,7 @@
 # Translated by Anonymous author
 
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 23
+version: 25
 
 ###
 # &0 black
@@ -59,6 +59,8 @@ Message:
 # Spawn cmd
   in-world: '&c假人已生成'
   max-capacity: '&c伺服器假人名額已滿'
+  spawn-error: '&c假人%a%生成失敗, 請稍後再試'
+  spawn-success: '&a假人成功生成'
 # Jump cmd
   self-jump: '&c真人玩家不支援跳躍行為'
 # Lookat cmd
@@ -70,7 +72,7 @@ Message:
 
 control-button:
   back: '&f返回'
-  hint: '&2左鍵啟用$n&c右鍵禁用'
+  hint: '&2左鍵啟用$n&c右鍵停用'
   prev: '&f上一頁'
   curr: '&f當前'
   next: '&f下一頁'
@@ -127,8 +129,8 @@ set-menu:
     name: '自動加入'
     desc: '&f使假人在伺服器開啟時自動進入世界'
   hide_from_list:
-    name: 'Hide From List'
-    desc: '&fWhether Doll will hide from dolllist command'
+    name: '列表隱藏'
+    desc: '&f使假人不顯示於info指令的Tab補全列表'
   pickable:
     name: '拾取'
     desc: '&f使假人可否從世界獲得物品'
@@ -171,9 +173,6 @@ set-menu:
   gset:
     name: '全體設定'
     desc: "&f開放假人的全體設定權限"
-  info:
-    name: 'Info'
-    desc: "&fSet info command"
   jump:
     name: '跳躍'
     desc: "&f開放假人的跳躍權限"
@@ -237,3 +236,33 @@ inv-menu:
 
   level-display: '&e等級:%a%'
   level-get: "&a按此以獲得1等級的經驗值"
+
+info-cmd:
+  name: '假人: '
+  uuid: 'UUID: '
+  status-online: 在線
+  status-offline: 離線
+  owner: '持有人: '
+  doll-setting: '[假人設定]'
+  g-setting: '[全體設定]'
+
+
+cmd-hover:
+  action-main: '主手物品: %a%'
+  action-off: '副手物品: %a%'
+  despawn: '位置: [%a% %b% %c%]'
+  dismount: '正在騎乘: %a%'
+  exp: '等級: %a%'
+  give: '持有人: %a%'
+  gset: '啟用:'
+  look: '朝向: %a%'
+  mount: '正在騎乘: %a%'
+  pset: '已設定:'
+  remove: '持有人: %a%'
+  set: '啟用:'
+  slot: '當前快捷欄: %a%'
+  sneak: '蹲下: %a%'
+  spawn: '持有人: %a%'
+  sprint: '奔跑: %a%'
+  tp: '位置: [%a% %b% %c%]'
+  turn: '朝向: %a%'
