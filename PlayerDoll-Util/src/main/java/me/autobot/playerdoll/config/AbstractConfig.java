@@ -7,7 +7,7 @@ import java.util.logging.Level;
 
 public abstract class AbstractConfig {
     public YamlConfiguration yamlConfiguration;
-    public static final int CURRENT_VERSION = 24;
+    public static final int CURRENT_VERSION = 25;
     public int version;
     public AbstractConfig(YamlConfiguration config) {
         this.yamlConfiguration = config;

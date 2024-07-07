@@ -8,7 +8,6 @@ import me.autobot.playerdoll.event.DollJoinEvent;
 import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 
 public class ServerDoll extends ExtServerPlayer implements Doll {
@@ -131,24 +129,6 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     @Override
     public boolean canBeSeenAsEnemy() {
         return dollConfig.dollHostility.getValue() && super.canBeSeenAsEnemy();
-    }
-
-    // IDK-why-Way to fix portal cool down counter not working
-    @Override
-    public Entity changeDimension(ServerLevel serverLevel) {
-        if (wonGame) {
-            ServerboundClientCommandPacket p = new ServerboundClientCommandPacket(ServerboundClientCommandPacket.Action.PERFORM_RESPAWN);
-            connection.handleClientCommand(p);
-        }
-        if (connection.player.isChangingDimension()) {
-            connection.player.hasChangedDimension();
-        }
-        return connection.player;
-    }
-    @Override
-    public Entity changeDimension(ServerLevel serverLevel, PlayerTeleportEvent.TeleportCause cause) {
-        super.changeDimension(serverLevel, cause);
-        return this.changeDimension(serverLevel);
     }
 
     @Override

@@ -8,8 +8,6 @@ import me.autobot.playerdoll.event.DollJoinEvent;
 import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ServerboundClientCommandPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,12 +15,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
-
-import javax.annotation.Nullable;
 
 
 public class ServerDoll extends ExtServerPlayer implements Doll {
@@ -140,38 +135,6 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     public boolean canBeSeenAsEnemy() {
         return dollConfig.dollHostility.getValue() && super.canBeSeenAsEnemy();
     }
-
-    @Nullable
-    @Override
-    public Entity changeDimension(DimensionTransition dimensiontransition) {
-        super.changeDimension(dimensiontransition);
-        if (wonGame) {
-            ServerboundClientCommandPacket p = new ServerboundClientCommandPacket(ServerboundClientCommandPacket.Action.PERFORM_RESPAWN);
-            connection.handleClientCommand(p);
-        }
-        if (connection.player.isChangingDimension()) {
-            connection.player.hasChangedDimension();
-        }
-        return connection.player;
-    }
-
-
-//    @Override
-//    public Entity changeDimension(ServerLevel serverLevel) {
-//        if (wonGame) {
-//            ServerboundClientCommandPacket p = new ServerboundClientCommandPacket(ServerboundClientCommandPacket.Action.PERFORM_RESPAWN);
-//            connection.handleClientCommand(p);
-//        }
-//        if (connection.player.isChangingDimension()) {
-//            connection.player.hasChangedDimension();
-//        }
-//        return connection.player;
-//    }
-//    @Override
-//    public Entity changeDimension(ServerLevel serverLevel, PlayerTeleportEvent.TeleportCause cause) {
-//        super.changeDimension(serverLevel, cause);
-//        return this.changeDimension(serverLevel);
-//    }
 
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
