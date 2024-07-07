@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
 
@@ -44,6 +45,16 @@ public class PSet extends SubCommand implements DollCommandExecutor {
         }
         DollConfig config = DollConfig.getOnlineDollConfig(target.getUniqueId());
         EnumMap<FlagConfig.PersonalFlagType, Boolean> flagMap = config.playerSetting.get(profile.getId());
+        if (flagMap == null) {
+            // Setup all default value for new player
+            EnumMap<FlagConfig.PersonalFlagType, Boolean> enumMap = new EnumMap<>(FlagConfig.PersonalFlagType.class);
+            Arrays.stream(FlagConfig.PersonalFlagType.values())
+                    .forEach(personalFlagType -> enumMap.put(personalFlagType, false));
+            config.playerSetting.put(profile.getId(), enumMap);
+
+            DollGUIHolder.DOLL_GUI_HOLDERS.get(target.getUniqueId()).getPSetMenu(Bukkit.getOfflinePlayer(profile.getId()));
+            flagMap = enumMap;
+        }
         flagMap.put(flagType, toggle);
     }
 

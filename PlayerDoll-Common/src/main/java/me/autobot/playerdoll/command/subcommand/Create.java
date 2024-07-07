@@ -37,10 +37,12 @@ public class Create extends SubCommand implements DollCommandExecutor {
         dollConfig.dollName.setNewValue(DollManager.dollFullName(targetString));
         dollConfig.ownerName.setNewValue(sender.getName());
         dollConfig.ownerUUID.setNewValue(sender.getUniqueId().toString());
-        if (profile != null && !profile.getProperties().get("textures").isEmpty()) {
-            Property property = profile.getProperties().get("textures").iterator().next();
-            dollConfig.skinProperty.setNewValue(property.value());
-            dollConfig.skinSignature.setNewValue(property.signature());
+        if (profile != null) {
+            if (!profile.getProperties().get("textures").isEmpty()) {
+                Property property = profile.getProperties().get("textures").iterator().next();
+                dollConfig.skinProperty.setNewValue(property.value());
+                dollConfig.skinSignature.setNewValue(property.signature());
+            }
         }
         dollConfig.saveConfig();
         sender.sendMessage(LangFormatter.YAMLReplaceMessage("success-create"));
@@ -83,17 +85,17 @@ public class Create extends SubCommand implements DollCommandExecutor {
 
         String[] splitInput = context.getInput().split(" ");
 
+        if (fromManageCommand(context.getInput())) {
+            dollConfig = DollConfig.createNewConfig(fileUtil.getOrCreateFile(fileUtil.getDollDir(), dollConfigFile));
+            execute();
+            return 1;
+        }
+
         if (!DollManager.canPlayerCreateDoll(playerSender)) {
             playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("max-create"));
             return 0;
         }
 
-        if (profile == null || splitInput.length == 3) {
-            // Player do not have skin permission or not input skin
-            dollConfig = DollConfig.createNewConfig(fileUtil.getOrCreateFile(fileUtil.getDollDir(), dollConfigFile));
-            execute();
-            return 1;
-        }
         if (splitInput.length == 4) {
             // Player have skin permission & inputted skin
             if (splitInput[3].startsWith("@")) { // doll create <name> [<skin>]
@@ -102,59 +104,6 @@ public class Create extends SubCommand implements DollCommandExecutor {
             }
         }
         dollConfig = DollConfig.createNewConfig(fileUtil.getOrCreateFile(fileUtil.getDollDir(), dollConfigFile));
-        if (executeIfManage(context.getInput())) {
-            return 1;
-        }
-
-        /*
-        FileUtil fileUtil = FileUtil.INSTANCE;
-        File dollConfigFile = fileUtil.getFile(fileUtil.getDollDir(), DollManager.dollFullName(targetString) + ".yml");
-        if (dollConfigFile.exists()) {
-            playerSender.sendMessage("Repeat Doll Name");
-            return 0;
-        }
-
-         */
-        /*
-        try {
-            if (!dollConfigFile.createNewFile()) {
-                playerSender.sendMessage("Fail to create Doll Config");
-                return 0;
-            }
-        } catch (IOException e) {
-            playerSender.sendMessage("Error whist creating Doll Config");
-            throw new RuntimeException(e);
-        }
-
-         */
-
-        //DollConfig dollConfig = DollConfig.createNewConfig(dollConfigFile);
-
-
-        // In Offline mode, create command will always be called,
-        // also gameProfile will always exist (property will be empty instead)
-
-        // In Online mode, create command will only be called when Player fetch succeed (exist in Mojang db)
-        // gameProfile exist (property will be empty if player haven't joined the server)
-
-        // [Online mode] or [BungeeCord + Offline mode] -> fetch skin
-
-        /*
-        if (gameProfiles.isEmpty()) {
-            playerSender.sendMessage("Player Is Not Exist, Using Default Skin");
-            return 0;
-        } else {
-            GameProfile profile = gameProfiles.stream().findFirst().get();
-
-            playerSender.sendMessage("Valid Skin");
-            profile.getProperties().forEach((s, p) -> {
-                System.out.println(s);
-                System.out.println(p.signature());
-                System.out.println(p.value());
-            });
-        }
-
-         */
         execute();
         return 1;
     }

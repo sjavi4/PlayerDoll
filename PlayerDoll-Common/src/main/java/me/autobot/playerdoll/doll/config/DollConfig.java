@@ -181,75 +181,6 @@ public class DollConfig extends AbstractConfig {
         return true;
     }
 
-//    public void changeSetting(Player player, SettingType type, boolean b) {
-//        if (doll == null) {
-//            return;
-//        }
-//        //if player has permission
-//        //then is nms?
-//        //nms then event
-//        boolean trigger = switch (type) {
-//            case ENDER_CHEST -> {
-//                this.dollEChest.setNewValue(b);
-//                yield true;
-//            }
-//            case INVENTORY -> {
-//                this.dollInv.setNewValue(b);
-//                yield true;
-//            }
-//            case JOIN_AT_START -> {
-//                this.dollJoinAtStart.setNewValue(b);
-//                yield true;
-//            }
-//            case HOSTILITY -> {
-//                this.dollHostility.setNewValue(b);
-//                yield true;
-//            }
-//
-//            case INVULNERABLE -> {
-//                this.dollInvulnerable.setNewValue(b);
-//                yield false;
-//            }
-//            case PUSHABLE -> {
-//                this.dollPushable.setNewValue(b);
-//                yield false;
-//            }
-//            case PICKABLE -> {
-//                this.dollPickable.setNewValue(b);
-//                yield false;
-//            }
-//            case PHANTOM -> {
-//                this.dollPhantom.setNewValue(b);
-//                yield false;
-//            }
-//            case GRAVITY -> {
-//                this.dollGravity.setNewValue(b);
-//                yield false;
-//            }
-//            case GLOW -> {
-//                this.dollGlow.setNewValue(b);
-//                yield false;
-//            }
-//            case LARGE_STEP_SIZE -> {
-//                this.dollLargeStepSize.setNewValue(b);
-//                yield false;
-//            }
-//            case REAL_PLAYER_TICK_UPDATE -> {
-//                this.dollRealPlayerTickUpdate.setNewValue(b);
-//                yield false;
-//            }
-//            case REAL_PLAYER_TICK_ACTION -> {
-//                this.dollRealPlayerTickAction.setNewValue(b);
-//                yield false;
-//            }
-//        };
-//
-//        if (trigger) {
-//            return;
-//        }
-        //Bukkit.getPluginManager().callEvent(new DollSettingChangeEvent(player, doll, type, b));
-    //}
-
     private void getDollSetting() {
         Arrays.stream(DollSettings.values()).forEach(settings -> {
             ConfigKey<DollConfig, Boolean> configKey = new ConfigKey<>(this, settings.path, settings.getDefaultSetting());
@@ -266,7 +197,11 @@ public class DollConfig extends AbstractConfig {
                 this.playerSetting.put(playerUUID, map);
                 Map<String, Object> settingMap = yamlConfiguration.getConfigurationSection("Player-Setting." + playerUUID).getValues(true);
                 settingMap.forEach((s, b) -> {
-                    map.put(FlagConfig.PersonalFlagType.valueOf(s.toUpperCase()), (boolean) b);
+                    try {
+                        // Unused key will be not found
+                        map.put(FlagConfig.PersonalFlagType.valueOf(s.toUpperCase()), (boolean) b);
+                    } catch (IllegalArgumentException ignored) {
+                    }
                 });
             });
         }
@@ -287,8 +222,8 @@ public class DollConfig extends AbstractConfig {
             yamlConfiguration.set("General-Setting." + s.getCommand().toLowerCase(), b);
         });
         this.playerSetting.forEach((uuid,map) -> {
-            // not to save when values are all false (in default state)
-            if (!map.containsValue(true)) {
+            // not to save when values are equal to general setting
+            if (map.equals(generalSetting)) {
                 return;
             }
             map.forEach((s,b) -> {
@@ -311,6 +246,7 @@ public class DollConfig extends AbstractConfig {
         GRAVITY(FlagConfig.GlobalFlagType.GRAVITY, "Doll-Setting.gravity", true),
         HOSTILITY(FlagConfig.GlobalFlagType.HOSTILITY, "Doll-Setting.hostility", true),
         //INV(FlagConfig.GlobalFlagType.INV, "Doll-Setting.inv", true),
+        HIDE_FROM_LIST(FlagConfig.GlobalFlagType.HIDE_FROM_LIST, "Doll-Setting.hide_from_list", false),
         INVULNERABLE(FlagConfig.GlobalFlagType.INVULNERABLE, "Doll-Setting.invulnerable", false),
         JOIN_AT_START(FlagConfig.GlobalFlagType.JOIN_AT_START, "Doll-Setting.join_at_start", false),
         LARGE_STEP_SIZE(FlagConfig.GlobalFlagType.LARGE_STEP_SIZE, "Doll-Setting.large_step_size", false),
@@ -340,147 +276,8 @@ public class DollConfig extends AbstractConfig {
 
     }
 
-//    public enum SettingType {
-//        ENDER_CHEST {
-//            @Override
-//            public String getSettingName() {
-//                return "echest";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollEChest;
-//            }
-//        },
-//        GLOW {
-//            @Override
-//            public String getSettingName() {
-//                return "glow";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollGlow;
-//            }
-//        },
-//        GRAVITY {
-//            @Override
-//            public String getSettingName() {
-//                return "gravity";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollGravity;
-//            }
-//        },
-//        HOSTILITY {
-//            @Override
-//            public String getSettingName() {
-//                return "hostility";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollHostility;
-//            }
-//        },
-//        INVENTORY {
-//            @Override
-//            public String getSettingName() {
-//                return "inv";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollInv;
-//            }
-//        },
-//        INVULNERABLE {
-//            @Override
-//            public String getSettingName() {
-//                return "invulnerable";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollInvulnerable;
-//            }
-//        },
-//        JOIN_AT_START {
-//            @Override
-//            public String getSettingName() {
-//                return "join_at_start";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollJoinAtStart;
-//            }
-//        },
-//        LARGE_STEP_SIZE {
-//            @Override
-//            public String getSettingName() {
-//                return "large_step_size";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollLargeStepSize;
-//            }
-//        },
-//        PHANTOM {
-//            @Override
-//            public String getSettingName() {
-//                return "phantom";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollPhantom;
-//            }
-//        },
-//        PICKABLE {
-//            @Override
-//            public String getSettingName() {
-//                return "pickable";
-//            }
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollPickable;
-//            }
-//        },
-//        PUSHABLE {
-//            @Override
-//            public String getSettingName() {
-//                return "pushable";
-//            }
-//
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollPushable;
-//            }
-//        },
-//        REAL_PLAYER_TICK_UPDATE {
-//            @Override
-//            public String getSettingName() {
-//                return "real_player_tick_update";
-//            }
-//
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollRealPlayerTickUpdate;
-//            }
-//        },
-//        REAL_PLAYER_TICK_ACTION {
-//            @Override
-//            public String getSettingName() {
-//                return "real_player_tick_action";
-//            }
-//
-//            @Override
-//            public ConfigKey<DollConfig, Boolean> getConfigKey(DollConfig config) {
-//                return config.dollRealPlayerTickAction;
-//            }
-//        };
-//
-//        public abstract String getSettingName();
-//        public abstract ConfigKey<DollConfig,Boolean> getConfigKey(DollConfig config);
-//    }
-
     @Override
     public String getName() {
-        return ""; //"Doll Config of [" + doll.getBukkitPlayer().getName() + "]";
+        return "";
     }
 }

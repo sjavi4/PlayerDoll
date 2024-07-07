@@ -19,16 +19,14 @@ public class DollPacketInjector extends ChannelDuplexHandler {
         Class<?> keepAlivePacketClass = ReflectionUtil.getClass(s + "common.ClientboundKeepAlivePacket");
         Class<?> disconnectPacketClass = ReflectionUtil.getClass(s + "common.ClientboundDisconnectPacket");
         Class<?> deathScreenPacketClass = ReflectionUtil.getClass(s + "game.ClientboundPlayerCombatKillPacket");
+        Class<?> gameEventPacketClass = ReflectionUtil.getClass(s + "game.PacketPlayOutGameStateChange");
+        Class<?> playerPositionPacketClass = ReflectionUtil.getClass(s + "game.PacketPlayOutPosition");
 
         packetSet.add(keepAlivePacketClass);
         packetSet.add(disconnectPacketClass);
         packetSet.add(deathScreenPacketClass);
-        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
-            Class<?> gameEventPacketClass = ReflectionUtil.getClass(s + "game.PacketPlayOutGameStateChange");
-            Class<?> playerPositionPacketClass = ReflectionUtil.getClass(s + "game.PacketPlayOutPosition");
-            packetSet.add(gameEventPacketClass);
-            packetSet.add(playerPositionPacketClass);
-        }
+        packetSet.add(gameEventPacketClass);
+        packetSet.add(playerPositionPacketClass);
     }
 
     public DollPacketInjector(Channel connectionChannel) {

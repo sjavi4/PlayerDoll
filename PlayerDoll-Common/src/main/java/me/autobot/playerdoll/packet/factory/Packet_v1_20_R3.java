@@ -6,7 +6,6 @@ import me.autobot.playerdoll.event.DollRespawnEvent;
 import me.autobot.playerdoll.packet.PacketFactory;
 import me.autobot.playerdoll.packet.Packets;
 import me.autobot.playerdoll.socket.io.SocketReader;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.DataInputStream;

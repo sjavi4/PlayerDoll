@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 24
+version: 25
 
 ###
 # &0 black
@@ -128,7 +128,7 @@ set-menu:
     desc: '&fWhether Doll will automatically join when server start'
   hide_from_list:
     name: 'Hide From List'
-    desc: '&fWhether Doll will hide from dolllist command'
+    desc: '&fWhether Doll will hide from Tab complete in info command'
   pickable:
     name: 'Pickable'
     desc: '&fWhether Doll can pick up items'
@@ -171,9 +171,6 @@ set-menu:
   gset:
     name: 'Gset'
     desc: "&fSet gset command"
-  info:
-    name: 'Info'
-    desc: "&fSet info command"
   jump:
     name: 'Jump'
     desc: "&fSet jump command"
@@ -237,3 +234,33 @@ inv-menu:
 
   level-display: '&eLevel:%a%'
   level-get: "&aClick to retrieve EXP points of 1 Level"
+
+
+info-cmd:
+  name: 'Doll: '
+  uuid: 'UUID: '
+  status-online: Online
+  status-offline: Offline
+  owner: 'Owner: '
+  doll-setting: '[Doll Settings]'
+  g-setting: '[Everyone Settings]'
+
+cmd-hover:
+  action-main: 'MainHand Item: %a%'
+  action-off: 'OffHand Item: %a%'
+  despawn: 'Pos: [%a% %b% %c%]'
+  dismount: 'Riding: %a%'
+  exp: 'Level: %a%'
+  give: 'Owner: %a%'
+  gset: 'Enabled:'
+  look: 'Facing: %a%'
+  mount: 'Riding: %a%'
+  pset: 'Being Set:'
+  remove: 'Owner: %a%'
+  set: 'Enabled:'
+  slot: 'Hand Slot: %a%'
+  sneak: 'Sneaking: %a%'
+  spawn: 'Owner: %a%'
+  sprint: 'Sprinting: %a%'
+  tp: 'Pos: [%a% %b% %c%]'
+  turn: 'Facing: %a%'

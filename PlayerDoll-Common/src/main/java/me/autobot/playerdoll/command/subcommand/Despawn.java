@@ -8,7 +8,6 @@ import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
-import me.autobot.playerdoll.socket.SocketHelper;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

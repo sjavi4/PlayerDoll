@@ -233,8 +233,8 @@ permissions:
     description: GUI permission
   playerdoll.globalflag.gravity:
     description: GUI permission
-  #playerdoll.globalflag.hide_from_list:
-  #  description: GUI permission
+  playerdoll.globalflag.hide_from_list:
+    description: GUI permission
   playerdoll.globalflag.hostility:
     description: GUI permission
   playerdoll.globalflag.inv:
@@ -274,8 +274,8 @@ permissions:
     description: GUI permission
   playerdoll.personalflag.gset:
     description: GUI permission
-  playerdoll.personalflag.info:
-    description: GUI permission
+  #playerdoll.personalflag.info:
+  #  description: GUI permission
   playerdoll.personalflag.inv:
     description: GUI permission
   playerdoll.personalflag.jump:
