@@ -28,12 +28,6 @@ Updated Readme for v1.28
 
 Download links available from above
 
-## Notice
-
-<b>The plugin is finished re-construction and start Testing publicly.
-
-If problems found on newer version, please write an issue. </b>
-
 ## Disclaimer
 
 <b>This plugin is highly dependent on NMS, slightly changes made by Mojang / Server Jar provider might cause this plugin no longer working.<br>
@@ -76,7 +70,9 @@ Pre-1.20.4 versions are temporary un-supported.
 
 For BungeeCord connections, check [here](https://modrinth.com/plugin/playerdoll/version/lbTw2Mzy)
 
-Things like database, multiverse, bungeecord might went wrong (not tested or coded to handle)
+For Velocity connections, a basic test was done and no specific support is needed. Doll can join directly without any setup
+
+Things like database, multiverse might went wrong (not tested or coded to handle)
 
 Welcome to report any issues (performance, bugs, suggestions, feedback, compatibility tests)
 
@@ -128,20 +124,21 @@ Number keys -> Move / Swap target slot to the corresponding number key slot in h
 
 ## Properties
 1. All doll have "-" prefix as identifier to distinguish Real players and Doll
-2. Because of the prefix, Doll name has only 15 of name length (obey real player name rule)
+2. As is, Doll name has only 15 of name length (obey real player name rule)
 3. Doll are not gaining crafing recipes to reduce storage.
 4. Doll are not count into sleeping percentage
 5. Doll are default to be surivial mode
-6. Doll quit the game immediate if died (not dropping loot and exp)
-7. Doll being Removed by command will execute die process<br>(loot and exp are determined by gamerule `keepinventory`)<br>All related data will be deleted
+6. Doll quit the game immediate if died (obey gamerule `keepinventory`)
+7. Doll will not drop loot when Despawn by command
+8. Doll being Removed by command will execute the `die process`<br>(obey gamerule `keepinventory`)<br>All player-related data will be deleted
 
 ## Convert Player
 
 Convert Player is a feature can be set from config `convert-player`.
-- Player will be convert to modified entity when Connect to server
+- Player will be convert to modified entity when connected to server
 - Converted Player has the ability to perform doll commands to self
   * attack, use, swapHands, drop, dropStack, lookat
-- When enabled, some commands will display `_` as self indication
+- When enabled, some commands will suggest `_` as self indication
 
 ### Notes
 
@@ -229,7 +226,7 @@ Command are followed by this format
     <td>info</td>
     <td>playerdoll.command.info</td>
     <td>Show Doll data</td>
-    <td>Not implemented</td>
+    <td>Affected by hide_from_list flag</td>
   </tr>
   <tr>
     <td>inv</td>
@@ -376,6 +373,11 @@ Otherwise, only OP will be able to use the related action.
     <td>Ability to use /doll subCommands</td>
     <td>true (everyone)</td>
   </tr>
+  <tr>
+    <td>playerdoll.dollmanage</td>
+    <td>Ability to use /dollmanage subCommands (bypass most checkings)</td>
+    <td>op</td>
+  </tr>
 </table>
 
 ### Grouped Permission
@@ -497,6 +499,10 @@ Otherwise, only OP will be able to use the related action.
     <td>Set Doll to be targeted by mobs</td>
   </tr>
   <tr>
+    <td>playerdoll.globalflag.hide_from_list</td>
+    <td>Set Doll to not being list by info command</td>
+  </tr>
+  <tr>
     <td>playerdoll.globalflag.invulnerable</td>
     <td>Set Doll to ignore damage</td>
   </tr>
@@ -565,8 +571,8 @@ Otherwise, only OP will be able to use the related action.
     <td>Grant command access for Player</td>
   </tr>
   <tr>
-    <td>playerdoll.personalflag.info</td>
-    <td>Grant command access for Player</td>
+    <td>playerdoll.personalflag.hidden</td>
+    <td>Being vanished to Player</td>
   </tr>
   <tr>
     <td>playerdoll.personalflag.inv</td>
