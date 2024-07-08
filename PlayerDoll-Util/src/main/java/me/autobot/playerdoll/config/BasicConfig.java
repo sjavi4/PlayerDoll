@@ -26,6 +26,8 @@ public class BasicConfig extends AbstractConfig {
     public final ConfigKey<BasicConfig,Boolean> broadcastDollDeath;
     public final ConfigKey<BasicConfig,Boolean> broadcastDollJoin;
     public final ConfigKey<BasicConfig,Boolean> broadcastDollDisconnect;
+    public final ConfigKey<BasicConfig,Boolean> displayDollWhenPing;
+    public final ConfigKey<BasicConfig,Boolean> opCanSeeHiddenDoll;
 
     public final ConfigKey<BasicConfig,List<String>> dollPermission;
     public final ConfigKey<BasicConfig,Integer> dollChatWhenJoinInterval;
@@ -56,6 +58,8 @@ public class BasicConfig extends AbstractConfig {
         this.broadcastDollDeath = new ConfigKey<>(this,"broadcast-doll-death",true);
         this.broadcastDollJoin = new ConfigKey<>(this,"broadcast-doll-join",false);
         this.broadcastDollDisconnect = new ConfigKey<>(this,"broadcast-doll-disconnect",false);
+        this.displayDollWhenPing = new ConfigKey<>(this, "display-doll-when-ping", false);
+        this.opCanSeeHiddenDoll = new ConfigKey<>(this, "op-can-see-hidden-doll", true);
         this.dollPermission = new ConfigKey<>(this,"doll-permission",DEFAULT_STRING_LIST);
         this.dollChatWhenJoinInterval = new ConfigKey<>(this, "chat-when-join-interval", 10);
         this.dollChatWhenJoin = new ConfigKey<>(this,"chat-when-join", DEFAULT_STRING_LIST);

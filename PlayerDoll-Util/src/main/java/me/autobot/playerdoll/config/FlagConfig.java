@@ -218,6 +218,7 @@ public class FlagConfig extends AbstractConfig {
         EXP("playerdoll.personalflag.exp", "Personal-Flag.exp", Material.EXPERIENCE_BOTTLE),
         GSET("playerdoll.personalflag.gset", "Personal-Flag.gset", Material.CRAFTING_TABLE),
         //INFO("playerdoll.personalflag.info", "Personal-Flag.info", Material.BOOK),
+        HIDDEN("playerdoll.personalflag.hidden", "Personal-Flag.hidden", Material.SPECTRAL_ARROW),
         INV("playerdoll.personalflag.inv", "Personal-Flag.inv", Material.CHEST_MINECART),
         JUMP("playerdoll.personalflag.jump", "Personal-Flag.jump", Material.RABBIT_FOOT),
         LOOK("playerdoll.personalflag.look", "Personal-Flag.look", Material.SPYGLASS),
