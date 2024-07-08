@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 25
+version: 26
 
 ###
 # &0 black
@@ -56,7 +56,8 @@ Message:
   doll-pset: '&cCannot set personal permission to Doll'
 # Spawn cmd
   in-world: '&cDoll already spawned'
-  max-capacity: '&cServer is full for Doll'
+  max-capacity: '&cServer is full of Doll'
+  null-uuid: '&cDoll got NULL UUID, please contact Admin for help'
   spawn-error: '&cDoll %a% failed to spawn, Please Try again Later'
   spawn-success: '&aDoll spawned successfully'
 # Jump cmd
@@ -225,6 +226,10 @@ set-menu:
   unsprint:
     name: 'Unsprint'
     desc: "&fSet unsprint command"
+# Not a command
+  hidden:
+    name: 'Hidden'
+    desc: "&fSet Doll visibility to player"
 
 inv-menu:
   inv: '&7Inventory'

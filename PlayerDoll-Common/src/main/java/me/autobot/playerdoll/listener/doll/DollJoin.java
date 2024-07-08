@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.config.BasicConfig;
+import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.config.PermConfig;
 import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.DollManager;
@@ -21,10 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.PermissionAttachment;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class DollJoin implements Listener {
 
@@ -48,19 +46,25 @@ public class DollJoin implements Listener {
 
         if (caller != null) {
             caller.sendMessage(LangFormatter.YAMLReplaceMessage("spawn-success"));
+            // keep flying
+            if (caller.getGameMode() == GameMode.CREATIVE && player.getAllowFlight()) {
+                player.setFlying(caller.isFlying());
+            }
             if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
                 PlayerDoll.scheduler.foliaTeleportAync(player, caller.getLocation());
             } else {
-                player.teleport(caller);
+                // Delay to avoid teleport packet clash
+                PlayerDoll.scheduler.globalTaskDelayed(() -> player.teleport(caller), 10);
             }
         }
 
-        PermissionAttachment attachment = player.addAttachment(PlayerDoll.PLUGIN);
 
         BasicConfig basicConfig = BasicConfig.get();
         if (basicConfig.adjustableMaxPlayer.getValue()) {
             Bukkit.setMaxPlayers(Bukkit.getMaxPlayers()+1);
         }
+
+        PermissionAttachment attachment = player.addAttachment(PlayerDoll.PLUGIN);
 
         for (String perm : basicConfig.dollPermission.getValue()) {
             attachment.setPermission(perm,true);
@@ -86,7 +90,31 @@ public class DollJoin implements Listener {
             }
         }
 
-
+        // Hide players
+        boolean hide = dollConfig.generalSetting.get(FlagConfig.PersonalFlagType.HIDDEN);
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (DollManager.ONLINE_DOLLS.containsKey(onlinePlayer.getUniqueId())) {
+                continue;
+            }
+            if (player.isOp() && basicConfig.opCanSeeHiddenDoll.getValue()) {
+                continue;
+            }
+            EnumMap<FlagConfig.PersonalFlagType, Boolean> playerSettings = dollConfig.playerSetting.get(onlinePlayer.getUniqueId());
+            if (playerSettings == null) {
+                if (hide) {
+                    onlinePlayer.hidePlayer(PlayerDoll.PLUGIN, player);
+                } else {
+                    onlinePlayer.showPlayer(PlayerDoll.PLUGIN, player);
+                }
+                continue;
+            }
+            boolean playerHide = playerSettings.get(FlagConfig.PersonalFlagType.HIDDEN);
+            if (playerHide) {
+                onlinePlayer.hidePlayer(PlayerDoll.PLUGIN, player);
+            } else {
+                onlinePlayer.showPlayer(PlayerDoll.PLUGIN, player);
+            }
+        }
 
         // Sync data
         Arrays.stream(DollConfig.DollSettings.values())
@@ -98,20 +126,6 @@ public class DollJoin implements Listener {
         // Disable push when Spawn
         PlayerDoll.callSyncEvent(new DollSettingEvent(null, doll, DollConfig.DollSettings.PUSHABLE, false));
 
-
-/*
-        String configPrefix = globalConfig.getString("Global.DollPrefix");
-        String prefix = ChatColor.translateAlternateColorCodes('&',configPrefix == null? "" : configPrefix);
-        String configSuffix = globalConfig.getString("Global.DollSuffix");
-        String suffix = ChatColor.translateAlternateColorCodes('&',configSuffix == null? "" : configSuffix);
-        player.setPlayerListName(prefix + player.getName() + suffix);
-        player.setDisplayName(prefix + player.getName() + suffix);
-
-
- */
-
-
-        // Trigger this after Doll Placed in World
 
         String prefix = "[BOT]";
         String suffix = "";

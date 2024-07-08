@@ -1,14 +1,17 @@
 package me.autobot.playerdoll.command.subcommand;
 
 import com.mojang.brigadier.context.CommandContext;
+import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
+import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.DollGUIHolder;
 import me.autobot.playerdoll.util.LangFormatter;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -36,6 +39,20 @@ public class GSet extends SubCommand implements DollCommandExecutor {
         }
         DollConfig config = DollConfig.getOnlineDollConfig(target.getUniqueId());
         config.generalSetting.put(flagType, toggle);
+        if (flagType == FlagConfig.PersonalFlagType.HIDDEN) {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (DollManager.ONLINE_DOLLS.containsKey(player.getUniqueId())) {
+                    return;
+                }
+                if (!player.isOp() || (player.isOp() && !BasicConfig.get().opCanSeeHiddenDoll.getValue())) {
+                    if (toggle) {
+                        player.hidePlayer(PlayerDoll.PLUGIN, target);
+                    } else {
+                        player.showPlayer(PlayerDoll.PLUGIN, target);
+                    }
+                }
+            });
+        }
     }
     private void openGUI() {
         sender.openInventory(DollGUIHolder.DOLL_GUI_HOLDERS.get(target.getUniqueId()).menus.get(DollGUIHolder.MenuType.GSETTING).getInventory());

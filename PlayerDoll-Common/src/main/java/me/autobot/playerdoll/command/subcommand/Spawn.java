@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.command.subcommand;
 
 import com.mojang.brigadier.context.CommandContext;
+import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
 import me.autobot.playerdoll.config.BasicConfig;
@@ -26,6 +27,12 @@ public class Spawn extends SubCommand implements DollCommandExecutor {
 
     @Override
     public void execute() {
+        if (targetUUID.toString().equals(DollConfig.NULL_UUID)) {
+            PlayerDoll.LOGGER.warning("Doll[" + targetString + "] Got Null UUID! Please check the config");
+            caller.sendMessage(LangFormatter.YAMLReplaceMessage("null-uuid"));
+            return;
+        }
+
         SocketHelper.createConnection(targetString, targetUUID, caller);
     }
 

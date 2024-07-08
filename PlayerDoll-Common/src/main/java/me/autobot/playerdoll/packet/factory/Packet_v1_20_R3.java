@@ -111,7 +111,7 @@ public class Packet_v1_20_R3 extends PacketFactory {
                     PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.callSyncEvent(new DollRespawnEvent(player)), 5);
                 }
             }
-            // Sync Pos (Folia End portal Tp)
+            // Sync Pos
             case 0x3E -> {
                 double x = data.readDouble();
                 double y = data.readDouble();

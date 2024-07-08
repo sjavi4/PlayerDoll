@@ -2,8 +2,10 @@ package me.autobot.playerdoll.command.subcommand;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
+import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
+import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.DollManager;
@@ -56,6 +58,20 @@ public class PSet extends SubCommand implements DollCommandExecutor {
             flagMap = enumMap;
         }
         flagMap.put(flagType, toggle);
+
+        if (flagType == FlagConfig.PersonalFlagType.HIDDEN) {
+            Player psetPlayer = Bukkit.getPlayer(profile.getId());
+            if (psetPlayer == null) {
+                return;
+            }
+            if (!psetPlayer.isOp() || (psetPlayer.isOp() && !BasicConfig.get().opCanSeeHiddenDoll.getValue())) {
+                if (toggle) {
+                    psetPlayer.hidePlayer(PlayerDoll.PLUGIN, target);
+                } else {
+                    psetPlayer.showPlayer(PlayerDoll.PLUGIN, target);
+                }
+            }
+        }
     }
 
     private void openGUI() {

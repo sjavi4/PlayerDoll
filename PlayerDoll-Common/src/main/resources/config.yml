@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 25
+version: 26
 
 # Custom Server Mod
 # If plugin has detected the Mod wrongly,
@@ -21,6 +21,14 @@ server-max-doll: -1
 broadcast-doll-death: true
 broadcast-doll-join: false
 broadcast-doll-disconnect: false
+
+# Will doll info being displayed on Ping status
+# This affects the display of online counts and max player counts
+display-doll-when-ping: false
+
+# Will doll with hidden flag can be seen by OP
+# Include Tab list and player model in world
+op-can-see-hidden-doll: true
 
 # Add permission to all Dolls
 # It could be helpful in some circumstances
@@ -44,7 +52,7 @@ chat-when-join:
 # To support some doll actions
 convert-player: false
 
-# Broadcast kick reason for convert player
+# Broadcast kick reason for converted player
 # Call when server is reload or shutdown
 broadcast-convert-shutdown: true
 

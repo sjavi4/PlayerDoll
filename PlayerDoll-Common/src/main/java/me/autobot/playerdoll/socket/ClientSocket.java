@@ -1,6 +1,8 @@
 package me.autobot.playerdoll.socket;
 
 import com.mojang.authlib.GameProfile;
+import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.socket.io.SocketReader;
 import org.bukkit.entity.Player;
 

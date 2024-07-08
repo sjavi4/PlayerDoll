@@ -197,7 +197,6 @@ public class SocketReader extends Thread {
         int asks = 0;
         while (getCurrentState() == ConnectionState.LOGIN) {
             if (CursedConnection.startCursedConnection(localAddress, profile, clientSocket.getCaller())) {
-                //System.out.println("Succeed to login");
                 return true;
             } else {
                 if (asks == 10) {

@@ -116,7 +116,7 @@ public class Packet_v1_20_R4 extends Packet_v1_20_R3 {
                     PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.callSyncEvent(new DollRespawnEvent(player)), 5);
                 }
             }
-            // Sync Pos (Folia End portal Tp)
+            // Sync Pos
             case 0x40 -> {
                 double x = data.readDouble();
                 double y = data.readDouble();

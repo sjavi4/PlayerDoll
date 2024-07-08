@@ -159,6 +159,7 @@ public final class PlayerDoll extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDisconnect(), this);
         pluginManager.registerEvents(new PlayerDeath(), this);
         pluginManager.registerEvents(new AsyncPlayerPreLogin(), this);
+        pluginManager.registerEvents(new ServerListPing(), this);
 
         // Event for Register command
         pluginManager.registerEvents(new ServerLoad(), this);
@@ -279,5 +280,9 @@ public final class PlayerDoll extends JavaPlugin {
                 index++;
             }
         }
+    }
+
+    public int getMaxPlayer() {
+        return maxPlayer;
     }
 }

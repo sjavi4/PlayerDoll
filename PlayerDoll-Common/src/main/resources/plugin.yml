@@ -318,8 +318,10 @@ permissions:
     description: GUI permission
   playerdoll.personalflag.use:
     description: GUI permission
+  playerdoll.personalflag.hidden:
+    description: GUI permission
 
-# description: Tab shortcut for perm.yml
+  # description: Tab shortcut for perm.yml
   playerdoll.perm.max-doll-create:
     description: Tab shortcut for perm.yml
   playerdoll.perm.doll-prefix:
