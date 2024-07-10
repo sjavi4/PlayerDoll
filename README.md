@@ -89,7 +89,7 @@ Doll now will connect to server by Emulating a client.
 ### In game (v1.28 above)
 1. player without permission will not display the corrisponding command (or arguments)
    * `doll` or `playerdoll:doll` are the main commands
-   * `dollmanage` or `playerdoll:dollmanage` are the same from above, but they bypass some optional checking. OP are reqiured by default
+   * `dollmanage` or `playerdoll:dollmanage` are the same from above, but they bypass some optional checking. OP is reqiured by default
    * To create doll, enter `/doll create <name> [skin]` and wait for server to setup the config.
    * After creating doll, enter `/doll spawn <name>` to let the doll connect to the server.
 2. Most of the Doll data modification are require Doll to be online.
