@@ -59,6 +59,7 @@ Message:
 # Spawn cmd
   in-world: '&c假人已生成'
   max-capacity: '&c伺服器假人名額已滿'
+  null-uuid: '&c假人UUID異常, 請聯絡管理員'
   spawn-error: '&c假人%a%生成失敗, 請稍後再試'
   spawn-success: '&a假人成功生成'
 # Jump cmd
@@ -227,6 +228,10 @@ set-menu:
   unsprint:
     name: '解除奔跑'
     desc: "&f開放假人的解除奔跑權限"
+  # Not a command
+  hidden:
+    name: 湮滅
+    desc: '&f設定玩家可否洞察假人'
 
 inv-menu:
   inv: '&7背包'
