@@ -151,6 +151,14 @@ public final class ReflectionUtil {
         return invokeMethod(Player.class, getBukkitPlayerMethod, nmsPlayer);
     }
 
+    public static Object getServerPlayer(Player player) {
+        try {
+            return invokeMethod(player.getClass().getMethod("getHandle"), player);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Class<?> getPluginNMSClass(String className) {
         return getClass("me.autobot.playerdoll." + gameVersion + "." + className);
     }

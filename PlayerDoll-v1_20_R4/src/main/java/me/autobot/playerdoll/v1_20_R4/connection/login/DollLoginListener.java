@@ -65,7 +65,8 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl {
         }
         this.connection.setupOutboundProtocol(ConfigurationProtocols.CLIENTBOUND);
 
-        ServerPlayer player = ServerDoll.callSpawn(profile);
+        ServerDoll player = ServerDoll.callSpawn(profile);
+        player.setup(caller);
         ServerConfigurationPacketListenerImpl serverconfigurationpacketlistenerimpl = new ServerConfigurationListener(player.server, this.connection, player, caller);
         //CursedConnection.setPacketListener(connection, serverconfigurationpacketlistenerimpl);
         this.connection.setupInboundProtocol(ConfigurationProtocols.SERVERBOUND, serverconfigurationpacketlistenerimpl);

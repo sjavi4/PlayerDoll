@@ -1,6 +1,6 @@
 package me.autobot.playerdoll.v1_20_R3.connection.login;
 
-import me.autobot.playerdoll.connection.ConvertPlayerConnection;
+import me.autobot.playerdoll.listener.bukkit.AsyncPlayerPreLogin;
 import me.autobot.playerdoll.packet.PlayerConvertInjector;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import me.autobot.playerdoll.v1_20_R3.player.TransPlayer;
@@ -31,7 +31,8 @@ public class PlayerLoginListener extends ServerLoginPacketListenerImpl {
                 .orElseThrow();
         serverPlayerField.setAccessible(true);
 
-        ConvertPlayerConnection.checkProtocol = (listener) -> listener != null &&((ServerLoginPacketListenerImpl)listener).connection.channel.attr(Connection.ATTRIBUTE_CLIENTBOUND_PROTOCOL).get() == ClientIntent.LOGIN.protocol().codec(PacketFlow.CLIENTBOUND);
+//        ConvertPlayerConnection.checkProtocol = (listener) -> listener != null &&((ServerLoginPacketListenerImpl)listener).connection.channel.attr(Connection.ATTRIBUTE_CLIENTBOUND_PROTOCOL).get() == ClientIntent.LOGIN.protocol().codec(PacketFlow.CLIENTBOUND);
+        AsyncPlayerPreLogin.checkProtocol = (listener) -> listener != null &&((ServerLoginPacketListenerImpl)listener).connection.channel.attr(Connection.ATTRIBUTE_CLIENTBOUND_PROTOCOL).get() == ClientIntent.LOGIN.protocol().codec(PacketFlow.CLIENTBOUND);
 
         PlayerConvertInjector.swapListenerFunc = (oldListener) -> {
             ServerLoginPacketListenerImpl l = (ServerLoginPacketListenerImpl) oldListener;

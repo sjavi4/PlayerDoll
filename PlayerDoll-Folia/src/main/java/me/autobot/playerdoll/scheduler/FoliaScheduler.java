@@ -43,7 +43,7 @@ public class FoliaScheduler implements Scheduler {
 
     @Override
     public void foliaTeleportAync(Entity e, Location l) {
-        entityTaskDelayed(() -> e.teleportAsync(l), e, 10);
+        entityTaskDelayed(() -> e.teleportAsync(l), e, 1);
     }
 
     private long checkDelay(long d) {

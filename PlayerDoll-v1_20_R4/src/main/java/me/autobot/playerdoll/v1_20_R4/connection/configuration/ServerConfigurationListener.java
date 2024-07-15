@@ -2,6 +2,7 @@ package me.autobot.playerdoll.v1_20_R4.connection.configuration;
 
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.connection.CursedConnection;
+import me.autobot.playerdoll.event.DollJoinEvent;
 import me.autobot.playerdoll.v1_20_R4.connection.play.ServerGamePlayListener;
 import me.autobot.playerdoll.v1_20_R4.player.ServerDoll;
 import net.minecraft.network.Connection;
@@ -41,7 +42,8 @@ public class ServerConfigurationListener extends ServerConfigurationPacketListen
             //this.connection.setupInboundProtocol(GameProtocols.SERVERBOUND.bind(RegistryFriendlyByteBuf.decorator(this.server.registryAccess())), gamePlayListener);
 
             CursedConnection.setPacketListener(this.connection, gamePlayListener);
-            ((ServerDoll) this.player).setup(caller);
+//            ((ServerDoll) this.player).setup(caller);
+            ((ServerDoll) this.player).callDollJoinEvent();
             this.player.connection = gamePlayListener;
         };
         if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {

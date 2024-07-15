@@ -1,7 +1,7 @@
 package me.autobot.playerdoll.v1_20_R4.connection.login;
 
-import me.autobot.playerdoll.connection.ConvertPlayerConnection;
 import me.autobot.playerdoll.connection.CursedConnection;
+import me.autobot.playerdoll.listener.bukkit.AsyncPlayerPreLogin;
 import me.autobot.playerdoll.packet.PlayerConvertInjector;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import me.autobot.playerdoll.v1_20_R4.player.TransPlayer;
@@ -30,7 +30,8 @@ public class PlayerLoginListener extends ServerLoginPacketListenerImpl {
                 .orElseThrow();
         serverPlayerField.setAccessible(true);
 
-        ConvertPlayerConnection.checkProtocol = (listener) -> listener != null && ((ServerLoginPacketListenerImpl)listener).protocol() == ConnectionProtocol.LOGIN;
+//        ConvertPlayerConnection.checkProtocol = (listener) -> listener != null && ((ServerLoginPacketListenerImpl)listener).protocol() == ConnectionProtocol.LOGIN;
+        AsyncPlayerPreLogin.checkProtocol = (listener) -> listener != null && ((ServerLoginPacketListenerImpl)listener).protocol() == ConnectionProtocol.LOGIN;
 
         PlayerConvertInjector.swapListenerFunc = (oldListener) -> {
             ServerLoginPacketListenerImpl l = (ServerLoginPacketListenerImpl) oldListener;

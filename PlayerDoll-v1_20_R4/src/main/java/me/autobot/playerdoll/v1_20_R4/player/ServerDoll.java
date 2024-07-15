@@ -36,13 +36,12 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     public void setup(org.bukkit.entity.Player caller) {
         this.caller = caller == null ? this : ((CraftPlayer)caller).getHandle();
 
-        PlayerDoll.callSyncEvent(new DollJoinEvent(this.getBukkitEntity(), caller, this));
-
         this.entityData.set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) 0x7f);
-        //IDoll.setSkin(this.getBukkitEntity(), this);
-
     }
 
+    public void callDollJoinEvent() {
+        PlayerDoll.callSyncEvent(new DollJoinEvent(this.getBukkitEntity(), caller.getBukkitEntity(), this));
+    }
     @Override
     public boolean isDoll() {
         return true;

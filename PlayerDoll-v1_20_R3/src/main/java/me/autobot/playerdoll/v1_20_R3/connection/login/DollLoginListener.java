@@ -64,7 +64,8 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl {
             // Avoid IllegalStateException "Asynchronous Chunk getEntities call!"
             PacketUtils.ensureRunningOnSameThread(serverboundloginacknowledgedpacket, this, (MinecraftServer) ReflectionUtil.getDedicatedServerInstance());
         }
-        ServerPlayer player = ServerDoll.callSpawn(profile);
+        ServerDoll player = ServerDoll.callSpawn(profile);
+        player.setup(caller);
         ServerConfigurationPacketListenerImpl serverconfigurationpacketlistenerimpl = new ServerConfigurationListener(player.server, this.connection, player, caller);
         this.connection.setListener(serverconfigurationpacketlistenerimpl);
         serverconfigurationpacketlistenerimpl.startConfiguration();
