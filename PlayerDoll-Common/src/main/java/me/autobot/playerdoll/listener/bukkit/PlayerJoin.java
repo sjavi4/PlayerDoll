@@ -3,9 +3,10 @@ package me.autobot.playerdoll.listener.bukkit;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.FlagConfig;
+import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
-import org.bukkit.Bukkit;
+import me.autobot.playerdoll.util.ReflectionUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,8 +26,17 @@ public class PlayerJoin implements Listener {
             PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.PLUGIN.prepareDollSpawn(basicConfig.proxyAutoJoinDelay.getValue()), 100);
         }
         Player player = event.getPlayer();
-        if (player.getName().startsWith("-") && !basicConfig.broadcastDollJoin.getValue()) {
-            event.setJoinMessage(null);
+        if (player.getName().startsWith("-")) {
+            if (!basicConfig.broadcastDollJoin.getValue()) {
+                event.setJoinMessage(null);
+            }
+            if (ReflectionUtil.getServerPlayer(player) instanceof Doll doll) {
+                if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
+                    PlayerDoll.scheduler.foliaTeleportAync(player, doll.getCaller().getLocation());
+                } else {
+                    player.teleport(doll.getCaller());
+                }
+            }
         }
 
         // Hide players

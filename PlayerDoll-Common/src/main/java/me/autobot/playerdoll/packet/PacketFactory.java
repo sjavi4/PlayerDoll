@@ -7,13 +7,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public abstract class PacketFactory implements IPacketFactory {
     protected final SocketReader socketReader;
     protected final DataOutputStream output;
+
+    protected int lastAcceptTpId = -1;
     public PacketFactory(SocketReader socketReader) {
         this.socketReader = socketReader;
         this.output = socketReader.getOutput();

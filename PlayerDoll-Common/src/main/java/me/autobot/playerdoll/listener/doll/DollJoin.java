@@ -50,12 +50,11 @@ public class DollJoin implements Listener {
             if (caller.getGameMode() == GameMode.CREATIVE && player.getAllowFlight()) {
                 player.setFlying(caller.isFlying());
             }
-            if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
-                PlayerDoll.scheduler.foliaTeleportAync(player, caller.getLocation());
-            } else {
-                // Delay to avoid teleport packet clash
-                PlayerDoll.scheduler.globalTaskDelayed(() -> player.teleport(caller), 10);
-            }
+//            if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
+//                PlayerDoll.scheduler.foliaTeleportAync(player, caller.getLocation());
+//            } else {
+//                player.teleport(player);
+//            }
         }
 
 

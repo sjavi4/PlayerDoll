@@ -164,7 +164,7 @@ public class CursedConnection {
 
     // ServerConnectionListener -> Connection (NetworkManager) -> Channel (Field)
     public static Channel getChannel(Object connection) {
-        return ReflectionUtil.getField(Channel.class, connectionChannelField, connection);
+        return (Channel) ReflectionUtil.getField(connectionChannelField, connection);
     }
 
 //    public static void connectionSend(Object connection, Object packet) {

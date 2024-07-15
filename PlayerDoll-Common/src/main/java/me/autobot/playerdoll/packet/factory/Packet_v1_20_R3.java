@@ -120,7 +120,10 @@ public class Packet_v1_20_R3 extends PacketFactory {
                 float pitch = data.readFloat();
                 byte flag = data.readByte();
                 int id = Packets.readVarInt(data);
-                output.write(acceptTeleport(id));
+                if (lastAcceptTpId != id) {
+                    output.write(acceptTeleport(id));
+                    lastAcceptTpId = id;
+                }
             }
             case 0x44 -> {
                 // Weird problem when sending resource pack respond

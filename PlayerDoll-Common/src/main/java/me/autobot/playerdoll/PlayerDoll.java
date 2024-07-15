@@ -2,7 +2,6 @@ package me.autobot.playerdoll;
 
 import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.config.FlagConfig;
-import me.autobot.playerdoll.connection.ConvertPlayerConnection;
 import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
@@ -80,7 +79,6 @@ public final class PlayerDoll extends JavaPlugin {
 
     private BasicConfig basicConfig;
     private int maxPlayer;
-    private ConvertPlayerConnection convertConnection;
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -106,10 +104,10 @@ public final class PlayerDoll extends JavaPlugin {
 
         checkUpdate();
 
-        if (basicConfig.convertPlayer.getValue()) {
-            convertConnection = new ConvertPlayerConnection();
-            convertConnection.start();
-        }
+//        if (basicConfig.convertPlayer.getValue()) {
+//            convertConnection = new ConvertPlayerConnection();
+//            convertConnection.start();
+//        }
 
         // in BungeeCord mode, messaging require 1 player in Game
         // Trigger this in PlayerJoin
@@ -121,9 +119,9 @@ public final class PlayerDoll extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        if (basicConfig.convertPlayer.getValue()) {
-            convertConnection.interrupt();
-        }
+//        if (basicConfig.convertPlayer.getValue()) {
+//            convertConnection.interrupt();
+//        }
         if (serverBranch != ServerBranch.FOLIA) {
             // folia should not have Server Reload
             String kickReason = basicConfig.broadcastConvertShutdown.getValue() ? "(ConvertPlayer) Server Closed" : null;

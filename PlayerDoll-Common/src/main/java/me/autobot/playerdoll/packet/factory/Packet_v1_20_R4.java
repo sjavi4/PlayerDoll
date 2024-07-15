@@ -125,7 +125,10 @@ public class Packet_v1_20_R4 extends Packet_v1_20_R3 {
                 float pitch = data.readFloat();
                 byte flag = data.readByte();
                 int id = Packets.readVarInt(data);
-                output.write(acceptTeleport(id));
+                if (lastAcceptTpId != id) {
+                    output.write(acceptTeleport(id));
+                    lastAcceptTpId = id;
+                }
             }
             case 0x46 -> {
                 // Weird problem when sending resource pack respond
