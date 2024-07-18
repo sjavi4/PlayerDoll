@@ -68,6 +68,8 @@ Pre-1.20.4 versions are temporary un-supported.
 
 ### Cautions
 
+If you are running a Folia type server, please **Avoid** Doll entering regions containing Handheld/Hanging Maps of specific Region. Server will very likely to crash due the map is tracking the Doll.
+
 For BungeeCord connections, check [here](https://modrinth.com/plugin/playerdoll/version/lbTw2Mzy)
 
 For Velocity connections, a basic test was done and no specific support is needed. Doll can join directly without any setup
