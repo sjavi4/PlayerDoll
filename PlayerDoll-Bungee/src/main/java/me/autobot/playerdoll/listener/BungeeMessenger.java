@@ -28,12 +28,13 @@ public class BungeeMessenger implements Listener {
                 String address = input.readUTF();
                 UUID uuid = UUID.fromString(input.readUTF());
                 String name = input.readUTF();
+                String identifier = input.readUTF();
                 boolean autoJoin = input.readBoolean();
                 DollData dollData;
                 if (autoJoin) {
-                    dollData = new DollData(address, uuid, name, input.readUTF());
+                    dollData = new DollData(address, uuid, name, identifier, input.readUTF());
                 } else {
-                    dollData = new DollData(address, uuid, name, UUID.fromString(input.readUTF()));
+                    dollData = new DollData(address, uuid, name, identifier, UUID.fromString(input.readUTF()));
                 }
                 DollData.DOLL_DATA_LIST.add(dollData);
 

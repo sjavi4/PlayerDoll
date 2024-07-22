@@ -35,9 +35,12 @@ public class BasicConfig extends AbstractConfig {
 //    public final ConfigKey<BasicConfig,Boolean> dollMultiInstance;
     public final ConfigKey<BasicConfig,Boolean> convertPlayer;
     public final ConfigKey<BasicConfig,Boolean> broadcastConvertShutdown;
+    public final ConfigKey<BasicConfig, Boolean> forceProxyIP;
     public final ConfigKey<BasicConfig,String> proxyIP;
     public final ConfigKey<BasicConfig,Integer> proxyPort;
     public final ConfigKey<BasicConfig,Integer> proxyAutoJoinDelay;
+
+    public final ConfigKey<BasicConfig, String> dollIdentifier;
 
     @SuppressWarnings("unchecked")
     public BasicConfig(YamlConfiguration conf) {
@@ -52,6 +55,8 @@ public class BasicConfig extends AbstractConfig {
 //        this.backupShutDown = new ConfigKey<>(this,"backup-shutdown",false);
 //        this.removeInactiveDoll = new ConfigKey<>(this,"remove-inactive-doll",false);
 //        this.removeTime = new ConfigKey<>(this,"remove-time",30);
+        this.dollIdentifier = new ConfigKey<>(this, "doll-identifier", "-");
+
         this.preservedDollName = new ConfigKey<>(this,"preserved-doll-name", DEFAULT_STRING_LIST);
         this.adjustableMaxPlayer = new ConfigKey<>(this,"adjustable-max-player",true);
         this.serverMaxDollSpawn = new ConfigKey<>(this,"server-max-doll-spawn",-1);
@@ -66,9 +71,16 @@ public class BasicConfig extends AbstractConfig {
 //        this.dollMultiInstance = new ConfigKey<>(this, "doll-multi-instance", false);
         this.convertPlayer = new ConfigKey<>(this, "convert-player", false);
         this.broadcastConvertShutdown = new ConfigKey<>(this, "broadcast-convert-shutdown", true);
+        this.forceProxyIP = new ConfigKey<>(this, "force-proxy-ip", false);
         this.proxyIP = new ConfigKey<>(this, "proxy-ip", "127.0.0.1");
         this.proxyPort = new ConfigKey<>(this, "proxy-port", 25565);
         this.proxyAutoJoinDelay = new ConfigKey<>(this, "proxy-auto-join-delay", 1);
+
+        String dollId = dollIdentifier.getValue();
+        if (dollId.length() > 1) {
+            dollIdentifier.setNewValue("-");
+        }
+
         ConfigLoader.get().saveConfig(this.yamlConfiguration, ConfigLoader.ConfigType.BASIC);
     }
 

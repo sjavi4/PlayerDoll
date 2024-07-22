@@ -17,19 +17,27 @@ public class DollData {
     private ProxiedPlayer dollPlayer;
     private final ServerInfo targetServer;
 
-    public DollData(String address, UUID dollUUID, String dollName, UUID callerUUID) {
+    public DollData(String address, UUID dollUUID, String dollName, String identifier, UUID callerUUID) {
         this.address = address;
         uuid = dollUUID;
         fullName = dollName;
-        stripName = dollName.substring(1);
+        if (identifier.isEmpty()) {
+            stripName = dollName;
+        } else {
+            stripName = dollName.substring(1);
+        }
         this.targetServer = ProxyServer.getInstance().getPlayer(callerUUID).getServer().getInfo();
     }
 
-    public DollData(String address, UUID dollUUID, String dollName, String serverName) {
+    public DollData(String address, UUID dollUUID, String dollName, String identifier, String serverName) {
         this.address = address;
         uuid = dollUUID;
         fullName = dollName;
-        stripName = dollName.substring(1);
+        if (identifier.isEmpty()) {
+            stripName = dollName;
+        } else {
+            stripName = dollName.substring(1);
+        }
         this.targetServer = ProxyServer.getInstance().getServerInfo(serverName);
     }
 
