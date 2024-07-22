@@ -15,4 +15,8 @@ public interface IPacketFactory {
     void processLogin(int packetID, DataInputStream data, int dataLength) throws IOException;
     void processConfiguration(int packetID, DataInputStream data, int dataLength) throws IOException;
     void processPlay(int packetID, DataInputStream data, int dataLength) throws IOException;
+
+
+
+
 }

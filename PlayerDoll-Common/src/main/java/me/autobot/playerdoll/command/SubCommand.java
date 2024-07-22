@@ -2,6 +2,7 @@ package me.autobot.playerdoll.command;
 
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.config.FlagConfig;
+import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.util.LangFormatter;
 import net.md_5.bungee.api.ChatColor;
@@ -22,7 +23,8 @@ public abstract class SubCommand {
     }
     public SubCommand(String targetString) {
         this.target = null;
-        this.targetString = targetString;
+        String unquoted = targetString.replaceAll("^\"|\"$", "");
+        this.targetString = DollManager.dollShortName(unquoted);
     }
 
     public abstract void execute();

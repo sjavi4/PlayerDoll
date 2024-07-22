@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.gui.menu;
 
 import me.autobot.playerdoll.doll.Doll;
+import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.DollGUIHolder;
 import me.autobot.playerdoll.gui.ItemSetter;
@@ -50,14 +51,14 @@ public class DollInfoMenu extends AbstractMenu {
         ItemStack slot2 = ItemSetter.setItem(Material.CRAFTING_TABLE, ButtonAction.OPEN_DOLL_SETTING, 1, LangFormatter.YAMLReplace("info.set"),null);
         inventory.setItem(2,slot2);
         buttonMap.put(getPDC(slot2), (player)-> {
-            String commandSet = String.format("playerdoll:doll set %s", dollPlayer.getName());
+            String commandSet = String.format("playerdoll:doll set %s", DollManager.dollShortName(dollPlayer.getName()));
             player.performCommand(commandSet);
         });
 
         ItemStack slot3 = ItemSetter.setItem(Material.FLETCHING_TABLE, ButtonAction.OPEN_GSETTING, 1, LangFormatter.YAMLReplace("info.gset"),null);
         inventory.setItem(3,slot3);
         buttonMap.put(getPDC(slot3), (player)-> {
-            String commandGSet = String.format("playerdoll:doll gset %s", dollPlayer.getName());
+            String commandGSet = String.format("playerdoll:doll gset %s", DollManager.dollShortName(dollPlayer.getName()));
             player.performCommand(commandGSet);
         });
 
@@ -72,7 +73,7 @@ public class DollInfoMenu extends AbstractMenu {
         inventory.setItem(7,slot7);
         buttonMap.put(getPDC(slot7),(player)-> {
             player.closeInventory();
-            String commandDespawn = String.format("playerdoll:doll despawn %s", dollPlayer.getName());
+            String commandDespawn = String.format("playerdoll:doll despawn %s", DollManager.dollShortName(dollPlayer.getName()));
             player.performCommand(commandDespawn);
         });
         List<String> removeHint = Arrays.asList(LangFormatter.splitter(LangFormatter.YAMLReplace("info.remove-hint")));
@@ -80,7 +81,7 @@ public class DollInfoMenu extends AbstractMenu {
         inventory.setItem(8, slot8);
         buttonMap.put(getPDC(slot8),(player)->{
             player.closeInventory();
-            String commandRemove = String.format("playerdoll:doll remove %s", dollPlayer.getName());
+            String commandRemove = String.format("playerdoll:doll remove %s", DollManager.dollShortName(dollPlayer.getName()));
             player.performCommand(commandRemove);
         });
     }

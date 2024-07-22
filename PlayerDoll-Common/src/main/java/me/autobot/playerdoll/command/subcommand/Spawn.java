@@ -32,8 +32,13 @@ public class Spawn extends SubCommand implements DollCommandExecutor {
             caller.sendMessage(LangFormatter.YAMLReplaceMessage("null-uuid"));
             return;
         }
-
-        SocketHelper.createConnection(targetString, targetUUID, caller);
+        if (targetString.length() >= 15) {
+            PlayerDoll.LOGGER.warning("Doll[" + targetString + "] Got Legacy Name Format! Please check the config");
+            caller.sendMessage(LangFormatter.YAMLReplaceMessage("spawn-error", targetString));
+            return;
+        }
+        // Spawn with Prefixed value (can be flexibly changed)
+        SocketHelper.createConnection(BasicConfig.get().dollIdentifier.getValue() + targetString, targetUUID, caller);
     }
 
     @Override

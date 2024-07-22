@@ -4,10 +4,11 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.packet.IPacketFactory;
-import me.autobot.playerdoll.packet.Packets;
+import me.autobot.playerdoll.packet.PacketUtil;
 import me.autobot.playerdoll.socket.ClientSocket;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.entity.Player;
@@ -33,9 +34,11 @@ public class SocketReader extends Thread {
     private boolean endStream = false;
     private ConnectionState currentState;
 
-    private Packets.protocolNumber protocol;
+    private PacketUtil.protocolNumber protocol;
 
     public GameProfile profile;
+
+    public int lastAcceptTpId = -1;
 
     public SocketReader(ClientSocket clientSocket) {
         this.clientSocket = clientSocket;
@@ -43,7 +46,7 @@ public class SocketReader extends Thread {
         this.profile = clientSocket.getProfile();
         localAddress = socket.getLocalAddress().toString() + ":" + socket.getLocalPort();
         try {
-            protocol = Packets.protocolNumber.valueOf(PlayerDoll.INTERNAL_VERSION);
+            protocol = PacketUtil.protocolNumber.valueOf(PlayerDoll.INTERNAL_VERSION);
         } catch (IllegalArgumentException e) {
             PlayerDoll.LOGGER.severe("Not supported Game Version");
             throw new IllegalArgumentException(e);
@@ -155,6 +158,7 @@ public class SocketReader extends Thread {
         output.writeUTF(localAddress);
         output.writeUTF(profile.getId().toString());
         output.writeUTF(profile.getName());
+        output.writeUTF(BasicConfig.get().dollIdentifier.getValue());
 
         Player caller = clientSocket.getCaller();
         output.writeBoolean(caller == null);
@@ -178,7 +182,7 @@ public class SocketReader extends Thread {
         try {
             byte[] handshakeMessage = packetFactory.clientIntent();
 
-            Packets.writeVarInt(output, handshakeMessage.length);
+            PacketUtil.writeVarInt(output, handshakeMessage.length);
             output.write(handshakeMessage);
 
             nextState();
@@ -215,9 +219,9 @@ public class SocketReader extends Thread {
 
     private void readPacketUncompressed() throws IOException {
         //System.out.println("Reading packet disabled compression");
-        int packetLength = Packets.readVarInt(input);
-        int packetID = Packets.readVarInt(input);
-        int shouldReadLength = packetLength - Packets.getVarIntLength(packetID);
+        int packetLength = PacketUtil.readVarInt(input);
+        int packetID = PacketUtil.readVarInt(input);
+        int shouldReadLength = packetLength - PacketUtil.getVarIntLength(packetID);
         byte[] packetData = new byte[shouldReadLength];
         readActualData(packetData);
         processPacket(packetID, new DataInputStream(new ByteArrayInputStream(packetData)), packetData.length);
@@ -225,21 +229,21 @@ public class SocketReader extends Thread {
     // Cursed but it works
     private void readPacketCompressed() throws IOException {
         //System.out.println("Reading packet enabled compression");
-        int packetLength = Packets.readVarInt(input);
-        int decompressedDataLength = Packets.readVarInt(input);
+        int packetLength = PacketUtil.readVarInt(input);
+        int decompressedDataLength = PacketUtil.readVarInt(input);
         //System.out.println("PacketLength: " + packetLength);
         //System.out.println("Decompressed Data Length: " + decompressedDataLength);
         //System.out.println("Size of decompressed Data: " + Packets.getVarIntLength(decompressedDataLength));
         int packetID = -2;
-        int shouldReadLength = packetLength - Packets.getVarIntLength(decompressedDataLength);
+        int shouldReadLength = packetLength - PacketUtil.getVarIntLength(decompressedDataLength);
         byte[] packetData;
         DataInputStream packetDataInputStream = null;
         int finalDataLength = -1;
         if (decompressedDataLength == 0) {
             //System.out.println("Uncompressed Packet");
-            packetID = Packets.readVarInt(input);
+            packetID = PacketUtil.readVarInt(input);
             // packet ID consumed size
-            packetData = new byte[shouldReadLength - Packets.getVarIntLength(packetID)];
+            packetData = new byte[shouldReadLength - PacketUtil.getVarIntLength(packetID)];
             readActualData(packetData);
             packetDataInputStream = new DataInputStream(new ByteArrayInputStream(packetData));
             finalDataLength = packetData.length;
@@ -248,7 +252,7 @@ public class SocketReader extends Thread {
             byte[] compressedPacketIDWithData = new byte[shouldReadLength];
             readActualData(compressedPacketIDWithData);
             try {
-                byte[] decompressedRawData = packetData = Packets.decompress(compressedPacketIDWithData, false);
+                byte[] decompressedRawData = packetData = PacketUtil.decompress(compressedPacketIDWithData, false);
                 //System.out.println("Decompressed Raw Data: " + decompressedRawData.length);
                 //System.out.println("Expected Decompressed:" + decompressedDataLength);
                 //if (decompressedRawData.length != decompressedDataLength) {
@@ -259,8 +263,8 @@ public class SocketReader extends Thread {
                     input.read(new byte[decompressedDataLength - decompressedRawData.length]);
                 }
                 packetDataInputStream = new DataInputStream(new ByteArrayInputStream(decompressedRawData));
-                packetID = Packets.readVarInt(packetDataInputStream);
-                finalDataLength = packetData.length - Packets.getVarIntLength(packetID);
+                packetID = PacketUtil.readVarInt(packetDataInputStream);
+                finalDataLength = packetData.length - PacketUtil.getVarIntLength(packetID);
             } catch (DataFormatException e) {
                 e.printStackTrace();
                 PlayerDoll.LOGGER.warning("Error while Decompressing Packet");

@@ -2,6 +2,7 @@ package me.autobot.playerdoll.gui.menu;
 
 import me.autobot.playerdoll.config.FlagConfig;
 import me.autobot.playerdoll.doll.Doll;
+import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.DollGUIHolder;
 import me.autobot.playerdoll.gui.ItemSetter;
@@ -47,7 +48,7 @@ public class DollSetMenu extends AbstractMenu {
 
         FlagConfig.GlobalFlagType flagType = (FlagConfig.GlobalFlagType) getPDC(item);
 
-        String commandSet = String.format("playerdoll:doll set %s %s %b", dollPlayer.getName(), flagType.getCommand().toLowerCase(), leftClick);
+        String commandSet = String.format("playerdoll:doll set %s %s %b", DollManager.dollShortName(dollPlayer.getName()), flagType.getCommand().toLowerCase(), leftClick);
         whoClicked.performCommand(commandSet);
         return true;
     }

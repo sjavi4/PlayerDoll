@@ -112,6 +112,9 @@ public class CursedConnection {
             //PlayerDoll.LOGGER.info("Connection Size: " + serverConnectionList.size());
             for (Object connections : serverConnectionList) {
                 Channel channel = getChannel(connections);
+                if (channel == null) {
+                    continue;
+                }
                 String addressServer = channel.remoteAddress().toString();
                 boolean checkAddress;
                 if (PlayerDoll.BUNGEECORD) {

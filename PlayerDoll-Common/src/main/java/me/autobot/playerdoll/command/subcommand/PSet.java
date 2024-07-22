@@ -13,6 +13,7 @@ import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.gui.DollGUIHolder;
 import me.autobot.playerdoll.util.FileUtil;
 import me.autobot.playerdoll.util.LangFormatter;
+import me.autobot.playerdoll.util.ReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -107,7 +108,7 @@ public class PSet extends SubCommand implements DollCommandExecutor {
         }
         // Not allow Doll pset
         FileUtil fileUtil = FileUtil.INSTANCE;
-        if (fileUtil.getFile(fileUtil.getDollDir(), profile.getName() + ".yml").exists()) {
+        if (fileUtil.getFile(fileUtil.getDollDir(), DollManager.dollShortName(profile.getName()) + ".yml").exists()) {
             playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("doll-pset"));
             return 0;
         }

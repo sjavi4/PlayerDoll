@@ -47,9 +47,9 @@ public class DollJoin implements Listener {
         if (caller != null) {
             caller.sendMessage(LangFormatter.YAMLReplaceMessage("spawn-success"));
             // keep flying
-            if (caller.getGameMode() == GameMode.CREATIVE && player.getAllowFlight()) {
-                player.setFlying(caller.isFlying());
-            }
+//            if (caller.getGameMode() == GameMode.CREATIVE && player.getAllowFlight()) {
+//                player.setFlying(caller.isFlying());
+//            }
 //            if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
 //                PlayerDoll.scheduler.foliaTeleportAync(player, caller.getLocation());
 //            } else {

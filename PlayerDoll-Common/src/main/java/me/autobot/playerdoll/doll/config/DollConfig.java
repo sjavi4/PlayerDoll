@@ -8,6 +8,7 @@ import me.autobot.playerdoll.doll.BaseEntity;
 import me.autobot.playerdoll.doll.Doll;
 import me.autobot.playerdoll.doll.DollManager;
 import me.autobot.playerdoll.util.FileUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -68,23 +69,23 @@ public class DollConfig extends AbstractConfig {
     }
 
     public static DollConfig getTemporaryConfig(String name) {
-        String fullName = DollManager.dollFullName(name);
-        Optional<DollConfig> existConfig = DOLL_CONFIGS.values().stream().filter(config -> config.dollName.getValue().equals(name)).findAny();
+        String shortName = DollManager.dollShortName(name);
+        Optional<DollConfig> existConfig = DOLL_CONFIGS.values().stream().filter(config -> config.dollName.getValue().equals(shortName)).findAny();
         if (existConfig.isPresent()) {
             return existConfig.get();
         }
         FileUtil fileUtil = FileUtil.INSTANCE;
-        File dollFile = fileUtil.getFile(fileUtil.getDollDir(), name + ".yml");
-        return new DollConfig(fullName, dollFile, YamlConfiguration.loadConfiguration(dollFile));
+        File dollFile = fileUtil.getFile(fileUtil.getDollDir(), shortName + ".yml");
+        return new DollConfig(shortName, dollFile, YamlConfiguration.loadConfiguration(dollFile));
     }
     public static DollConfig getDollConfigForOnline(Doll doll, String dollName, UUID dollUUID) {
-        String fullName = DollManager.dollFullName(dollName);
+        String shortName = DollManager.dollShortName(dollName);
         if (DOLL_CONFIGS.containsKey(dollUUID)) {
             DOLL_CONFIGS.get(dollUUID).saveConfig();
             DOLL_CONFIGS.remove(dollUUID);
         }
         // Doll is not online yet
-        File file = FILE_UTIL.getOrCreateFile(FILE_UTIL.getDollDir(), fullName + ".yml");
+        File file = FILE_UTIL.getOrCreateFile(FILE_UTIL.getDollDir(), shortName + ".yml");
         return new DollConfig(doll, YamlConfiguration.loadConfiguration(file));
     }
 
@@ -93,7 +94,7 @@ public class DollConfig extends AbstractConfig {
             return DOLL_CONFIGS.get(dollUUID);
         }
         Doll doll = DollManager.ONLINE_DOLLS.get(dollUUID);
-        File file = FILE_UTIL.getOrCreateFile(FILE_UTIL.getDollDir(), doll.getBukkitPlayer().getName() + ".yml");
+        File file = FILE_UTIL.getOrCreateFile(FILE_UTIL.getDollDir(), DollManager.dollShortName(doll.getBukkitPlayer().getName()) + ".yml");
         //File file = new File(PlayerDoll.getDollDirectory(), doll.getBukkitPlayer().getName()+".yml");
         return new DollConfig(doll, YamlConfiguration.loadConfiguration(file));
     }
@@ -138,7 +139,7 @@ public class DollConfig extends AbstractConfig {
         super(config);
         this.doll = doll;
         //this.dollName = new ConfigKey<>(this, "Doll-Name", doll.getBukkitPlayer().getName());
-        this.dollFile = FILE_UTIL.getOrCreateFile(FILE_UTIL.getDollDir(), doll.getBukkitPlayer().getName() + ".yml");
+        this.dollFile = FILE_UTIL.getOrCreateFile(FILE_UTIL.getDollDir(), DollManager.dollShortName(doll.getBukkitPlayer().getName()) + ".yml");
         //this.dollFile = new File(PlayerDoll.getDollDirectory(),doll.getBukkitPlayer().getName()+".yml");
         getData();
         DOLL_CONFIGS.put(doll.getBukkitPlayer().getUniqueId(),this);
@@ -151,7 +152,7 @@ public class DollConfig extends AbstractConfig {
         this.today = dateFormat.format(new Date(System.currentTimeMillis()));
         this.creationTimeStamp = new ConfigKey<>(this,"Creation-Date", today);
         this.lastSpawnTimeStamp = new ConfigKey<>(this,"Last-Spawn-Date",today);
-        this.dollName = new ConfigKey<> (this,"Doll-Name",doll == null? name : doll.getBukkitPlayer().getName());
+        this.dollName = new ConfigKey<> (this,"Doll-Name",doll == null? name : DollManager.dollShortName(doll.getBukkitPlayer().getName()));
         this.dollUUID = new ConfigKey<> (this,"Doll-UUID", NULL_UUID);
         this.ownerName = new ConfigKey<> (this,"Owner-Name", "");
         this.ownerUUID = new ConfigKey<> (this,"Owner-UUID", NULL_UUID);

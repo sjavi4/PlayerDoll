@@ -90,7 +90,7 @@ public class Give extends SubCommand implements DollCommandExecutor {
         }
         // Not allow Doll pset
         FileUtil fileUtil = FileUtil.INSTANCE;
-        if (fileUtil.getFile(fileUtil.getDollDir(), profile.getName() + ".yml").exists()) {
+        if (fileUtil.getFile(fileUtil.getDollDir(), DollManager.dollShortName(profile.getName()) + ".yml").exists()) {
             playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("doll-give"));
             return 0;
         }

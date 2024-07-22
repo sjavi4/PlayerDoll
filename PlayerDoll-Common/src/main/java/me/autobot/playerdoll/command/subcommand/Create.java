@@ -34,7 +34,7 @@ public class Create extends SubCommand implements DollCommandExecutor {
     @Override
     public void execute() {
         dollConfig.dollUUID.setNewValue(UUID.randomUUID().toString());
-        dollConfig.dollName.setNewValue(DollManager.dollFullName(targetString));
+        dollConfig.dollName.setNewValue(targetString);
         dollConfig.ownerName.setNewValue(sender.getName());
         dollConfig.ownerUUID.setNewValue(sender.getUniqueId().toString());
         if (profile != null) {
@@ -77,7 +77,7 @@ public class Create extends SubCommand implements DollCommandExecutor {
         this.sender = playerSender;
 
         FileUtil fileUtil = FileUtil.INSTANCE;
-        File dollConfigFile = fileUtil.getFile(fileUtil.getDollDir(), DollManager.dollFullName(targetString) + ".yml");
+        File dollConfigFile = fileUtil.getFile(fileUtil.getDollDir(), DollManager.dollShortName(targetString) + ".yml");
         if (dollConfigFile.exists()) {
             playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("dupe-name"));
             return 0;
@@ -97,7 +97,7 @@ public class Create extends SubCommand implements DollCommandExecutor {
         }
 
         if (splitInput.length == 4) {
-            // Player have skin permission & inputted skin
+            // Player have skin permission & have input skin
             if (splitInput[3].startsWith("@")) { // doll create <name> [<skin>]
                 playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("multi-select"));
                 return 0;

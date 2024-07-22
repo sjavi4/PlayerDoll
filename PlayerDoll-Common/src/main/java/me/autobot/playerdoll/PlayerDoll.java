@@ -181,6 +181,7 @@ public final class PlayerDoll extends JavaPlugin {
     private void initServerVersion() {
         SERVER_VERSION = Bukkit.getBukkitVersion().split("-")[0];
         switch (SERVER_VERSION) {
+            case "1.20.2" -> INTERNAL_VERSION = "v1_20_R2";
             case "1.20.3", "1.20.4" -> INTERNAL_VERSION = "v1_20_R3";
             case "1.20.5", "1.20.6" -> INTERNAL_VERSION = "v1_20_R4";
             case "1.21" -> INTERNAL_VERSION = "v1_21_R1";
@@ -270,7 +271,7 @@ public final class PlayerDoll extends JavaPlugin {
             DollManager.PLAYER_CREATION_COUNTS.merge(ownerUUID, 1, Integer::sum);
             // auto Join
             if (config.dollSetting.get(FlagConfig.GlobalFlagType.JOIN_AT_START).getValue()) {
-                if (config.dollLastJoinServer.getValue().isEmpty()) {
+                if (BUNGEECORD && config.dollLastJoinServer.getValue().isEmpty()) {
                     continue;
                 }
                 Runnable r = () -> SocketHelper.createConnection(config.dollName.getValue(), UUID.fromString(config.dollUUID.getValue()), null);

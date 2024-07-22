@@ -9,6 +9,7 @@ import me.autobot.playerdoll.gui.menu.Menu;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +40,15 @@ public class PlayerDisconnect implements Listener {
             caller.sendMessage(LangFormatter.YAMLReplaceMessage("doll-disconnect", player.getName()));
         }
         //event.getPlayer().setFallDistance(0.0f);
+
+        Entity riding = player.getVehicle();
+        if (riding != null) {
+            riding.removePassenger(player);
+        }
+        List<Entity> passengers = player.getPassengers();
+        for (Entity p : passengers) {
+            player.removePassenger(p);
+        }
 
 
         if (basicConfig.adjustableMaxPlayer.getValue()) {

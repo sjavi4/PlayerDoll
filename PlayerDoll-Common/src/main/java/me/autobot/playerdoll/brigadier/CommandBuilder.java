@@ -54,7 +54,18 @@ public class CommandBuilder {
 
     public static final List<LiteralCommandNode<Object>> COMMANDS = new ArrayList<>();
     public static final LiteralCommandNode<Object> builtRoot;
-    public static final String SELF_INDICATION = "_";
+    public static final String SELF_INDICATION;
+    public static final String DOLL_INDICATION;
+    public static final boolean SHOULD_QUOTE_DOLL_NAME;
+
+    // Others
+    static {
+        String quoteRegex = "^[a-zA-Z0-9+-.]";
+        BasicConfig basicConfig = BasicConfig.get();
+        SELF_INDICATION = "_";
+        DOLL_INDICATION = basicConfig.dollIdentifier.getValue();
+        SHOULD_QUOTE_DOLL_NAME = !DOLL_INDICATION.matches(quoteRegex);
+    }
 
     // Root Node
     static {
@@ -239,7 +250,7 @@ public class CommandBuilder {
                                     continue;
                                 }
                                 if (testRuntimePermission(commandContext.getSource(), canSuggestsDoll(player -> SubCommand.isOwnerOrOp(player, config)))) {
-                                    suggestionsBuilder.suggest(dollName, () -> LangFormatter.YAMLReplace("cmd-hover.give", config.ownerName.getValue()));
+                                    suggestionsBuilder.suggest(convertQuotedDollName(dollName), () -> LangFormatter.YAMLReplace("cmd-hover.give", config.ownerName.getValue()));
                                 }
                             }
                             return suggestionsBuilder.buildFuture();
@@ -249,7 +260,7 @@ public class CommandBuilder {
                                 .executes(commandContext -> {
                                     String target = StringArgumentType.getString(commandContext, "target");
                                     Collection<GameProfile> profiles = WrapperGameProfileArgument.getGameProfiles(commandContext, "players");
-                                    return DollCommandSource.execute(commandContext, new Give(DollManager.dollFullName(target), profiles));
+                                    return DollCommandSource.execute(commandContext, new Give(DollManager.dollShortName(target), profiles));
                                 })))
                 .build();
         builtRoot.addChild(give);
@@ -319,14 +330,14 @@ public class CommandBuilder {
                                 String dollName = fileName.substring(0, fileName.length() - ".yml".length());
                                 DollConfig config = DollConfig.getTemporaryConfig(dollName);
                                 if (testRuntimePermission(commandContext.getSource(), canSuggestsDoll(player -> SubCommand.isOwnerOrOp(player, config)))) {
-                                    suggestionsBuilder.suggest(dollName);
+                                    suggestionsBuilder.suggest(convertQuotedDollName(dollName));
                                     continue;
                                 }
                                 if (config.dollSetting.get(FlagConfig.GlobalFlagType.HIDE_FROM_LIST).getValue()) {
                                     // Filter Hide From List
                                     continue;
                                 }
-                                suggestionsBuilder.suggest(dollName);
+                                suggestionsBuilder.suggest(convertQuotedDollName(dollName));
                             }
                             return suggestionsBuilder.buildFuture();
                         })
@@ -463,7 +474,7 @@ public class CommandBuilder {
                                 String dollName = fileName.substring(0, fileName.length() - ".yml".length());
                                 DollConfig config = DollConfig.getTemporaryConfig(dollName);
                                 if (testRuntimePermission(commandContext.getSource(), canSuggestsDoll(player -> SubCommand.isOwnerOrOp(player, config)))) {
-                                    suggestionsBuilder.suggest(dollName, () -> LangFormatter.YAMLReplace("cmd-hover.remove", config.ownerName.getValue()));
+                                    suggestionsBuilder.suggest(convertQuotedDollName(dollName), () -> LangFormatter.YAMLReplace("cmd-hover.remove", config.ownerName.getValue()));
                                 }
                             }
                             return suggestionsBuilder.buildFuture();
@@ -559,14 +570,14 @@ public class CommandBuilder {
                                     continue;
                                 }
                                 if (testRuntimePermission(commandContext.getSource(), canSuggestsDoll(player -> SubCommand.hasDollPermission(player, config, FlagConfig.PersonalFlagType.SPAWN)))) {
-                                    suggestionsBuilder.suggest(dollName, () -> LangFormatter.YAMLReplace("cmd-hover.spawn", config.ownerName.getValue()));
+                                    suggestionsBuilder.suggest(convertQuotedDollName(dollName), () -> LangFormatter.YAMLReplace("cmd-hover.spawn", config.ownerName.getValue()));
                                 }
                             }
                             return suggestionsBuilder.buildFuture();
                         })
                         .executes(commandContext -> {
                             String target = StringArgumentType.getString(commandContext, "target");
-                            return DollCommandSource.execute(commandContext, new Spawn(DollManager.dollFullName(target)));
+                            return DollCommandSource.execute(commandContext, new Spawn(DollManager.dollShortName(target)));
                         }))
                 .build();
         builtRoot.addChild(spawn);
@@ -682,11 +693,11 @@ public class CommandBuilder {
 
 
     private static CompletableFuture<Suggestions> setDollSuggestion(SuggestionsBuilder builder, Function<Player, String> dollHoverText) {
-        DollManager.ONLINE_DOLLS.values().forEach(d -> builder.suggest(d.getBukkitPlayer().getName(),() -> dollHoverText.apply(d.getBukkitPlayer())));
+        DollManager.ONLINE_DOLLS.values().forEach(d -> builder.suggest(convertQuotedDollName(DollManager.dollShortName(d.getBukkitPlayer().getName())),() -> dollHoverText.apply(d.getBukkitPlayer())));
         return builder.buildFuture();
     }
     private static CompletableFuture<Suggestions> setDollSuggestion(SuggestionsBuilder builder, String simpleHoverText) {
-        DollManager.ONLINE_DOLLS.values().forEach(d -> builder.suggest(d.getBukkitPlayer().getName(),() -> simpleHoverText));
+        DollManager.ONLINE_DOLLS.values().forEach(d -> builder.suggest(convertQuotedDollName(DollManager.dollShortName(d.getBukkitPlayer().getName())),() -> simpleHoverText));
         return builder.buildFuture();
     }
 
@@ -786,17 +797,8 @@ public class CommandBuilder {
         String mText = LangFormatter.YAMLReplace("cmd-hover.action-main", mainHandItem.getType().name());
         String oText = LangFormatter.YAMLReplace("cmd-hover.action-off", offHandItem.getType().name());
 
-        //System.out.println(new TranslatableComponent(mainHandItem.getType().getTranslationKey()));
-        //String mText = LangFormatter.YAMLReplace("cmd-hover.action-main", new TranslatableComponent(mainHandItem.getType().getTranslationKey()).toString());
-        //String oText = LangFormatter.YAMLReplace("cmd-hover.action-off", new TranslatableComponent(offHandItem.getType().getTranslationKey()).toString());
-        //return materialToJsonTranslate(mainHandItem.getType());// + " " + materialToJsonTranslate(offHandItem.getType());
-        //return new TranslatableComponent(mainHandItem.getType().getTranslationKey()).toString();
         return mText + " " + oText;
     }
-//    private static String materialToJsonTranslate(Material material) {
-//        TranslatableComponent component = new TranslatableComponent(material.getTranslationKey());
-//        return String.format("{\"translate\":\"%s\"}", component.getTranslate());
-//    }
     private static boolean isManager(CommandSender sender) {
         return sender.isOp() || sender.hasPermission("playerdoll.dollmanage");
     }
@@ -813,5 +815,13 @@ public class CommandBuilder {
             }
             return test.apply(playerSender);
         };
+    }
+
+    private static String convertQuotedDollName(String dollName) {
+        if (DOLL_INDICATION.isEmpty()) {
+            return dollName;
+        } else {
+            return dollName.startsWith(DOLL_INDICATION) ? "\"" + dollName + "\"" : dollName;
+        }
     }
 }

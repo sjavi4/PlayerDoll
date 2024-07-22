@@ -17,9 +17,10 @@ public class SocketHelper {
     public static final Map<UUID, ClientSocket> DOLL_CLIENTS = new ConcurrentHashMap<>();
 
     static {
-        if (PlayerDoll.BUNGEECORD) {
-            IP = BasicConfig.get().proxyIP.getValue();
-            PORT = BasicConfig.get().proxyPort.getValue();
+        BasicConfig basicConfig = BasicConfig.get();
+        if (PlayerDoll.BUNGEECORD || basicConfig.forceProxyIP.getValue()) {
+            IP = basicConfig.proxyIP.getValue();
+            PORT = basicConfig.proxyPort.getValue();
             HOST = new InetSocketAddress(IP, PORT);
         }
     }

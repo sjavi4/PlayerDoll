@@ -73,7 +73,7 @@ public class CommandRegister {
         brigadierDispatcher.getRoot().removeCommand(node.getName());
         brigadierDispatcher.getRoot().addChild((CommandNode<Object>) node);
 
-        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.SPIGOT || PlayerDoll.INTERNAL_VERSION.equals("v1_20_R3")) {
+        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.SPIGOT || PlayerDoll.INTERNAL_VERSION.matches("v1_20_R2|v1_20_R3")) {
             Command wrapperCommand = (Command) ReflectionUtil.newInstance(vanillaCommandWrapperConstructor, vanillaCommandDispatcherInstance, node);
             simpleCommandMap.register("minecraft", wrapperCommand);
         }

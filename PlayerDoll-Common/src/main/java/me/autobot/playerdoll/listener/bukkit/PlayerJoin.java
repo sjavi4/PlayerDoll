@@ -26,16 +26,16 @@ public class PlayerJoin implements Listener {
             PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.PLUGIN.prepareDollSpawn(basicConfig.proxyAutoJoinDelay.getValue()), 100);
         }
         Player player = event.getPlayer();
-        if (player.getName().startsWith("-")) {
+        final boolean isDoll = ReflectionUtil.getServerPlayer(player) instanceof Doll;
+        if (isDoll) {
             if (!basicConfig.broadcastDollJoin.getValue()) {
                 event.setJoinMessage(null);
             }
-            if (ReflectionUtil.getServerPlayer(player) instanceof Doll doll) {
-                if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
-                    PlayerDoll.scheduler.foliaTeleportAync(player, doll.getCaller().getLocation());
-                } else {
-                    player.teleport(doll.getCaller());
-                }
+            Doll doll = (Doll) ReflectionUtil.getServerPlayer(player);
+            if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
+                PlayerDoll.scheduler.foliaTeleportAync(player, doll.getCaller().getLocation());
+            } else {
+                player.teleport(doll.getCaller());
             }
         }
 
@@ -45,7 +45,7 @@ public class PlayerJoin implements Listener {
                 Player dollPlayer = doll.getBukkitPlayer();
                 DollConfig dollConfig = DollConfig.getTemporaryConfig(dollPlayer.getName());
                 boolean hide = dollConfig.generalSetting.get(FlagConfig.PersonalFlagType.HIDDEN);
-                if (!player.getName().startsWith("-")) {
+                if (!isDoll) {
                     EnumMap<FlagConfig.PersonalFlagType, Boolean> playerSettings = dollConfig.playerSetting.get(player.getUniqueId());
                     if (playerSettings == null) {
                         if (hide) {
