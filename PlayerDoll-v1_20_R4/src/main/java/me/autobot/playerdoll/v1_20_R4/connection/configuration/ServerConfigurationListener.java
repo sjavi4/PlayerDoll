@@ -20,11 +20,9 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class ServerConfigurationListener extends ServerConfigurationPacketListenerImpl {
-    private final Player caller;
-    public ServerConfigurationListener(MinecraftServer minecraftserver, Connection networkmanager, ServerPlayer player, Player caller) {
+    public ServerConfigurationListener(MinecraftServer minecraftserver, Connection networkmanager, ServerPlayer player) {
         super(minecraftserver, networkmanager, CommonListenerCookie.createInitial(player.getGameProfile(), false), player);
         handleClientInformation(new ServerboundClientInformationPacket(ClientInformation.createDefault()));
-        this.caller = caller;
     }
 
     @Override

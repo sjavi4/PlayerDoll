@@ -40,7 +40,6 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     public void callDollJoinEvent() {
         PlayerDoll.callSyncEvent(new DollJoinEvent(this.getBukkitEntity(), caller.getBukkitEntity(), this));
     }
-
     @Override
     public boolean isDoll() {
         return true;
@@ -48,7 +47,7 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
 
     @Override
     public void dollDisconnect() {
-        shakeOff();
+        //shakeOff();
         SocketHelper.DOLL_CLIENTS.get(uuid).getSocketReader().close();
 //        this.connection.onDisconnect(Component.literal(r));
 //        Runnable t = () -> this.connection.disconnect(r);
@@ -114,16 +113,16 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
         }
     }
 
-    private void shakeOff() {
-        if (getVehicle() instanceof Player) {
-            stopRiding();
-        }
-        for (Entity passenger : getIndirectPassengers()) {
-            if (passenger instanceof Player) {
-                passenger.stopRiding();
-            }
-        }
-    }
+//    private void shakeOff() {
+//        if (getVehicle() instanceof Player) {
+//            stopRiding();
+//        }
+//        for (Entity passenger : getIndirectPassengers()) {
+//            if (passenger instanceof Player) {
+//                passenger.stopRiding();
+//            }
+//        }
+//    }
 
     @Override
     public void tick() {
@@ -160,14 +159,14 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     }
     @Override
     public void kill() {
-        shakeOff();
+        //shakeOff();
         super.kill();
         //dollDisconnect();
     }
     @Override
     public void die(DamageSource cause)
     {
-        shakeOff();
+        //shakeOff();
         super.die(cause);
         //setHealth(20);
         //this.foodData = new FoodData();

@@ -1,4 +1,4 @@
-package me.autobot.playerdoll.v1_21_R1.player;
+package me.autobot.playerdoll.v1_20_R2.player;
 
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.PlayerDoll;
@@ -16,8 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 
 
 public class ServerDoll extends ExtServerPlayer implements Doll {
@@ -36,7 +35,6 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     public void setup(org.bukkit.entity.Player caller) {
         this.caller = caller == null ? this : ((CraftPlayer)caller).getHandle();
         this.entityData.set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) 0x7f);
-        //IDoll.setSkin(this.getBukkitEntity(), this);
     }
 
     public void callDollJoinEvent() {
@@ -52,7 +50,8 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     public void dollDisconnect() {
         //shakeOff();
         SocketHelper.DOLL_CLIENTS.get(uuid).getSocketReader().close();
-//        Runnable t = () -> this.connection.disconnect(Component.literal(r));
+//        this.connection.onDisconnect(Component.literal(r));
+//        Runnable t = () -> this.connection.disconnect(r);
 //        if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
 //            PlayerDoll.scheduler.entityTask(t, getBukkitPlayer());
 //        } else {
@@ -75,8 +74,8 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
 //    }
 
     @Override
-    public void setDollMaxUpStep(double d) {
-        getBukkitPlayer().getAttribute(Attribute.GENERIC_STEP_HEIGHT).setBaseValue(d);
+    public void setDollMaxUpStep(double f) {
+        setMaxUpStep((float) f);
     }
 
     @Override

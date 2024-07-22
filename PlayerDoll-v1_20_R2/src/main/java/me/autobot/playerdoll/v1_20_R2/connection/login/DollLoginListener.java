@@ -1,13 +1,14 @@
-package me.autobot.playerdoll.v1_20_R4.connection.login;
+package me.autobot.playerdoll.v1_20_R2.connection.login;
 
 import com.mojang.authlib.GameProfile;
 import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.util.ReflectionUtil;
-import me.autobot.playerdoll.v1_20_R4.connection.configuration.ServerConfigurationListener;
-import me.autobot.playerdoll.v1_20_R4.player.ServerDoll;
+import me.autobot.playerdoll.v1_20_R2.connection.configuration.ServerConfigurationListener;
+import me.autobot.playerdoll.v1_20_R2.player.ServerDoll;
 import net.minecraft.network.Connection;
+import net.minecraft.network.ConnectionProtocol;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.PacketUtils;
-import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.network.protocol.login.ServerboundLoginAcknowledgedPacket;
 import net.minecraft.server.MinecraftServer;
@@ -35,8 +36,8 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl {
         startClientVerificationMethod.setAccessible(true);
     }
     public DollLoginListener(MinecraftServer minecraftserver, Connection networkmanager, GameProfile profile, Player caller) {
-        super(minecraftserver, networkmanager, false);
-        //networkmanager.channel.attr(Connection.ATTRIBUTE_SERVERBOUND_PROTOCOL).set(ConnectionProtocol.LOGIN.codec(PacketFlow.SERVERBOUND));
+        super(minecraftserver, networkmanager);
+        networkmanager.channel.attr(Connection.ATTRIBUTE_SERVERBOUND_PROTOCOL).set(ConnectionProtocol.LOGIN.codec(PacketFlow.SERVERBOUND));
         this.profile = profile;
         this.caller = caller;
         handleHello(new ServerboundHelloPacket(profile.getName(), profile.getId()));
@@ -62,13 +63,10 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl {
             // Avoid IllegalStateException "Asynchronous Chunk getEntities call!"
             PacketUtils.ensureRunningOnSameThread(serverboundloginacknowledgedpacket, this, (MinecraftServer) ReflectionUtil.getDedicatedServerInstance());
         }
-        this.connection.setupOutboundProtocol(ConfigurationProtocols.CLIENTBOUND);
-
         ServerDoll player = ServerDoll.callSpawn(profile);
         player.setup(caller);
         ServerConfigurationPacketListenerImpl serverconfigurationpacketlistenerimpl = new ServerConfigurationListener(player.server, this.connection, player);
-        //CursedConnection.setPacketListener(connection, serverconfigurationpacketlistenerimpl);
-        this.connection.setupInboundProtocol(ConfigurationProtocols.SERVERBOUND, serverconfigurationpacketlistenerimpl);
+        this.connection.setListener(serverconfigurationpacketlistenerimpl);
         serverconfigurationpacketlistenerimpl.startConfiguration();
     }
 }

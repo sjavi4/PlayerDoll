@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -49,7 +50,7 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
 
     @Override
     public void dollDisconnect() {
-        shakeOff();
+        //shakeOff();
         SocketHelper.DOLL_CLIENTS.get(uuid).getSocketReader().close();
         //this.connection.disconnect(r);
         //this.connection.onDisconnect(Component.literal(r));
@@ -108,16 +109,16 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
         }
     }
 
-    private void shakeOff() {
-        if (getVehicle() instanceof Player) {
-            stopRiding();
-        }
-        for (Entity passenger : getIndirectPassengers()) {
-            if (passenger instanceof Player) {
-                passenger.stopRiding();
-            }
-        }
-    }
+//    private void shakeOff() {
+//        if (getVehicle() instanceof Player) {
+//            stopRiding();
+//        }
+//        for (Entity passenger : getIndirectPassengers()) {
+//            if (passenger instanceof Player) {
+//                passenger.stopRiding();
+//            }
+//        }
+//    }
 
     @Override
     public void tick() {
@@ -152,16 +153,17 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
         doCheckFallDamage(0.0, y, 0.0, onGround);
     }
+
     @Override
     public void kill() {
-        shakeOff();
+        //shakeOff();
         super.kill();
         //dollDisconnect();
     }
     @Override
     public void die(DamageSource cause)
     {
-        shakeOff();
+        //shakeOff();
         super.die(cause);
         //setHealth(20);
         //this.foodData = new FoodData();

@@ -9,14 +9,14 @@
         <artifactId>PlayerDoll-Parent</artifactId>
         <version>1.33</version>
     </parent>
-    <artifactId>PlayerDoll-v1_20_R4</artifactId>
+    <artifactId>PlayerDoll-v1_20_R2</artifactId>
     <version>${project.parent.version}</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <craftbukkit.version>1.20.6-R0.1-SNAPSHOT</craftbukkit.version>
+        <craftbukkit.version>1.20.2-R0.1-SNAPSHOT</craftbukkit.version>
     </properties>
 
     <repositories>
@@ -93,5 +93,5 @@
             </resource>
         </resources>
     </build>
-
+    
 </project>
