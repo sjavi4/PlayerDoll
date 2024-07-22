@@ -33,6 +33,11 @@ i.e. Hostility = true / Gravity: false
 **Screenshots or Videos**
 If applicable, add screenshots or videos to help explain your problem.
 
+**Related Setup (If your problem is related to 3rd parties)**
+- Resource Packs
+- Server Properties
+- Others
+
 **Context in code (If applicable)**
 
 **Additional context**
