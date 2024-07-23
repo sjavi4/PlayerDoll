@@ -102,8 +102,8 @@ public class DollBackpackMenu extends AbstractMenu {
     private void mouseClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (event.isLeftClick() && event.getSlot() >= 36) {
-            String commandSlot = String.format("playerdoll:doll slot %s %d", DollManager.dollShortName(dollPlayer.getName()), event.getSlot() - 35);
-            player.performCommand(commandSlot);
+            String commandSlot = String.format("/playerdoll:doll slot %s %d", DollManager.dollShortName(dollPlayer.getName()), event.getSlot() - 35);
+            player.chat(commandSlot);
         }
         //new Slot(player,fullDollName, new String[]{Integer.toString(event.getSlot()-35)});
         ItemStack currItem = event.getCurrentItem();
@@ -111,8 +111,8 @@ public class DollBackpackMenu extends AbstractMenu {
             return;
         }
         if (event.isRightClick() && !currItem.getType().isBlock()) {
-            String commandUse = String.format("playerdoll:doll use %s", DollManager.dollShortName(dollPlayer.getName()));
-            player.performCommand(commandUse);
+            String commandUse = String.format("/playerdoll:doll use %s", DollManager.dollShortName(dollPlayer.getName()));
+            player.chat(commandUse);
             //new Use(player, fullDollName, null);
             ItemStack item = inventory.getItem(event.getSlot());
             if (item != null) {
@@ -239,8 +239,8 @@ public class DollBackpackMenu extends AbstractMenu {
         }
         boolean dropStack = event.getClick() == ClickType.CONTROL_DROP;
         String arg = dropStack ? "dropStack" : "drop";
-        String commandDrop = String.format("playerdoll:doll %s %s %s", arg, DollManager.dollShortName(dollPlayer.getName()), slot);
-        ((Player) event.getWhoClicked()).performCommand(commandDrop);
+        String commandDrop = String.format("/playerdoll:doll %s %s %s", arg, DollManager.dollShortName(dollPlayer.getName()), slot);
+        ((Player) event.getWhoClicked()).chat(commandDrop);
         //new Drop((Player) event.getWhoClicked(),fullDollName,new String[]{all,slot});
         ItemStack item = inventory.getItem(event.getSlot());
         if (item != null) {
