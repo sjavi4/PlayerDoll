@@ -38,13 +38,19 @@ Please use it with cautious</b>
 
 ## Versions
 Other versions and Server Mods are not guaranteed to 100% work<br>
-Pre-1.20.4 versions are temporary un-supported.
+Pre-1.20.2 versions are un-supported.
 <table>
   <tr>
     <th>version</th>
     <th>Spigot</th>
     <th>Paper/Purpur/...</th>
     <th>Folia</th>
+  </tr>
+  <tr>
+    <td>1.20.2</td>
+    <td>Testing</td>
+    <td>Testing</td>
+    <td>Testing</td>
   </tr>
   <tr>
     <td>1.20.3-1.20.4</td>
