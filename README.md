@@ -91,6 +91,16 @@ Welcome to report any issues (performance, bugs, suggestions, feedback, compatib
 Doll now will connect to server by Emulating a client.
 - This Should provide a better support in the future.
 
+## Known Issues
+The issues stated here are not likely to be fixed due to complicated behaviour
+
+<h6>It is welcome to contribute for this plugin</h6>
+
+- Doll cannot update certain vehicles while mounting
+- Doll cannot be push by piston with Slime block correctly
+- Doll causes Crash in Folia servers when Map is tracking Regions containing Doll (Temporary Solution above)
+
+
 ## How to use
 
 ### Upgrade from old version (v1.28 above)
