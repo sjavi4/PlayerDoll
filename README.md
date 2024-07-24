@@ -82,6 +82,8 @@ For BungeeCord connections, check [here](https://modrinth.com/plugin/playerdoll/
 
 For Velocity connections, a basic test was done and no specific support is needed. Doll can join directly without any setup
 
+For Proxy-Protocol connections, is not supported, and not being able to support in short time
+
 Things like database, multiverse might went wrong (not tested or coded to handle)
 
 Welcome to report any issues (performance, bugs, suggestions, feedback, compatibility tests)
