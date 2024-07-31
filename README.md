@@ -18,34 +18,6 @@ Please use it with cautious</b>
 
 <i>Features provided by this plugin are not GUARANTEE to be fully working, it is not encouraged to treat this plugin as a pay feature to other players.</i>
 
-### Cautions
-
-If you are running a Folia type server, please **Avoid** Doll entering regions containing Handheld/Hanging Maps of specific Region. Server will very likely to crash due the map is tracking the Doll.
-
-Temoprary Solution: Goto `paper-world-defaults.yml` and change the value of `item-frame-cursor-update-interval` to 0
-
-For BungeeCord connections, check [here](https://modrinth.com/plugin/playerdoll/version/lbTw2Mzy)
-
-For Velocity connections, a basic test was done and no specific support is needed. Doll can join directly without any setup
-
-For Proxy-Protocol connections, is not supported, and not being able to support in short time
-
-Things like database, multiverse might went wrong (not tested or coded to handle)
-
-Welcome to report any issues (performance, bugs, suggestions, feedback, compatibility tests)
-
-Doll now will connect to server by Emulating a client.
-- This Should provide a better support in the future.
-
-## Known Issues
-The issues stated here are not likely to be fixed due to complicated behaviour
-
-<h6>It is welcome to contribute for this plugin</h6>
-
-- Doll cannot update certain vehicles while mounting
-- Doll cannot be push by piston with Slime block correctly
-- Doll causes Crash in Folia servers when Map is tracking Regions containing Doll (Temporary Solution above)
-
 
 ## How to use
 
