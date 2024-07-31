@@ -5,30 +5,10 @@ Simple Standalone Fake Player Plugin for Spigot, Paper, Folia 1.20 [Java 17+]
 
 Release avaliable on Modrinth.
 
-Updated Readme for v1.28
+
 
 Detailed Usage has been migrated to [Wiki](https://github.com/sjavi4/PlayerDoll/wiki)
 
-#### Currently supported Languages
-<table>
-  <tr>
-    <th>Language</th>
-    <th>Author</th>
-    <th>Location</th>
-  </tr>
-  <tr>
-    <td>default (English)</td>
-    <td></td>
-    <td>built-in</td>
-  </tr>
-  <tr>
-    <td>Tranditional Chinese</td>
-    <td>anonymous</td>
-    <td><a href="https://github.com/sjavi4/PlayerDoll/blob/main/customlanguages/zh.yml">zh.yml</a></td>
-  </tr>
-</table>
-
-Download links available from above
 
 ## Disclaimer
 
@@ -37,42 +17,6 @@ Please use it with cautious</b>
 
 
 <i>Features provided by this plugin are not GUARANTEE to be fully working, it is not encouraged to treat this plugin as a pay feature to other players.</i>
-
-## Versions
-Other versions and Server Mods are not guaranteed to 100% work<br>
-Pre-1.20.2 versions are un-supported.
-<table>
-  <tr>
-    <th>version</th>
-    <th>Spigot</th>
-    <th>Paper/Purpur/...</th>
-    <th>Folia</th>
-  </tr>
-  <tr>
-    <td>1.20.2</td>
-    <td>Testing</td>
-    <td>Testing</td>
-    <td>Testing</td>
-  </tr>
-  <tr>
-    <td>1.20.3-1.20.4</td>
-    <td>✓</td>
-    <td>✓</td>
-    <td>✓</td>
-  </tr>
-  <tr>
-    <td>1.20.5-1.20.6</td>
-    <td>✓</td>
-    <td>✓</td>
-    <td>✓</td>
-  </tr>
-  <tr>
-    <td>1.21</td>
-    <td>✓</td>
-    <td>✓ (Exp Build #9)</td>
-    <td>Not Release</td>
-  </tr>
-</table>
 
 ### Cautions
 
