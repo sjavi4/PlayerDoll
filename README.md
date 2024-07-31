@@ -88,30 +88,3 @@ F -> Swap between target slot and offhand slot
 Shift Click slots -> Move hotbar/backpack slot to merge or put to the last empty backpack/hotbar slot (if avaliable)
 Number keys -> Move / Swap target slot to the corresponding number key slot in hotbar
 ```
-
-
-## Properties
-1. All doll have "-" prefix as identifier to distinguish Real players and Doll
-2. As is, Doll name has only 15 of name length (obey real player name rule)
-3. Doll are not gaining crafing recipes to reduce storage.
-4. Doll are not count into sleeping percentage
-5. Doll are default to be surivial mode
-6. Doll quit the game immediate if died (obey gamerule `keepinventory`)
-7. Doll will not drop loot when Despawn by command
-8. Doll being Removed by command will execute the `die process`<br>(obey gamerule `keepinventory`)<br>All player-related data will be deleted
-
-## Convert Player
-
-Convert Player is a feature can be set from config `convert-player`.
-- Player will be convert to modified entity when connected to server
-- Converted Player has the ability to perform doll commands to self
-  * attack, use, swapHands, drop, dropStack, lookat
-- When enabled, some commands will suggest `_` as self indication
-
-### Notes
-
-If enabled, Server Reload command is not recommanded.
-
-Converted players will be kicked from the server.
-
-(Once reloaded, the plugin has no access to player entity anymore)
