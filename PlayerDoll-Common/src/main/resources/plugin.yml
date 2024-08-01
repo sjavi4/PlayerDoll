@@ -4,25 +4,9 @@ main: me.autobot.playerdoll.PlayerDoll
 api-version: '1.20'
 folia-supported: true
 load: POSTWORLD
-commands:
-  # doll command handled by brigadier and custom implementation
-  #doll:
-  #  usage: /<command> <subcommand> <doll> <args>
-  #  permission: playerdoll.doll
-  #dollReload:
-  #  description: Reload
-  #  permission: playerdoll.reload
-  #dollHelp:
-  #  description: Show Help
-  #  permission: playerdoll.help
-  #dollList:
-  #  description: List Dolls
-  #  permission: playerdoll.list
-  #dollLimit:
-  #  description: List Permission Info
-  #  permission: playerdoll.limit
 
-# Most of them are not used
+# doll command handled by brigadier and custom implementation
+
 permissions:
   playerdoll.doll:
     description: Ability to use /doll subCommands
@@ -30,19 +14,6 @@ permissions:
   playerdoll.dollmanage:
     description: Ability to use /dollmanage subCommands (bypass /doll checks)
     default: op
-
-  playerdoll.reload:
-    description: /dollReload command
-    default: op
-  playerdoll.help:
-    description: /dollHelp command
-    default: true
-  playerdoll.list:
-    description: /dollList command
-    default: true
-  playerdoll.limit:
-    description: /dollLimit command
-    default: true
 
   # Perm config predefined values
   playerdoll.perm.max-doll-create.default:
@@ -57,270 +28,6 @@ permissions:
     description: default
     default: true
 
-  # Grouped Permissions
-  playerdoll.group.doll:
-    description: A permission group for Dolls
-
-  playerdoll.group.basic:
-    description: Very Basic permissions
-    children:
-      - playerdoll.command.create
-      - playerdoll.command.despawn
-      - playerdoll.command.spawn
-      - playerdoll.command.remove
-      - playerdoll.command.menu
-      - playerdoll.command.set
-      - playerdoll.command.gset
-      - playerdoll.command.pset
-
-  playerdoll.group.container:
-    description: Doll container related permissions
-    children:
-      - playerdoll.command.echest
-      - playerdoll.command.exp
-      - playerdoll.command.drop
-      - playerdoll.command.inv
-      - playerdoll.command.menu
-      - playerdoll.command.slot
-      - playerdoll.command.swap
-
-  playerdoll.group.movement:
-    description: A set of permission about movement
-    children:
-      - playerdoll.command.sprint
-      - playerdoll.command.stop
-      - playerdoll.command.move
-      - playerdoll.command.jump
-      - playerdoll.command.tp
-
-  playerdoll.group.action:
-    description: A set of permission for Action commands
-    children:
-      - playerdoll.command.attack
-#      - playerdoll.command.copy
-      - playerdoll.command.dismount
-      - playerdoll.command.drop
-      - playerdoll.command.jump
-      - playerdoll.command.look
-      - playerdoll.command.lookat
-      - playerdoll.command.mount
-      - playerdoll.command.move
-      - playerdoll.command.slot
-      - playerdoll.command.sneak
-      - playerdoll.command.sprint
-      - playerdoll.command.stop
-#      - playerdoll.command.strafe
-      - playerdoll.command.swap
-      - playerdoll.command.turn
-      - playerdoll.command.use
-
-  playerdoll.group.datacontrol:
-    description: A set of permission for modifying Doll data
-    children:
-      - playerdoll.command.set
-      - playerdoll.command.pset
-      - playerdoll.command.gset
-
-  playerdoll.group.manage:
-    description: A set of permission for managing Doll
-    children:
-      - playerdoll.command.rename
-      - playerdoll.command.give
-
-  # Standalone Permissions
-  playerdoll.command.attack:
-    description: Doll Attack
-
-#  playerdoll.command.copy:
-#    description: Doll Copy action
-
-  playerdoll.command.create:
-    description: Player Create Doll
-
-  playerdoll.argument.create.skin:
-    description: Player set skin in doll creation
-
-  playerdoll.command.despawn:
-    description: Doll Despawn
-
-  playerdoll.command.dismount:
-    description: Doll Dismount
-
-  playerdoll.command.drop:
-    description: Doll Drop item
-
-  playerdoll.command.echest:
-    description: Player access Doll ender chest
-
-  playerdoll.command.exp:
-    description: Player take Doll exp
-
-  playerdoll.command.give:
-    description: Player Transfer Doll
-
-  playerdoll.command.gset:
-    description: Player set Doll All-player-Setting
-
-  playerdoll.command.info:
-    description: Player get Doll information
-
-  playerdoll.command.inv:
-    description: Player access Doll inventory
-
-  playerdoll.command.jump:
-    description: Doll Jump
-
-  playerdoll.command.look:
-    description: Doll Look
-
-  playerdoll.command.lookat:
-    description: Doll Lookat
-
-  playerdoll.command.menu:
-    description: Player open Doll status menu
-
-  playerdoll.command.mount:
-    description: Doll Mount
-
-  playerdoll.command.move:
-    description: Doll Move
-
-  playerdoll.command.pset:
-    description: Player set Doll specific-player-Setting
-
-  playerdoll.command.remove:
-    description: Player Remove Doll
-
-  playerdoll.command.rename:
-    description: Player Rename Doll
-
-  playerdoll.command.set:
-    description: Player set Doll own setting
-
-  playerdoll.command.slot:
-    description: Player set Doll handheld Slot
-
-  playerdoll.command.sneak:
-    description: Player set Doll Sneak
-
-  playerdoll.command.spawn:
-    description: Player spawn Doll
-
-  playerdoll.command.sprint:
-    description: Doll Sprint
-
-  playerdoll.command.stop:
-    description: Doll Stop actions
-
-#  playerdoll.command.strafe:
-#    description: Doll Strafe
-
-  playerdoll.command.swap:
-    description: Doll Swap main-off hands
-
-  playerdoll.command.tp:
-    description: TP Doll to player
-
-  playerdoll.command.turn:
-    description: Player set Doll turn
-
-  playerdoll.command.use:
-    description: Doll Use
-
-  playerdoll.globalflag.echest:
-    description: GUI permission
-  playerdoll.globalflag.glow:
-    description: GUI permission
-  playerdoll.globalflag.gravity:
-    description: GUI permission
-  playerdoll.globalflag.hide_from_list:
-    description: GUI permission
-  playerdoll.globalflag.hostility:
-    description: GUI permission
-  playerdoll.globalflag.inv:
-    description: GUI permission
-  playerdoll.globalflag.invulnerable:
-    description: GUI permission
-  playerdoll.globalflag.join_at_start:
-    description: GUI permission
-  playerdoll.globalflag.large_step_size:
-    description: GUI permission
-  playerdoll.globalflag.phantom:
-    description: GUI permission
-  playerdoll.globalflag.pickable:
-    description: GUI permission
-  playerdoll.globalflag.pushable:
-    description: GUI permission
-  playerdoll.globalflag.real_player_tick_update:
-    description: GUI permission
-  playerdoll.globalflag.real_player_tick_action:
-    description: GUI permission
-
-  playerdoll.personalflag.admin:
-    description: GUI permission
-  playerdoll.personalflag.attack:
-    description: GUI permission
-#  playerdoll.personalflag.copy:
-#    description: GUI permission
-  playerdoll.personalflag.despawn:
-    description: GUI permission
-  playerdoll.personalflag.dismount:
-    description: GUI permission
-  playerdoll.personalflag.drop:
-    description: GUI permission
-  playerdoll.personalflag.echest:
-    description: GUI permission
-  playerdoll.personalflag.exp:
-    description: GUI permission
-  playerdoll.personalflag.gset:
-    description: GUI permission
-  #playerdoll.personalflag.info:
-  #  description: GUI permission
-  playerdoll.personalflag.inv:
-    description: GUI permission
-  playerdoll.personalflag.jump:
-    description: GUI permission
-  playerdoll.personalflag.look:
-    description: GUI permission
-  playerdoll.personalflag.lookat:
-    description: GUI permission
-  playerdoll.personalflag.menu:
-    description: GUI permission
-  playerdoll.personalflag.mount:
-    description: GUI permission
-  playerdoll.personalflag.move:
-    description: GUI permission
-  playerdoll.personalflag.pset:
-    description: GUI permission
-  playerdoll.personalflag.set:
-    description: GUI permission
-  playerdoll.personalflag.slot:
-    description: GUI permission
-  playerdoll.personalflag.sneak:
-    description: GUI permission
-  playerdoll.personalflag.spawn:
-    description: GUI permission
-  playerdoll.personalflag.sprint:
-    description: GUI permission
-  playerdoll.personalflag.stop:
-    description: GUI permission
-  playerdoll.personalflag.strafe:
-    description: GUI permission
-  playerdoll.personalflag.swap:
-    description: GUI permission
-  playerdoll.personalflag.tp:
-    description: GUI permission
-  playerdoll.personalflag.turn:
-    description: GUI permission
-  playerdoll.personalflag.unsneak:
-    description: GUI permission
-  playerdoll.personalflag.unsprint:
-    description: GUI permission
-  playerdoll.personalflag.use:
-    description: GUI permission
-  playerdoll.personalflag.hidden:
-    description: GUI permission
-
   # description: Tab shortcut for perm.yml
   playerdoll.perm.max-doll-create:
     description: Tab shortcut for perm.yml
@@ -328,3 +35,247 @@ permissions:
     description: Tab shortcut for perm.yml
   playerdoll.perm.doll-suffix:
     description: Tab shortcut for perm.yml
+
+  # Wildcard Permissions
+  playerdoll.command.*:
+    description: All command permissions
+    children:
+      playerdoll.command.attack: true
+      playerdoll.command.create: true
+      playerdoll.command.despawn: true
+      playerdoll.command.dismount: true
+      playerdoll.command.drop: true
+      playerdoll.command.echest: true
+      playerdoll.command.exp: true
+      playerdoll.command.give: true
+      playerdoll.command.gset: true
+      playerdoll.command.info: true
+      playerdoll.command.inv: true
+      playerdoll.command.jump: true
+      playerdoll.command.look: true
+      playerdoll.command.lookat: true
+      playerdoll.command.menu: true
+      playerdoll.command.mount: true
+      playerdoll.command.move: true
+      playerdoll.command.pset: true
+      playerdoll.command.remove: true
+      playerdoll.command.rename: true
+      playerdoll.command.set: true
+      playerdoll.command.slot: true
+      playerdoll.command.sneak: true
+      playerdoll.command.spawn: true
+      playerdoll.command.sprint: true
+      playerdoll.command.stop: true
+      playerdoll.command.swap: true
+      playerdoll.command.tp: true
+      playerdoll.command.turn: true
+      playerdoll.command.use: true
+
+  playerdoll.globalflag.*:
+    description: All global flag permissions
+    children:
+      playerdoll.globalflag.echest: true
+      playerdoll.globalflag.glow: true
+      playerdoll.globalflag.gravity: true
+      playerdoll.globalflag.hide_from_list: true
+      playerdoll.globalflag.hostility: true
+      playerdoll.globalflag.inv: true
+      playerdoll.globalflag.invulnerable: true
+      playerdoll.globalflag.join_at_start: true
+      playerdoll.globalflag.large_step_size: true
+      playerdoll.globalflag.phantom: true
+      playerdoll.globalflag.pickable: true
+      playerdoll.globalflag.pushable: true
+      playerdoll.globalflag.real_player_tick_update: true
+      playerdoll.globalflag.real_player_tick_action: true
+
+  playerdoll.personalflag.*:
+    description: All personal flag permissions
+    children:
+      playerdoll.personalflag.admin: true
+      playerdoll.personalflag.attack: true
+      playerdoll.personalflag.despawn: true
+      playerdoll.personalflag.dismount: true
+      playerdoll.personalflag.drop: true
+      playerdoll.personalflag.echest: true
+      playerdoll.personalflag.exp: true
+      playerdoll.personalflag.gset: true
+      playerdoll.personalflag.inv: true
+      playerdoll.personalflag.jump: true
+      playerdoll.personalflag.look: true
+      playerdoll.personalflag.lookat: true
+      playerdoll.personalflag.menu: true
+      playerdoll.personalflag.mount: true
+      playerdoll.personalflag.move: true
+      playerdoll.personalflag.pset: true
+      playerdoll.personalflag.set: true
+      playerdoll.personalflag.slot: true
+      playerdoll.personalflag.sneak: true
+      playerdoll.personalflag.spawn: true
+      playerdoll.personalflag.sprint: true
+      playerdoll.personalflag.stop: true
+      playerdoll.personalflag.strafe: true
+      playerdoll.personalflag.swap: true
+      playerdoll.personalflag.tp: true
+      playerdoll.personalflag.turn: true
+      playerdoll.personalflag.unsneak: true
+      playerdoll.personalflag.unsprint: true
+      playerdoll.personalflag.use: true
+      playerdoll.personalflag.hidden: true
+
+  # Standalone Permissions
+  # This is not included in wildcards
+  playerdoll.argument.create.skin:
+    description: Player set skin in doll creation
+
+
+  playerdoll.command.attack:
+    description: Doll Attack
+  playerdoll.command.create:
+    description: Player Create Doll
+  playerdoll.command.despawn:
+    description: Doll Despawn
+  playerdoll.command.dismount:
+    description: Doll Dismount
+  playerdoll.command.drop:
+    description: Doll Drop item
+  playerdoll.command.echest:
+    description: Player access Doll ender chest
+  playerdoll.command.exp:
+    description: Player take Doll exp
+  playerdoll.command.give:
+    description: Player Transfer Doll
+  playerdoll.command.gset:
+    description: Player set Doll All-player-Setting
+  playerdoll.command.info:
+    description: Player get Doll information
+  playerdoll.command.inv:
+    description: Player access Doll inventory
+  playerdoll.command.jump:
+    description: Doll Jump
+  playerdoll.command.look:
+    description: Doll Look
+  playerdoll.command.lookat:
+    description: Doll Lookat
+  playerdoll.command.menu:
+    description: Player open Doll status menu
+  playerdoll.command.mount:
+    description: Doll Mount
+  playerdoll.command.move:
+    description: Doll Move
+  playerdoll.command.pset:
+    description: Player set Doll specific-player-Setting
+  playerdoll.command.remove:
+    description: Player Remove Doll
+  playerdoll.command.rename:
+    description: Player Rename Doll
+  playerdoll.command.set:
+    description: Player set Doll own setting
+  playerdoll.command.slot:
+    description: Player set Doll handheld Slot
+  playerdoll.command.sneak:
+    description: Player set Doll Sneak
+  playerdoll.command.spawn:
+    description: Player spawn Doll
+  playerdoll.command.sprint:
+    description: Doll Sprint
+  playerdoll.command.stop:
+    description: Doll Stop actions
+  playerdoll.command.swap:
+    description: Doll Swap main-off hands
+  playerdoll.command.tp:
+    description: TP Doll to player
+  playerdoll.command.turn:
+    description: Player set Doll turn
+  playerdoll.command.use:
+    description: Doll Use
+
+  playerdoll.globalflag.echest:
+    description: GUI permission
+    playerdoll.globalflag.glow:
+      description: GUI permission
+    playerdoll.globalflag.gravity:
+      description: GUI permission
+    playerdoll.globalflag.hostility:
+      description: GUI permission
+    playerdoll.globalflag.inv:
+      description: GUI permission
+    playerdoll.globalflag.invulnerable:
+      description: GUI permission
+    playerdoll.globalflag.join_at_start:
+      description: GUI permission
+    playerdoll.globalflag.large_step_size:
+      description: GUI permission
+    playerdoll.globalflag.phantom:
+      description: GUI permission
+    playerdoll.globalflag.pickable:
+      description: GUI permission
+    playerdoll.globalflag.pushable:
+      description: GUI permission
+    playerdoll.globalflag.real_player_tick_update:
+      description: GUI permission
+    playerdoll.globalflag.real_player_tick_action:
+      description: GUI permission
+
+    playerdoll.personalflag.admin:
+      description: GUI permission
+    playerdoll.personalflag.attack:
+      description: GUI permission
+    playerdoll.personalflag.despawn:
+      description: GUI permission
+    playerdoll.personalflag.dismount:
+      description: GUI permission
+    playerdoll.personalflag.drop:
+      description: GUI permission
+    playerdoll.personalflag.echest:
+      description: GUI permission
+    playerdoll.personalflag.exp:
+      description: GUI permission
+    playerdoll.personalflag.gset:
+      description: GUI permission
+    playerdoll.personalflag.hidden:
+      description: GUI permission
+    playerdoll.personalflag.info:
+      description: GUI permission
+    playerdoll.personalflag.inv:
+      description: GUI permission
+    playerdoll.personalflag.jump:
+      description: GUI permission
+    playerdoll.personalflag.look:
+      description: GUI permission
+    playerdoll.personalflag.lookat:
+      description: GUI permission
+    playerdoll.personalflag.menu:
+      description: GUI permission
+    playerdoll.personalflag.mount:
+      description: GUI permission
+    playerdoll.personalflag.move:
+      description: GUI permission
+    playerdoll.personalflag.pset:
+      description: GUI permission
+    playerdoll.personalflag.set:
+      description: GUI permission
+    playerdoll.personalflag.slot:
+      description: GUI permission
+    playerdoll.personalflag.sneak:
+      description: GUI permission
+    playerdoll.personalflag.spawn:
+      description: GUI permission
+    playerdoll.personalflag.sprint:
+      description: GUI permission
+    playerdoll.personalflag.stop:
+      description: GUI permission
+    playerdoll.personalflag.strafe:
+      description: GUI permission
+    playerdoll.personalflag.swap:
+      description: GUI permission
+    playerdoll.personalflag.tp:
+      description: GUI permission
+    playerdoll.personalflag.turn:
+      description: GUI permission
+    playerdoll.personalflag.unsneak:
+      description: GUI permission
+    playerdoll.personalflag.unsprint:
+      description: GUI permission
+    playerdoll.personalflag.use:
+      description: GUI permission

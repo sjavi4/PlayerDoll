@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 27
+version: 28
 
 # Custom Server Mod
 # If plugin has detected the Mod wrongly,
@@ -90,8 +90,8 @@ proxy-ip: 127.0.0.1
 # see proxy server config
 proxy-port: 25565
 
-# Auto Join Delay (BungeeCord)
-# Delay Joining of each Doll
+# Auto Join Delay
+# The delay between each Joining of Doll
 # Adjust by real performance
 # in second
-proxy-auto-join-delay: 1
+auto-join-delay: 1
