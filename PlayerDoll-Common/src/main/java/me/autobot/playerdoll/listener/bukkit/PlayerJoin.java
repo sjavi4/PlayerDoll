@@ -23,7 +23,7 @@ public class PlayerJoin implements Listener {
         if (!firstJoin && PlayerDoll.BUNGEECORD) {
             firstJoin = true;
             // wait for 5s
-            PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.PLUGIN.prepareDollSpawn(basicConfig.proxyAutoJoinDelay.getValue()), 100);
+            PlayerDoll.scheduler.globalTaskDelayed(() -> PlayerDoll.PLUGIN.prepareDollSpawn(basicConfig.autoJoinDelay.getValue()), 100);
         }
         Player player = event.getPlayer();
         final boolean isDoll = ReflectionUtil.getServerPlayer(player) instanceof Doll;

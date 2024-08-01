@@ -9,6 +9,7 @@ import me.autobot.playerdoll.connection.CursedConnection;
 import me.autobot.playerdoll.doll.config.DollConfig;
 import me.autobot.playerdoll.packet.IPacketFactory;
 import me.autobot.playerdoll.packet.PacketUtil;
+import me.autobot.playerdoll.packet.SPackets;
 import me.autobot.playerdoll.socket.ClientSocket;
 import me.autobot.playerdoll.util.LangFormatter;
 import org.bukkit.entity.Player;
@@ -307,6 +308,14 @@ public class SocketReader extends Thread {
             }
         }
     }
+
+//    public void sendPacket(SPackets sPackets) {
+//        try {
+//            output.write(sPackets.write());
+//        } catch (IOException e) {
+//            PlayerDoll.LOGGER.warning("Tried to Send Custom Packet but an Error was Caught");
+//        }
+//    }
 
     public void setCompressionThreshold(int compressionThreshold) {
         this.compressionThreshold = compressionThreshold;

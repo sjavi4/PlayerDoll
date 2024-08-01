@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.command.subcommand.actionpack;
 
 import com.mojang.brigadier.context.CommandContext;
+import me.autobot.playerdoll.PlayerDoll;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
 import me.autobot.playerdoll.config.FlagConfig;
@@ -25,8 +26,9 @@ public class ActionDrop extends SubCommand implements DollCommandExecutor {
 
     @Override
     public void execute() {
-        targetEntity.getActionPack().drop(slotId, dropStack);
+        PlayerDoll.scheduler.entityTask(() -> targetEntity.getActionPack().drop(slotId, dropStack), targetEntity.getBukkitPlayer());
     }
+
     @Override
     public int onCommand(CommandSender sender, CommandContext<Object> context) {
         if (!(sender instanceof Player playerSender)) {

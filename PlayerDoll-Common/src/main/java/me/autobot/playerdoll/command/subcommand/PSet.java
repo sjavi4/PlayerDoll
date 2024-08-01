@@ -56,7 +56,7 @@ public class PSet extends SubCommand implements DollCommandExecutor {
             config.playerSetting.put(profile.getId(), enumMap);
 
             DollGUIHolder.DOLL_GUI_HOLDERS.get(target.getUniqueId()).getPSetMenu(Bukkit.getOfflinePlayer(profile.getId()));
-            flagMap = enumMap;
+            flagMap = config.playerSetting.get(profile.getId());
         }
         flagMap.put(flagType, toggle);
 

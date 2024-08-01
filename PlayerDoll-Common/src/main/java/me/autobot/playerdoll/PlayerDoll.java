@@ -112,7 +112,11 @@ public final class PlayerDoll extends JavaPlugin {
         // in BungeeCord mode, messaging require 1 player in Game
         // Trigger this in PlayerJoin
         if (!BUNGEECORD) {
-            scheduler.globalTaskDelayed(() -> prepareDollSpawn(0), 5);
+            try {
+                scheduler.globalTaskDelayed(() -> prepareDollSpawn(basicConfig.autoJoinDelay.getValue()), 5);
+            } catch (Exception ignored) {
+                // Not to disable Plugin if Error was caught
+            }
         }
     }
 
@@ -274,7 +278,7 @@ public final class PlayerDoll extends JavaPlugin {
                 if (BUNGEECORD && config.dollLastJoinServer.getValue().isEmpty()) {
                     continue;
                 }
-                Runnable r = () -> SocketHelper.createConnection(config.dollName.getValue(), UUID.fromString(config.dollUUID.getValue()), null);
+                Runnable r = () -> SocketHelper.createConnection(basicConfig.dollIdentifier.getValue() + config.dollName.getValue(), UUID.fromString(config.dollUUID.getValue()), null);
                 scheduler.globalTaskDelayed(r, delayOfEach * 20 * index);
                 index++;
             }

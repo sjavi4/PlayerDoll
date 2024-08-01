@@ -19,6 +19,8 @@ import org.bukkit.inventory.PlayerInventory;
 public class DollBackpackMenu extends AbstractMenu {
     private final Player dollPlayer;
     private final PlayerInventory dollInventory;
+    private long lastInteractTick = -1;
+
     public DollBackpackMenu(Doll doll) {
         super(doll, DollGUIHolder.MenuType.BACKPACK);
         this.dollPlayer = doll.getBukkitPlayer();
@@ -67,6 +69,12 @@ public class DollBackpackMenu extends AbstractMenu {
         }
 
         if (event.getSlot() < 5 || event.getSlot() > 8) {
+            long currentTickCount = whoClicked.getWorld().getGameTime();
+            if (currentTickCount - lastInteractTick >= 0 && currentTickCount - lastInteractTick <= 5) {
+                return;
+            }
+            lastInteractTick = currentTickCount;
+            // TODO: OverStacked Items
             switch (event.getClick()) {
                 case LEFT,RIGHT -> mouseClick(event);
                 case SHIFT_LEFT -> shiftSwap(event);
@@ -75,9 +83,7 @@ public class DollBackpackMenu extends AbstractMenu {
                 case DROP,CONTROL_DROP -> dropSlot(event);
             }
         }
-        Runnable task = () -> inventory.setContents(updateInventory());
-        PlayerDoll.scheduler.entityTaskDelayed(task, dollPlayer, 4);
-
+        PlayerDoll.scheduler.entityTaskDelayed(this::updateGUIContent, dollPlayer, 4);
     }
 
     private ItemStack[] updateInventory() {
@@ -131,26 +137,17 @@ public class DollBackpackMenu extends AbstractMenu {
     }
 
     private void shiftSwap(InventoryClickEvent event) {
-        if (event.getSlot() >= 36) { // Hot-bar to backpack
-            for (int i = 9; i < 36; i++) {
-                if (dollInventory.getItem(i) != null) {
-                    continue;
-                }
-                dollInventory.setItem(i, dollInventory.getItem(event.getSlot()-36));
-                dollInventory.setItem(event.getSlot()-36, null);
-                break;
-            }
-        } else if ((event.getSlot() >= 9 && event.getSlot() < 36)) { // Backpack to hot-bar
-            for (int j = 0; j < 9; j++) {
-                if (dollInventory.getItem(j) != null && dollInventory.getItem(j) == EMPTY_ITEM) {
-                    continue;
-                }
-                //ItemStack item = inv.getItem(j);
-                dollInventory.setItem(j, dollInventory.getItem(event.getSlot()));
-                dollInventory.setItem(event.getSlot(), null);
-                break;
-            }
-        } else if (event.getSlot() < 5) { // Equipment and offhand to hot-bar
+        int clickedSlot = event.getSlot();
+
+        if (clickedSlot >= 36) { // Hot-bar to backpack
+            hotbarToBackpackSwap(clickedSlot);
+            return;
+        }
+        if (clickedSlot >= 9) { // Backpack to hot-bar
+            backpackToHotbarSwap(clickedSlot);
+            return;
+        }
+        if (event.getSlot() < 5) { // Equipment and offhand to hot-bar
             for (int i = 0; i < 9; i++) {
                 if (dollInventory.getItem(i) != null) {
                     continue;
@@ -249,6 +246,78 @@ public class DollBackpackMenu extends AbstractMenu {
             } else {
                 item.setAmount(item.getAmount()-1);
                 inventory.setItem(pos, item);
+            }
+        }
+    }
+
+    private void hotbarToBackpackSwap(int clickedSlot) {
+        int actualClickedSlot = clickedSlot - 36; // 0 - 9 Hotbar slots
+        ItemStack targetItem = dollInventory.getItem(actualClickedSlot);
+        if (targetItem == null) {
+            return;
+        }
+        int targetItemAmount = targetItem.getAmount();
+        // 9 - 36 Backpack slots
+        for (int i = 9; i < 36; i++) {
+            ItemStack indexedItem = dollInventory.getItem(i);
+            // Empty Backpack Slot -> Immediately swap
+            if (indexedItem == null) {
+                dollInventory.setItem(i, targetItem);
+                dollInventory.setItem(actualClickedSlot, null);
+                return;
+            }
+            // Partial Backpack Slot Empty -> Iterate all similar item and add amount
+            if (indexedItem.getAmount() == indexedItem.getMaxStackSize()) {
+                continue;
+            }
+            if (indexedItem.getType() == targetItem.getType()) {
+                int sum = indexedItem.getAmount() + targetItemAmount;
+                int min = Math.min(sum, indexedItem.getMaxStackSize());
+                targetItem.setAmount(min);
+                dollInventory.setItem(i, targetItem);
+                targetItemAmount = sum - min;
+                if (targetItemAmount > 0) {
+                    indexedItem.setAmount(targetItemAmount);
+                    dollInventory.setItem(actualClickedSlot, indexedItem);
+                    continue;
+                }
+                dollInventory.setItem(actualClickedSlot, null);
+                return;
+            }
+        }
+    }
+    private void backpackToHotbarSwap(int clickedSlot) {
+        ItemStack targetItem = dollInventory.getItem(clickedSlot);
+        if (targetItem == null) {
+            return;
+        }
+        int targetItemAmount = targetItem.getAmount();
+        // 0 - 9 Hotbar slots
+        for (int i = 0; i < 9; i++) {
+            ItemStack indexedItem = dollInventory.getItem(i);
+            // Empty Horbar Slot -> Immediately swap
+            if (indexedItem == null) {
+                dollInventory.setItem(i, targetItem);
+                dollInventory.setItem(clickedSlot, null);
+                return;
+            }
+            // Partial Hotbar Slot Empty -> Iterate all similar item and add amount
+            if (indexedItem.getAmount() == indexedItem.getMaxStackSize()) {
+                continue;
+            }
+            if (indexedItem.getType() == targetItem.getType()) {
+                int sum = indexedItem.getAmount() + targetItemAmount;
+                int min = Math.min(sum, indexedItem.getMaxStackSize());
+                targetItem.setAmount(min);
+                dollInventory.setItem(i, targetItem);
+                targetItemAmount = sum - min;
+                if (targetItemAmount > 0) {
+                    indexedItem.setAmount(targetItemAmount);
+                    dollInventory.setItem(clickedSlot, indexedItem);
+                    continue;
+                }
+                dollInventory.setItem(clickedSlot, null);
+                return;
             }
         }
     }
