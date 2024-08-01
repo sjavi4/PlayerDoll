@@ -270,7 +270,7 @@ public class DollBackpackMenu extends AbstractMenu {
             if (indexedItem.getAmount() == indexedItem.getMaxStackSize()) {
                 continue;
             }
-            if (indexedItem.getType() == targetItem.getType()) {
+            if (indexedItem.isSimilar(targetItem)) {
                 int sum = indexedItem.getAmount() + targetItemAmount;
                 int min = Math.min(sum, indexedItem.getMaxStackSize());
                 targetItem.setAmount(min);
@@ -305,7 +305,7 @@ public class DollBackpackMenu extends AbstractMenu {
             if (indexedItem.getAmount() == indexedItem.getMaxStackSize()) {
                 continue;
             }
-            if (indexedItem.getType() == targetItem.getType()) {
+            if (indexedItem.isSimilar(targetItem)) {
                 int sum = indexedItem.getAmount() + targetItemAmount;
                 int min = Math.min(sum, indexedItem.getMaxStackSize());
                 targetItem.setAmount(min);
