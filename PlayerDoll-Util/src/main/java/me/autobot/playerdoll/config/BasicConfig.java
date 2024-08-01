@@ -38,7 +38,7 @@ public class BasicConfig extends AbstractConfig {
     public final ConfigKey<BasicConfig, Boolean> forceProxyIP;
     public final ConfigKey<BasicConfig,String> proxyIP;
     public final ConfigKey<BasicConfig,Integer> proxyPort;
-    public final ConfigKey<BasicConfig,Integer> proxyAutoJoinDelay;
+    public final ConfigKey<BasicConfig,Integer> autoJoinDelay;
 
     public final ConfigKey<BasicConfig, String> dollIdentifier;
 
@@ -74,7 +74,7 @@ public class BasicConfig extends AbstractConfig {
         this.forceProxyIP = new ConfigKey<>(this, "force-proxy-ip", false);
         this.proxyIP = new ConfigKey<>(this, "proxy-ip", "127.0.0.1");
         this.proxyPort = new ConfigKey<>(this, "proxy-port", 25565);
-        this.proxyAutoJoinDelay = new ConfigKey<>(this, "proxy-auto-join-delay", 1);
+        this.autoJoinDelay = new ConfigKey<>(this, "auto-join-delay", 1);
 
         String dollId = dollIdentifier.getValue();
         if (dollId.length() > 1) {
