@@ -26,6 +26,10 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
+**Server Setting**
+State if you changed some uncommon settings
+i.e. Whitelist, Online-mode, specific server-mod settings
+
 **Setting of Doll**
 Doll's current setting. From config or GUI. This might be helpful when clarifing the problem
 i.e. Hostility = true / Gravity: false
