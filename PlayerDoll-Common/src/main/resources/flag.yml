@@ -1,0 +1,50 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 28
+
+Global-Flag:
+  echest: ENDER_EYE
+  glow: GLOW_INK_SAC
+  gravity: GRAVEL
+  hide_from_list: TINTED_GLASS
+  hostility: TARGET
+  inv: CHEST_MINECART
+  invulnerable: TOTEM_OF_UNDYING
+  join_at_start: RECOVERY_COMPASS
+  large_step_size: STONE_STAIRS
+  phantom: PHANTOM_MEMBRANE
+  pickable: HOPPER
+  pushable: ARMOR_STAND
+  real_player_tick_update: CARROT_ON_A_STICK
+  real_player_tick_action: FISHING_ROD
+
+Personal-Flag:
+  admin: WOODEN_PICKAXE
+  attack: WOODEN_SWORD
+  despawn: CRYING_OBSIDIAN
+  dismount: ACTIVATOR_RAIL
+  drop: DROPPER
+  echest: ENDER_EYE
+  exp: EXPERIENCE_BOTTLE
+  gset: CRAFTING_TABLE
+  hidden: SPECTRAL_ARROW
+  inv: CHEST_MINECART
+  jump: RABBIT_FOOT
+  look: SPYGLASS
+  lookat: OBSERVER
+  menu: BARREL
+  mount: MINECART
+  move: POWERED_RAIL
+  pset: FURNACE
+  set: LECTERN
+  slot: HOPPER
+  sneak: MAGMA_BLOCK
+  spawn: RED_BED
+  sprint: ICE
+  stop: BLAZE_POWDER
+  strafe: OAK_BOAT
+  swap: DAYLIGHT_DETECTOR
+  tp: ENDER_PEARL
+  turn: IRON_TRAPDOOR
+  unsneak: MAGMA_BLOCK
+  unsprint: ICE
+  use: OAK_BUTTON

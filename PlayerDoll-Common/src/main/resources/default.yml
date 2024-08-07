@@ -1,0 +1,271 @@
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 28
+
+###
+# &0 black
+# &1 dark_blue
+# &2 dark_green
+# &3 dark_aqua
+# &4 dark_red
+# &5 dark_purple
+# &6 gold
+# &7 gray
+# &8 dark_gray
+# &9 blue
+# &a green
+# &b aqua
+# &c red
+# &d light_purple
+# &e yellow
+# &f white
+#
+# &k obfuscated
+# &l bold
+# &m strikethrough
+# &n underline
+# &o italic
+# &r reset
+#
+# $n new line (For overlay Text display & Lang file only)
+###
+
+MessagePrefix: '&e[&6PlayerDoll&e]&r'
+#Commands
+
+# All strings under Message group will display Plugin prefix when send message
+Message:
+# Commands execution message
+  no-permission: '&cNo permission to perform [%a%] at [%b%]'
+  require-player: '&cCommand Must Sent by Player'
+  no-target: '&cTarget not found'
+  multi-select: '&cNot Allow @ Usage in this command'
+  not-owner: '&cNot Owner'
+# Create cmd
+  long-name: '&cDoll name must within 15 characters'
+  regex-fail: '&cDoll name must be [A-Z][a-z][0-9][_]'
+  preserved-name: '&cThe name is preserved, try another one'
+  dupe-name: '&cDuplicated Doll name'
+  max-create: '&cReached creation limit'
+  success-create: '&aDoll created successfully'
+# Give cmd
+  player-offline: '&cPlayer is offline'
+  self-give: '&cCannot give yourself'
+  doll-give: '&cCannot give Doll'
+  cannot-create: '&cPlayer do not have permission to Create Doll'
+# Pset cmd
+  doll-pset: '&cCannot set personal permission to Doll'
+# Spawn cmd
+  in-world: '&cDoll already spawned'
+  max-capacity: '&cServer is full of Doll'
+  null-uuid: '&cDoll got NULL UUID, please contact Admin for help'
+  spawn-error: '&cDoll %a% failed to spawn, Please Try again Later'
+  spawn-success: '&aDoll spawned successfully'
+# Jump cmd
+  self-jump: '&cJump is not support for Self action'
+# Lookat cmd
+  empty-lookat: '&cNo Entity found at Cursor'
+# Doll Join Event
+  owner-offline: '&cDefault Prefix and Suffix is used due to owner is offline'
+# Disconnect Event
+  doll-disconnect: '&9Doll %a% Disconnected'
+
+control-button:
+  back: '&fback'
+  hint: '&2Left Click to Enable$n&cRight Click to Disable'
+  prev: '&fPrev Page'
+  curr: '&fCurrent'
+  next: '&fNext Page'
+
+inv-name:
+  backpack: "&l&e%a%'s backpack"
+  data: "&l&e%a%'s data"
+  gset: "&l&e%a%'s setting for everyone"
+  pset: "&l&e%a%'s setting for %b%"
+  info: '&l&e%a%'
+  set: "&l&e%a% setting"
+
+info:
+  set: '&9Settings'
+  gset: '&9Global Settings'
+  data: '&9Data'
+  offline: '&cOffline'
+  remove: '&cRemove'
+  remove-hint: 'All data of Doll (EXP, inventory, ender chest)$nWill be LOST!'
+
+  uuid: '&eUUID:%a%'
+  owner: '&5Owner:%a% (%b%)'
+  hp: '&4HP:%a%/%b%'
+  hunger: '&2Hunger:%a%/%b%'
+  gamemode: '&7Gamemode:%a%'
+
+
+set-menu:
+  echest:
+    name: 'Ender Chest'
+    desc: '&fEnable Ender chest Access for players'
+  invulnerable:
+    name: 'Invulnerable'
+    desc: "&fSet doll immune to damage and projectile, become non-aggressive"
+  hostility:
+    name: 'Hostility'
+    desc: "&fSet doll being targeted by mobs"
+  pushable:
+    name: 'Pushable'
+    desc: "&fSet doll being moved by hitbox collision"
+  gravity:
+    name: 'Gravity'
+    desc: "&fSet doll to fall from air"
+  glow:
+    name: 'Glow'
+    desc: "&fEnable Highlighting effects"
+  large_step_size:
+    name: 'Large Step Size'
+    desc: "&fStep up to 1 or 0.6 block high"
+  phantom:
+    name: 'Phantom Spawn'
+    desc: '&fEnable phantom spawn to Doll'
+  join_at_start:
+    name: 'Join At Start'
+    desc: '&fWhether Doll will automatically join when server start'
+  hide_from_list:
+    name: 'Hide From List'
+    desc: '&fWhether Doll will hide from Tab complete in info command'
+  pickable:
+    name: 'Pickable'
+    desc: '&fWhether Doll can pick up items'
+  real_player_tick_update:
+    name: 'Real Player Tick (Entity Update)'
+    desc: '&fWhether Doll will tick at Network Phase or Entity Phase'
+  real_player_tick_action:
+    name: 'Real Player Tick (Action)'
+    desc: '&fWhether Doll will tick at Asynchronous Task Phase or Entity Phase'
+  admin:
+    name: 'Admin'
+    desc: '&fEnable all access in the menu'
+  inv:
+    name: 'Inventory'
+    desc: '&fSet player access to Doll inventory'
+  attack:
+    name: 'Attack'
+    desc: "&fSet Attack command"
+  use:
+    name: 'Use'
+    desc: "&fSet Use command"
+  mount:
+    name: 'Mount'
+    desc: "&fSet Mount command"
+  dismount:
+    name: 'Dismount'
+    desc: "&fSet Dismount command"
+  copy:
+    name: 'Copy'
+    desc: "&fSet Copy command"
+  despawn:
+    name: 'Despawn'
+    desc: "&fSet despawn command"
+  drop:
+    name: 'Drop'
+    desc: "&fSet drop command"
+  exp:
+    name: 'Exp'
+    desc: "&fSet exp command"
+  gset:
+    name: 'Gset'
+    desc: "&fSet gset command"
+  jump:
+    name: 'Jump'
+    desc: "&fSet jump command"
+  look:
+    name: 'Look'
+    desc: "&fSet look command"
+  lookat:
+    name: 'Lookat'
+    desc: "&fSet lookat command"
+  menu:
+    name: 'Menu'
+    desc: "&fSet menu command"
+  move:
+    name: 'Move'
+    desc: "&fSet move command"
+  pset:
+    name: 'Pset'
+    desc: "&fSet pset command"
+  set:
+    name: 'Set'
+    desc: "&fSet set command"
+  slot:
+    name: 'Slot'
+    desc: "&fSet slot command"
+  sneak:
+    name: 'Sneak'
+    desc: "&fSet sneak command"
+  spawn:
+    name: 'Spawn'
+    desc: "&fSet spawn command"
+  sprint:
+    name: 'Sprint'
+    desc: "&fSet sprint command"
+  stop:
+    name: 'Stop'
+    desc: "&fSet stop command"
+  strafe:
+    name: 'Strafe'
+    desc: "&fSet strafe command"
+  swap:
+    name: 'Swap'
+    desc: "&fSet swap command"
+  tp:
+    name: 'Tp'
+    desc: "&fSet tp command"
+  turn:
+    name: 'Turn'
+    desc: "&fSet turn command"
+  unsneak:
+    name: 'Unsneak'
+    desc: "&fSet unsneak command"
+  unsprint:
+    name: 'Unsprint'
+    desc: "&fSet unsprint command"
+# Not a command
+  hidden:
+    name: 'Hidden'
+    desc: "&fSet Doll visibility to player"
+
+inv-menu:
+  inv: '&7Inventory'
+  real-inv: '&7Actual Inventory'
+  echest: '&dEnder Chest'
+  level: '&eEXP Point'
+
+  level-display: '&eLevel:%a%'
+  level-get: "&aClick to retrieve EXP points of 1 Level"
+
+
+info-cmd:
+  name: 'Doll: '
+  uuid: 'UUID: '
+  status-online: Online
+  status-offline: Offline
+  owner: 'Owner: '
+  doll-setting: '[Doll Settings]'
+  g-setting: '[Everyone Settings]'
+
+cmd-hover:
+  action-main: 'MainHand Item: %a%'
+  action-off: 'OffHand Item: %a%'
+  despawn: 'Pos: [%a% %b% %c%]'
+  dismount: 'Riding: %a%'
+  exp: 'Level: %a%'
+  give: 'Owner: %a%'
+  gset: 'Enabled:'
+  look: 'Facing: %a%'
+  mount: 'Riding: %a%'
+  pset: 'Being Set:'
+  remove: 'Owner: %a%'
+  set: 'Enabled:'
+  slot: 'Hand Slot: %a%'
+  sneak: 'Sneaking: %a%'
+  spawn: 'Owner: %a%'
+  sprint: 'Sprinting: %a%'
+  tp: 'Pos: [%a% %b% %c%]'
+  turn: 'Facing: %a%'
