@@ -13,7 +13,7 @@ Detailed Usage has been migrated to [Wiki](https://github.com/sjavi4/PlayerDoll/
 ## Disclaimer
 
 <b>This plugin is highly dependent on NMS, slightly changes made by Mojang / Server Jar provider might cause this plugin no longer working.<br>
-Please use it with cautious</b>
+Please use it with caution</b>
 
 
 <i>Features provided by this plugin are not GUARANTEE to be fully working, it is not encouraged to treat this plugin as a pay feature to other players.</i>
