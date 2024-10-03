@@ -6,7 +6,7 @@
 
   <groupId>me.autobot</groupId>
   <artifactId>PlayerDoll-Parent</artifactId>
-  <version>1.36</version>
+  <version>1.37</version>
   <packaging>pom</packaging>
 
   <name>PlayerDoll</name>

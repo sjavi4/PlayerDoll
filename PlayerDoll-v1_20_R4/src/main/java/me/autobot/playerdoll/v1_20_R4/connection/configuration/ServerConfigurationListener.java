@@ -40,7 +40,7 @@ public class ServerConfigurationListener extends ServerConfigurationPacketListen
             this.player.connection = gamePlayListener;
         };
         if (PlayerDoll.serverBranch == PlayerDoll.ServerBranch.FOLIA) {
-            SchedulerHelper.scheduler.globalTaskDelayed(task, 5);
+            SchedulerHelper.scheduler.entityTask(task, this.getCraftPlayer());
         } else {
             task.run();
         }
