@@ -10,6 +10,7 @@ import me.autobot.playerdoll.config.BasicConfig;
 import me.autobot.playerdoll.netty.handler.HandshakeHandler;
 import me.autobot.playerdoll.netty.handler.PacketHandler;
 import me.autobot.playerdoll.netty.handler.StateChangePacketHandler;
+import me.autobot.playerdoll.netty.packet.ClientPackets;
 import me.autobot.playerdoll.util.ReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -97,6 +98,17 @@ public class DollConnection {
                 .handler(new ChannelInitializer<>() {
                     @Override
                     protected void initChannel(Channel channel) {
+//                        if (!channel.eventLoop().inEventLoop()) {
+//                            Bukkit.getLogger().warning("[PlayerDoll] New connection is not inside EventLoop, canceling");
+//                        }
+//                        if (channel.eventLoop().isShutdown()) {
+//                            Bukkit.getLogger().warning("[PlayerDoll] EventLoop has already shutdown");
+//                        }
+//                        if (!channel.eventLoop().inEventLoop() || channel.eventLoop().isShutdown()) {
+//                            channel.close();
+//                            return;
+//                        }
+
                         try {
                             channel.config().setOption(ChannelOption.TCP_NODELAY, true);
                         } catch (ChannelException ignored) {
@@ -116,11 +128,11 @@ public class DollConnection {
 
                     }
                 })
-                .connect(HOST.getAddress(), HOST.getPort()).syncUninterruptibly();
+                .connect(HOST.getAddress(), HOST.getPort());
     }
 
     public static void shutDown() {
-        EVENT_LOOP_GROUP.shutdownGracefully().syncUninterruptibly();
+        EVENT_LOOP_GROUP.shutdownGracefully();
     }
 
     private static void configureSerialization(ChannelPipeline pipeline) {

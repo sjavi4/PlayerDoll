@@ -25,13 +25,13 @@ public class GamePlayHandler extends ChannelDuplexHandler {
             int id = ClientPackets.getPlayerPositionPacketId(msg);
             if (lastAcceptedId != id) {
                 lastAcceptedId = id;
-                channel.writeAndFlush(ServerPackets.createAcceptTeleportPacket(id));
+                SchedulerHelper.scheduler.entityTaskDelayed(() -> channel.writeAndFlush(ServerPackets.createAcceptTeleportPacket(id)), Bukkit.getPlayer(uuid), 1);
             }
         } else if (ClientPackets.deathScreenPacketClass.isInstance(msg)) {
-            channel.writeAndFlush(ServerPackets.createPerformRespawnPacket());
-            SchedulerHelper.scheduler.entityTaskDelayed(channel::close, Bukkit.getPlayer(uuid), 6);
+            SchedulerHelper.scheduler.entityTaskDelayed(() -> channel.writeAndFlush(ServerPackets.createPerformRespawnPacket()), Bukkit.getPlayer(uuid), 2);
+            SchedulerHelper.scheduler.entityTaskDelayed(channel::close, Bukkit.getPlayer(uuid), 5);
         } else if (ClientPackets.gameEventPacketClass.isInstance(msg)) {
-            channel.writeAndFlush(ServerPackets.createPerformRespawnPacket());
+            SchedulerHelper.scheduler.entityTaskDelayed(() -> channel.writeAndFlush(ServerPackets.createPerformRespawnPacket()), Bukkit.getPlayer(uuid), 2);
         }
         super.channelRead(ctx, msg);
     }
