@@ -53,7 +53,7 @@ public class ActionCommand extends SubCommand implements DollCommandExecutor {
 //            sender.sendMessage(LangFormatter.YAMLReplaceMessage("require-player"));
 //            return 0;
 //        }
-        boolean self = context.getInput().split(" ")[2].equals(CommandBuilder.SELF_INDICATION); // doll <action> <target> ...
+        boolean self = context.getInput().split(" ")[2].equals(CommandBuilder.SELF_INDICATOR); // doll <action> <target> ...
         this.sender = sender;
         if (target == null) {
             if (self && sender instanceof Player playerSender) {

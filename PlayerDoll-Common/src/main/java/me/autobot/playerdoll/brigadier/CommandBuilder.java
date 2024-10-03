@@ -54,17 +54,17 @@ public class CommandBuilder {
 
     public static final List<LiteralCommandNode<Object>> COMMANDS = new ArrayList<>();
     public static final LiteralCommandNode<Object> builtRoot;
-    public static final String SELF_INDICATION;
-    public static final String DOLL_INDICATION;
+    public static final String SELF_INDICATOR;
+    public static final String DOLL_INDICATOR;
     public static final boolean SHOULD_QUOTE_DOLL_NAME;
 
     // Others
     static {
         String quoteRegex = "^[a-zA-Z0-9+-.]";
         BasicConfig basicConfig = BasicConfig.get();
-        SELF_INDICATION = "_";
-        DOLL_INDICATION = basicConfig.dollIdentifier.getValue();
-        SHOULD_QUOTE_DOLL_NAME = !DOLL_INDICATION.matches(quoteRegex);
+        SELF_INDICATOR = "_";
+        DOLL_INDICATOR = basicConfig.dollIdentifier.getValue();
+        SHOULD_QUOTE_DOLL_NAME = !DOLL_INDICATOR.matches(quoteRegex);
     }
 
     // Root Node
@@ -117,7 +117,7 @@ public class CommandBuilder {
         ArgumentCommandNode<Object, String> onlineDollsWithSelf_Drop = argument("target", StringArgumentType.word())
                 .suggests((commandContext, suggestionsBuilder) -> {
                     if (BasicConfig.get().convertPlayer.getValue()) {
-                        suggestionsBuilder.suggest(SELF_INDICATION, () -> "self");
+                        suggestionsBuilder.suggest(SELF_INDICATOR, () -> "self");
                     }
                     setDollSuggestion(suggestionsBuilder, CommandBuilder::getHoverHandItems);
                     return suggestionsBuilder.buildFuture();
@@ -599,7 +599,7 @@ public class CommandBuilder {
                 .then(argument("target", StringArgumentType.word())
                         .suggests((commandContext, suggestionsBuilder) -> {
                             if (BasicConfig.get().convertPlayer.getValue()) {
-                                suggestionsBuilder.suggest(SELF_INDICATION, () -> "self");
+                                suggestionsBuilder.suggest(SELF_INDICATOR, () -> "self");
                             }
                             return setDollSuggestion(suggestionsBuilder, "doll");
                         })
@@ -709,7 +709,7 @@ public class CommandBuilder {
     }
     private static int performCommandSelf(CommandContext<Object> context, BiFunction<Player, Boolean, ? extends DollCommandExecutor> command) {
         String target = StringArgumentType.getString(context, "target");
-        boolean targetAsSelf = target.equals(SELF_INDICATION);
+        boolean targetAsSelf = target.equals(SELF_INDICATOR);
         Player targetPlayer = Bukkit.getPlayerExact(DollManager.dollFullName(target));
         return DollCommandSource.execute(context, command.apply(targetPlayer, targetAsSelf));
     }
@@ -736,7 +736,7 @@ public class CommandBuilder {
            return argument("target", StringArgumentType.word())
                     .suggests((commandContext, suggestionsBuilder) -> {
                         if (BasicConfig.get().convertPlayer.getValue()) {
-                            suggestionsBuilder.suggest(SELF_INDICATION, () -> "self");
+                            suggestionsBuilder.suggest(SELF_INDICATOR, () -> "self");
                         }
                         return setDollSuggestion(suggestionsBuilder, CommandBuilder::getHoverHandItems);
                     })
@@ -818,10 +818,10 @@ public class CommandBuilder {
     }
 
     private static String convertQuotedDollName(String dollName) {
-        if (DOLL_INDICATION.isEmpty()) {
+        if (DOLL_INDICATOR.isEmpty()) {
             return dollName;
         } else {
-            return dollName.startsWith(DOLL_INDICATION) ? "\"" + dollName + "\"" : dollName;
+            return dollName.startsWith(DOLL_INDICATOR) ? "\"" + dollName + "\"" : dollName;
         }
     }
 }

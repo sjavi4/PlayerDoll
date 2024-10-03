@@ -287,7 +287,7 @@ public class EntityPlayerActionPack {
     {
         double reach = actionPack.player.getGameMode() == GameMode.CREATIVE ? 5 : 4.5f;
 
-        return Tracer.rayTraceBlocks(actionPack.baseEntity, reach, false, actionPack.player);
+        return Tracer.rayTraceBlocks(actionPack.actionPackPlayer, actionPack.baseEntity, reach, false, actionPack.player);
     }
 
     private void dropItemFromSlot(int slot, boolean dropAll)

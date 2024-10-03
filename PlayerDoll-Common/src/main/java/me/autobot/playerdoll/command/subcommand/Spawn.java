@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.brigadier.context.CommandContext;
 import me.autobot.playerdoll.PlayerDoll;
+import me.autobot.playerdoll.brigadier.CommandBuilder;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
 import me.autobot.playerdoll.config.BasicConfig;
@@ -56,11 +57,6 @@ public class Spawn extends SubCommand implements DollCommandExecutor {
             playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("no-target"));
             return 0;
         }
-        Player onlinePlayer = Bukkit.getPlayerExact(targetString);
-        if (onlinePlayer != null) {
-            playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("in-world"));
-            return 0;
-        }
         FileUtil fileUtil = FileUtil.INSTANCE;
         File file = fileUtil.getFile(fileUtil.getDollDir(), targetString + ".yml");
         if (!file.exists()) {
@@ -68,9 +64,22 @@ public class Spawn extends SubCommand implements DollCommandExecutor {
             return 0;
         }
         // Direct execute
-
         DollConfig offlineConfig = DollConfig.getTemporaryConfig(targetString);
         targetUUID = UUID.fromString(offlineConfig.dollUUID.getValue());
+
+        Player onlinePlayer;
+        //String dollUUID = dollConfig.dollUUID.getValue();
+        if (CommandBuilder.DOLL_INDICATOR.isBlank()) {
+            onlinePlayer = Bukkit.getPlayer(targetUUID);
+        } else {
+            onlinePlayer = Bukkit.getPlayerExact(DollManager.dollFullName(targetString));
+        }
+        //Player onlinePlayer = Bukkit.getPlayerExact(CommandBuilder.DOLL_INDICATOR + targetString);
+        if (onlinePlayer != null) {
+            playerSender.sendMessage(LangFormatter.YAMLReplaceMessage("in-world"));
+            return 0;
+        }
+
 
         profile = new GameProfile(targetUUID, BasicConfig.get().dollIdentifier.getValue() + targetString);
         profile.getProperties().clear();

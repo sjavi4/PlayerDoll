@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.carpetmod;
 
 import me.autobot.playerdoll.util.ReflectionUtil;
+import me.autobot.playerdoll.wrapper.entity.WrapperEntity;
 import me.autobot.playerdoll.wrapper.phys.WrapperBlockHitResult;
 import me.autobot.playerdoll.wrapper.phys.WrapperVec3;
 import org.bukkit.FluidCollisionMode;
@@ -102,12 +103,14 @@ public class Tracer {
     }
 
     // For Use Action
-    public static WrapperBlockHitResult rayTraceBlocks(Object source, double reach, boolean fluids, LivingEntity livingEntity)
+    public static WrapperBlockHitResult rayTraceBlocks(ActionPackPlayer packPlayer, Object source, double reach, boolean fluids, LivingEntity livingEntity)
     {
         Location eyeLoc = livingEntity.getEyeLocation();
-        Vector viewVec = livingEntity.getEyeLocation().getDirection();
+        WrapperEntity entity = packPlayer.wrapEntity(ReflectionUtil.getNMSEntity(livingEntity));
+        Object viewVec = entity.getViewVector(1.0f);
+        //Vector viewVec = livingEntity.getEyeLocation().getDirection();
         WrapperVec3 pos = WrapperVec3.construct(eyeLoc.getX(), eyeLoc.getY(),eyeLoc.getZ());
-        WrapperVec3 rotation = WrapperVec3.construct(viewVec.getX(), viewVec.getY(), viewVec.getZ());
+        WrapperVec3 rotation = new WrapperVec3(viewVec);
         WrapperVec3 reachEnd = new WrapperVec3(pos.add(rotation.x * reach, rotation.y * reach, rotation.z * reach));
         return new WrapperBlockHitResult(getLevelClip(source, newClipContext(pos.getSource(), reachEnd.getSource(), clipBlockEnumOutline, fluids ?
                 clipFluidEnumAny : clipFluidEnumNone, source)));

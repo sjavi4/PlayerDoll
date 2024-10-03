@@ -1,6 +1,7 @@
 package me.autobot.playerdoll.command.subcommand;
 
 import com.mojang.brigadier.context.CommandContext;
+import me.autobot.playerdoll.brigadier.CommandBuilder;
 import me.autobot.playerdoll.command.DollCommandExecutor;
 import me.autobot.playerdoll.command.SubCommand;
 import me.autobot.playerdoll.config.PermConfig;
@@ -27,14 +28,19 @@ public class Remove extends SubCommand implements DollCommandExecutor {
 
     @Override
     public void execute() {
-        Player onlinePlayer = Bukkit.getPlayerExact(targetString);
+        Player onlinePlayer;
+        String dollUUID = dollConfig.dollUUID.getValue();
+        if (CommandBuilder.DOLL_INDICATOR.isBlank()) {
+            onlinePlayer = Bukkit.getPlayer(UUID.fromString(dollUUID));
+        } else {
+            onlinePlayer = Bukkit.getPlayerExact(DollManager.dollFullName(targetString));
+        }
         if (onlinePlayer != null) {
             // kill when online
             onlinePlayer.setHealth(0);
         }
         // remove config
         UUID ownerUUID = UUID.fromString(dollConfig.ownerUUID.getValue());
-        String dollUUID = dollConfig.dollUUID.getValue();
 
         FileUtil fileUtil = FileUtil.INSTANCE;
         File configFile = fileUtil.getFile(fileUtil.getDollDir(), dollConfig.dollName.getValue() + ".yml");
@@ -69,6 +75,14 @@ public class Remove extends SubCommand implements DollCommandExecutor {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("no-target"));
             return 0;
         }
+
+        FileUtil fileUtil = FileUtil.INSTANCE;
+        File file = fileUtil.getFile(fileUtil.getDollDir(), targetString + ".yml");
+        if (!file.exists()) {
+            sender.sendMessage(LangFormatter.YAMLReplaceMessage("no-target"));
+            return 0;
+        }
+
         // Direct execute
         dollConfig = DollConfig.getTemporaryConfig(targetString);
         if (executeIfManage(context.getInput())) {
