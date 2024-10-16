@@ -1,0 +1,273 @@
+# Translated by Anonymous author
+
+# Auto Updates if version is not equal to plugin hardcoded value
+version: 25
+
+###
+# &0 black
+# &1 dark_blue
+# &2 dark_green
+# &3 dark_aqua
+# &4 dark_red
+# &5 dark_purple
+# &6 gold
+# &7 gray
+# &8 dark_gray
+# &9 blue
+# &a green
+# &b aqua
+# &c red
+# &d light_purple
+# &e yellow
+# &f white
+#
+# &k obfuscated
+# &l bold
+# &m strikethrough
+# &n underline
+# &o italic
+# &r reset
+#
+# $n new line (For overlay Text display & Lang file only)
+###
+
+MessagePrefix: '&e[&6PlayerDoll&e]&r'
+#Commands
+
+# All strings under Message group will display Plugin prefix when send message
+Message:
+# Commands execution message
+  no-permission: '&c没有[%a%]权限为[%b%]使用命令'
+  require-player: '&c只有玩家才能使用这个命令'
+  no-target: '&c找不到目标'
+  multi-select: '&c此命令不接受@参数'
+  not-owner: '&c不是主人'
+# Create cmd
+  long-name: '&c假人的名字不能超过15字符'
+  regex-fail: '&c假人名称必须符合[A-Z][a-z][0-9][_]'
+  preserved-name: '&c这是保留名称，请使用其它名称'
+  dupe-name: '&c重复的假人名称'
+  max-create: '&c已达到创建上限'
+  success-create: '&a成功创建假人'
+# Give cmd
+  player-offline: '&c这个玩家已离线'
+  self-give: '&c无法给予自己'
+  doll-give: '&c无法给予假人'
+  cannot-create: '&c这个玩家没有权限创建假人'
+# Pset cmd
+  doll-pset: '&c不能为假人设置玩家权限'
+# Spawn cmd
+  in-world: '&c假人已生成'
+  max-capacity: '&c服务器假人名额已满'
+  null-uuid: '&c假人UUID异常，请联系管理员'
+  spawn-error: '&c假人%a%生成失败，请稍后再试。'
+  spawn-success: '&a假人成功生成'
+# Jump cmd
+  self-jump: '&c真人玩家不支持跳跃行为'
+# Lookat cmd
+  empty-lookat: '&c找不到准星目标'
+# Doll Join Event
+  owner-offline: '&c主任离线中，使用预设的前缀和后缀'
+# Disconnect Event
+  doll-disconnect: '&9假人%a%已离线'
+
+control-button:
+  back: '&f返回'
+  hint: '&2左键启用$n&c右键停用'
+  prev: '&f上一页'
+  curr: '&f当前'
+  next: '&f下一页'
+
+inv-name:
+  backpack: "&l&e%a%的背包"
+  data: "&l&e%a%的资料"
+  gset: "&l&e%a%的全局设置"
+  pset: "&l&e%a%的%b%设置"
+  info: '&l&e%a%'
+  set: "&l&e%a%的设置"
+
+info:
+  set: '&9设置'
+  gset: '&9全体设置'
+  data: '&9数据'
+  offline: '&c下线'
+  remove: '&c删除'
+  remove-hint: '这个假人的所有数据$n（经验值、物品栏、末影箱）将会消失'
+
+  uuid: '&eUUID:%a%'
+  owner: '&5主人:%a% (%b%)'
+  hp: '&4HP:%a%/%b%'
+  hunger: '&2饱食度:%a%/%b%'
+  gamemode: '&7游戏模式:%a%'
+
+
+set-menu:
+  echest:
+    name: '末影箱'
+    desc: '&f开放末影箱给所有玩家'
+  invulnerable:
+    name: '无敌'
+    desc: "&f使假人无视伤害和投掷物，同时不会吸引仇恨"
+  hostility:
+    name: '敌对性'
+    desc: "&f假人是否会被怪物当成目标"
+  pushable:
+    name: '推动'
+    desc: "&f假人是否会被碰撞箱推动"
+  gravity:
+    name: '重力'
+    desc: "&f使假人从空中坠落"
+  glow:
+    name: '高亮'
+    desc: "&f应用发光效果"
+  large_step_size:
+    name: '步幅增加'
+    desc: "&f使假人可跳过1/0.6格高的放开"
+  phantom:
+    name: '幻翼生成'
+    desc: '&f假人是否会生成幻翼'
+  join_at_start:
+    name: '自动加入'
+    desc: '&f使假人在服务器启动时自动加入世界'
+  hide_from_list:
+    name: '列表隐藏'
+    desc: '&f使假人不显示于info命令的Tab补全列表'
+  pickable:
+    name: '拾取'
+    desc: '&f假人是否能够拾取物品'
+  real_player_tick_update:
+    name: '真人Tick (实体更新)'
+    desc: '&f使假人于网络阶段/实体阶段Tick'
+  real_player_tick_action:
+    name: '真人Tick (动作更新)'
+    desc: '&f使假人于封包阶段/实体更新Tick'
+  admin:
+    name: '管理'
+    desc: '&f开放此GUI的所有权限'
+  inv:
+    name: '背包'
+    desc: '&f开放假人的背包权限'
+  attack:
+    name: '攻击'
+    desc: "&f开放假人的攻击权限"
+  use:
+    name: '交互'
+    desc: "&f开放假人的交互权限"
+  mount:
+    name: '骑乘'
+    desc: "&f开放假人的骑乘权限"
+  dismount:
+    name: '下马'
+    desc: "&f开放假人的下马权限"
+  copy:
+    name: '复制'
+    desc: "&f设置假人的复制权限"
+  despawn:
+    name: '下線'
+    desc: "&f开放假人的下線权限"
+  drop:
+    name: '丢弃物品'
+    desc: "&f开放假人的丢弃物品权限"
+  exp:
+    name: '经验获取'
+    desc: "&f开放假人的经验获取权限"
+  gset:
+    name: '全局设置'
+    desc: "&f开放假人的全局设置权限"
+  jump:
+    name: '跳跃'
+    desc: "&f开放假人的跳跃权限"
+  look:
+    name: '视角设置'
+    desc: "&f开放假人的视角设置权限"
+  lookat:
+    name: '注视'
+    desc: "&f开放假人的注视权限"
+  menu:
+    name: '资料页'
+    desc: "&f开放假人的资料页权限"
+  move:
+    name: '移动'
+    desc: "&f开放假人的移动权限"
+  pset:
+    name: '个别设置'
+    desc: "&f开放假人的个别设置权限"
+  set:
+    name: '设置'
+    desc: "&f开放假人的设置权限"
+  slot:
+    name: '快捷栏'
+    desc: "&f开放假人的快捷栏权限"
+  sneak:
+    name: '蹲下'
+    desc: "&f开放假人的蹲下权限"
+  spawn:
+    name: '生成'
+    desc: "&f开放假人的生成权限"
+  sprint:
+    name: '奔跑'
+    desc: "&f开放假人的奔跑权限"
+  stop:
+    name: '停止'
+    desc: "&f开放假人的停止权限"
+  strafe:
+    name: 'Strafe'
+    desc: "&fSet strafe command"
+  swap:
+    name: '換手'
+    desc: "&f开放假人的換手权限"
+  tp:
+    name: '傳送'
+    desc: "&f开放假人的傳送权限"
+  turn:
+    name: 'z转身'
+    desc: "&f开放假人的轉身权限"
+  unsneak:
+    name: '解除蹲下'
+    desc: "&f开放假人的解除蹲下权限"
+  unsprint:
+    name: '解除奔跑'
+    desc: "&f开放假人的解除奔跑权限"
+  # Not a command
+  hidden:
+    name: 隐藏
+    desc: '&f设置玩家是否能看到假人'
+
+inv-menu:
+  inv: '&7背包'
+  real-inv: '&7实际背包'
+  echest: '&d末影箱'
+  level: '&e经验'
+
+  level-display: '&e等级:%a%'
+  level-get: "&a点击以获得1等级的经验值"
+
+info-cmd:
+  name: '假人: '
+  uuid: 'UUID: '
+  status-online: 在线
+  status-offline: 离线
+  owner: '主人: '
+  doll-setting: '[假人设置]'
+  g-setting: '[全局设置]'
+
+
+cmd-hover:
+  action-main: '主手物品: %a%'
+  action-off: '副手物品: %a%'
+  despawn: '位置: [%a% %b% %c%]'
+  dismount: '正在骑乘: %a%'
+  exp: '等级: %a%'
+  give: '主人: %a%'
+  gset: '启用:'
+  look: '朝向: %a%'
+  mount: '正在骑乘: %a%'
+  pset: '已设置:'
+  remove: '主人: %a%'
+  set: '启用:'
+  slot: '当前快捷栏: %a%'
+  sneak: '蹲下: %a%'
+  spawn: '主人: %a%'
+  sprint: '奔跑: %a%'
+  tp: '位置: [%a% %b% %c%]'
+  turn: '朝向: %a%'
