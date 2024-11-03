@@ -11,7 +11,7 @@ Detailed Usage has been migrated to [Wiki](https://github.com/sjavi4/PlayerDoll/
 
 ## Notice
 
-<b> To adapt the new update flow of Minecraft (1.21.1+), this plugin is reconstructing to provide a higher flexibility in multi-versioning.</b>
+<b> To adapt the new update flow of Minecraft (1.21.1+), this plugin is adjusting to provide a higher flexibility in multi-versioning.</b>
 
 
 ## Disclaimer
