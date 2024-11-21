@@ -1,0 +1,2 @@
+main: 'me.autobot.playerdoll.addon.Main'
+versions: ["all"]

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>me.autobot</groupId>
+    <artifactId>PlayerDoll-Parent</artifactId>
+    <version>2.0</version>
+    <packaging>pom</packaging>
+
+    <name>PlayerDoll</name>
+
+    <modules>
+        <module>PlayerDoll-API</module>
+        <module>PlayerDoll-Core</module>
+
+        <module>Addon-Folia</module>
+        <module>Addon-Doll-v1_20_R2</module>
+        <module>Addon-Doll-v1_20_R3</module>
+        <module>Addon-Doll-v1_20_R4</module>
+
+        <module>Addon-Doll-v1_21_R1</module>
+        <module>Addon-Doll-v1_21_R2</module>
+
+        <module>Addon-Wrapper-1202_1211</module>
+        <module>Addon-Wrapper-1212</module>
+
+        <module>Output</module>
+    </modules>
+
+</project>
