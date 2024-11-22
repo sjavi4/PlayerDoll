@@ -2,6 +2,7 @@ package me.autobot.addonDoll.connection;
 
 import me.autobot.addonDoll.player.ServerDoll;
 import me.autobot.playerdoll.api.PlayerDollAPI;
+import me.autobot.playerdoll.api.ReflectionUtil;
 import me.autobot.playerdoll.api.connection.ConnectionFetcher;
 import me.autobot.playerdoll.api.constant.AbsServerBranch;
 import net.minecraft.network.Connection;
@@ -15,7 +16,7 @@ import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 
 public class ServerConfigurationListener extends ServerConfigurationPacketListenerImpl {
     public ServerConfigurationListener(MinecraftServer minecraftserver, Connection networkmanager, ServerPlayer player) {
-        super(minecraftserver, networkmanager, CommonListenerCookie.createInitial(player.getGameProfile(), false    ), player);
+        super(minecraftserver, networkmanager, CommonListenerCookie.createInitial(player.getGameProfile(), false), player);
         handleClientInformation(new ServerboundClientInformationPacket(ClientInformation.createDefault()));
     }
 
@@ -34,7 +35,7 @@ public class ServerConfigurationListener extends ServerConfigurationPacketListen
             this.player.connection = gamePlayListener;
         };
         if (PlayerDollAPI.getServerBranch() == AbsServerBranch.FOLIA) {
-            PlayerDollAPI.getScheduler().entityTask(task, this.getCraftPlayer());
+            PlayerDollAPI.getScheduler().entityTask(task, ReflectionUtil.NMSToBukkitPlayer(player));
         } else {
             task.run();
         }
