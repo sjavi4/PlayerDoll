@@ -71,11 +71,16 @@ Message:
 # Disconnect Event
   doll-disconnect: '&9假人%a%已離線'
 
+  # Version Query
+  ver-query: '&7目前插件運作的版本是%a%'
+  # Reloaded plugin
+  reloaded: '&e重載完成'
+
 control-button:
   back: '&f返回'
   hint: '&2左鍵啟用$n&c右鍵停用'
   prev: '&f上一頁'
-  curr: '&f當前'
+  curr: '&f當前:%a%/%b%'
   next: '&f下一頁'
 
 inv-name:
@@ -107,7 +112,7 @@ set-menu:
     desc: '&f開放終界箱予所有玩家'
   invulnerable:
     name: '無敵'
-    desc: "&f使假人無視傷害及投射物，及無法仇恨"
+    desc: "&f使假人無視傷害及投射物，及無法仇恨$n在較高版本中的創造模式玩家仍可造成傷害"
   hostility:
     name: '敵對性'
     desc: "&f假人會否被怪物當作目標"
