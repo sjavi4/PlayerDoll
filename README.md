@@ -9,11 +9,6 @@ Release avaliable on Modrinth.
 
 Detailed Usage has been migrated to [Wiki](https://github.com/sjavi4/PlayerDoll/wiki)
 
-## Notice
-
-<b> To adapt the new update flow of Minecraft (1.21.1+), this plugin is adjusting to provide a higher flexibility in multi-versioning.</b>
-
-
 ## Disclaimer
 
 <b>This plugin is highly dependent on NMS, slightly changes made by Mojang / Server Jar provider might cause this plugin no longer working.<br>
