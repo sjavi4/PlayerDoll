@@ -2,6 +2,7 @@ package me.autobot.addonDoll.wrapper;
 
 import me.autobot.addonDoll.action.PackPlayerImpl;
 import me.autobot.playerdoll.api.action.pack.AbsPackPlayer;
+import me.autobot.playerdoll.api.ReflectionUtil;
 import me.autobot.playerdoll.api.wrapper.Wrapper;
 import me.autobot.playerdoll.api.wrapper.WrapperRegistry;
 import me.autobot.playerdoll.api.wrapper.builtin.WEntity;
@@ -11,6 +12,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @Wrapper(wrapping = Entity.class, method = "wrap")
 public class WEntityImpl extends WEntity<Entity> {
@@ -48,7 +52,12 @@ public class WEntityImpl extends WEntity<Entity> {
 
     @Override
     public org.bukkit.entity.Entity getBukkitEntity() {
-        return entity.getBukkitEntity();
+        try {
+            Method getBukkitEntityMethod = entity.getClass().getMethod("getBukkitEntity");
+            return (org.bukkit.entity.Entity) getBukkitEntityMethod.invoke(entity);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Entity getInstance() {
