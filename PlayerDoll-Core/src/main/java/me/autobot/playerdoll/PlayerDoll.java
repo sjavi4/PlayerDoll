@@ -6,7 +6,6 @@ import me.autobot.playerdoll.api.*;
 import me.autobot.playerdoll.api.command.CommandBuilder;
 import me.autobot.playerdoll.api.config.ConfigLoader;
 import me.autobot.playerdoll.api.config.impl.BasicConfig;
-import me.autobot.playerdoll.api.config.impl.FlagConfig;
 import me.autobot.playerdoll.api.connection.Connection;
 import me.autobot.playerdoll.api.connection.ConnectionFetcher;
 import me.autobot.playerdoll.api.constant.AbsServerBranch;
