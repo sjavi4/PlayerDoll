@@ -2,6 +2,7 @@ package me.autobot.playerdoll.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -199,13 +200,13 @@ public abstract class ReflectionUtil {
 //        }
 //    }
 //
-//    public static Entity getCraftEntity(Object nmsEntity) {
-//        try {
-//            return invokeMethod(Entity.class, nmsEntity.getClass().getMethod("getBukkitEntity"), nmsEntity);
-//        } catch (NoSuchMethodException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public static Entity getCraftEntity(Object nmsEntity) {
+        try {
+            return invokeMethod(Entity.class, nmsEntity.getClass().getMethod("getBukkitEntity"), nmsEntity);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 //    public static Class<?> getPluginNMSClass(String className) {
 //        return getClass("me.autobot.playerdoll." + PlayerDollAPI.getServerVersion().getName() + "." + className);
