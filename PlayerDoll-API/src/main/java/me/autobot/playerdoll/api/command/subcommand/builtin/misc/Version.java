@@ -23,6 +23,8 @@ public class Version extends SubCommand implements DollCommandExecutor {
 
     @Override
     public void execute() {
-        sender.sendMessage(LangFormatter.YAMLReplaceMessage("ver-query", PlayerDollAPI.getInstance().getDescription().getVersion()));
+        String ver = PlayerDollAPI.getInstance().getDescription().getVersion();
+        sender.sendMessage(LangFormatter.YAMLReplaceMessage("ver-query", ver));
+        sender.sendMessage("[PlayerDoll] Plugin is running version " + ver);
     }
 }
