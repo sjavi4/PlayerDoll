@@ -116,15 +116,15 @@ public class DollJoin implements Listener {
         // Disable push when Spawn
         Bukkit.getPluginManager().callEvent(new DollSettingEvent(null, doll, DollSetting.PUSHABLE, false));
 
+        PermConfig permConfig = PlayerDollAPI.getConfigLoader().getPermConfig();
 
-        String prefix = "[BOT]";
-        String suffix = "";
+        String prefix = permConfig.dollPrefixes.getOrDefault("default", "[BOT]");
+        String suffix = permConfig.dollSuffixes.getOrDefault("default", "");
 
 
         OfflinePlayer offlineOwner = Bukkit.getOfflinePlayer(UUID.fromString(dollConfig.ownerUUID.getValue()));
         if (offlineOwner.isOnline()) {
             Player owner = (Player) offlineOwner;
-            PermConfig permConfig = PlayerDollAPI.getConfigLoader().getPermConfig();
             if (permConfig.enable.getValue()) {
                 Map<String, String> prefixes = permConfig.dollPrefixes;
                 for (String group : prefixes.keySet()) {
