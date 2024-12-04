@@ -15,13 +15,13 @@ version: 29
 # to set players in group B can create 2 dolls.
 
 # Example
-# max-doll-spawn:
+# max-doll-create:
 #   default: 1
 #   disallow: 0
 #   allow: 1
 #   other: 100
-# players who have permission [playerdoll.perm.max-doll-spawn.allow]
-# will be able to spawn up to 1 doll.
+# players who have permission [playerdoll.perm.max-doll-create.allow]
+# will be able to create up to 1 doll.
 
 # If not enabled, players are not limited from these settings
 # If enabled, please provide default value to default group

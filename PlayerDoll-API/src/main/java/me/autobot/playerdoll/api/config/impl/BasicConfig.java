@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 public final class BasicConfig extends AbstractConfig {
-    private static final List<String> DEFAULT_STRING_LIST = new ArrayList<>(Collections.singletonList(""));
     public final ConfigKey<BasicConfig,String> serverMod;
     public final ConfigKey<BasicConfig,String> pluginLanguage;
     public final ConfigKey<BasicConfig,Boolean> checkUpdate;
@@ -29,23 +28,23 @@ public final class BasicConfig extends AbstractConfig {
     public final ConfigKey<BasicConfig,List<String>> dollChatWhenJoin;
     public final ConfigKey<BasicConfig,Boolean> convertPlayer;
     public final ConfigKey<BasicConfig,Boolean> broadcastConvertShutdown;
-    public final ConfigKey<BasicConfig, Boolean> forceProxyIP;
+    public final ConfigKey<BasicConfig,Boolean> forceProxyIP;
     public final ConfigKey<BasicConfig,String> proxyIP;
     public final ConfigKey<BasicConfig,Integer> proxyPort;
     public final ConfigKey<BasicConfig,Integer> autoJoinDelay;
 
-    public final ConfigKey<BasicConfig, String> dollIdentifier;
+    public final ConfigKey<BasicConfig,String> dollIdentifier;
 
-    @SuppressWarnings("unchecked")
     public BasicConfig(File configFile) {
         super(configFile, true);
+        List<String> emptyStrList = new ArrayList<>(Collections.singletonList(""));
         this.serverMod = new ConfigKey<>(this,"server-mod","");
         this.pluginLanguage = new ConfigKey<>(this,"plugin-language", "default");
         this.checkUpdate = new ConfigKey<>(this,"check-update", true);
 //        this.updateReplaceConfig = new ConfigKey<>(this,"update-replace-config",false);
         this.dollIdentifier = new ConfigKey<>(this, "doll-identifier", "-");
 
-        this.preservedDollName = new ConfigKey<>(this,"preserved-doll-name", DEFAULT_STRING_LIST);
+        this.preservedDollName = new ConfigKey<>(this,"preserved-doll-name", emptyStrList);
         this.adjustableMaxPlayer = new ConfigKey<>(this,"adjustable-max-player",true);
         this.serverMaxDollSpawn = new ConfigKey<>(this,"server-max-doll-spawn",-1);
         this.broadcastDollDeath = new ConfigKey<>(this,"broadcast-doll-death",true);
@@ -53,9 +52,9 @@ public final class BasicConfig extends AbstractConfig {
         this.broadcastDollDisconnect = new ConfigKey<>(this,"broadcast-doll-disconnect",false);
         this.displayDollWhenPing = new ConfigKey<>(this, "display-doll-when-ping", false);
         this.opCanSeeHiddenDoll = new ConfigKey<>(this, "op-can-see-hidden-doll", true);
-        this.dollPermission = new ConfigKey<>(this,"doll-permission",DEFAULT_STRING_LIST);
+        this.dollPermission = new ConfigKey<>(this,"doll-permission",emptyStrList);
         this.dollChatWhenJoinInterval = new ConfigKey<>(this, "chat-when-join-interval", 10);
-        this.dollChatWhenJoin = new ConfigKey<>(this,"chat-when-join", DEFAULT_STRING_LIST);
+        this.dollChatWhenJoin = new ConfigKey<>(this,"chat-when-join", emptyStrList);
         this.convertPlayer = new ConfigKey<>(this, "convert-player", false);
         this.broadcastConvertShutdown = new ConfigKey<>(this, "broadcast-convert-shutdown", true);
         this.forceProxyIP = new ConfigKey<>(this, "force-proxy-ip", false);
