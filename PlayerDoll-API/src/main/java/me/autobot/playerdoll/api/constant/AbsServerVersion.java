@@ -40,6 +40,8 @@ public abstract class AbsServerVersion {
 
     public static AbsServerVersion v1_21_R2;
 
+    public static AbsServerVersion v1_21_R3;
+
     private final int protocol;
     public AbsServerVersion(int protocol) {
         this.protocol = protocol;
