@@ -11,8 +11,10 @@ import me.autobot.playerdoll.api.doll.BaseEntity;
 import me.autobot.playerdoll.api.doll.DollConfig;
 import me.autobot.playerdoll.api.doll.DollStorage;
 import me.autobot.playerdoll.api.inv.button.PersonalFlagButton;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.RayTraceResult;
 
 public class ActionCommand extends SubCommand implements DollCommandExecutor {
 
@@ -34,16 +36,15 @@ public class ActionCommand extends SubCommand implements DollCommandExecutor {
             sender.sendMessage(LangFormatter.YAMLReplaceMessage("self-jump"));
             return;
         }
-        // TODO LOOKAT
-//        if (type == ActionTypeHelper.Defaults.LOOK_AT && sender instanceof Player player) {
-//            Location loc = player.getEyeLocation();
-//            RayTraceResult result = player.getWorld().rayTraceEntities(loc,loc.getDirection(), 3.5, entity -> !(entity instanceof Player));
-//            if (result == null || result.getHitEntity() == null) {
-//                sender.sendMessage(LangFormatter.YAMLReplaceMessage("empty-lookat"));
-//                return;
-//            }
-//            targetEntity.getActionPack().setLookingAtEntity(result.getHitEntity().getUniqueId());
-//        }
+        if (type == ActionTypeHelper.Defaults.LOOK_AT && sender instanceof Player player) {
+            Location loc = player.getEyeLocation();
+            RayTraceResult result = player.getWorld().rayTraceEntities(loc,loc.getDirection(), 3.5, entity -> !(entity instanceof Player));
+            if (result == null || result.getHitEntity() == null) {
+                sender.sendMessage(LangFormatter.YAMLReplaceMessage("empty-lookat"));
+                return;
+            }
+            targetEntity.getActionPack().setLookingAtEntity(result.getHitEntity().getUniqueId());
+        }
         targetEntity.getActionPack().start(type.get(), actionMode);
     }
 

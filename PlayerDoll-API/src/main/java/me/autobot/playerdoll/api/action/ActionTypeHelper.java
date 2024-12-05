@@ -38,7 +38,8 @@ public final class ActionTypeHelper {
         JUMP(new Jump(true)),
         DROP_ITEM(new DropItem(true)),
         DROP_STACK(new DropStack(true)),
-        SWAP_HANDS(new SwapHands(true));
+        SWAP_HANDS(new SwapHands(true)),
+        LOOK_AT(new LookAt(true));
 
         private final AbsActionType type;
         Defaults(AbsActionType type) {

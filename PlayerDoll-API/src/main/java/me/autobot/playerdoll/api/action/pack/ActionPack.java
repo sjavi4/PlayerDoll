@@ -6,6 +6,7 @@ import me.autobot.playerdoll.api.action.type.AbsActionType;
 import me.autobot.playerdoll.api.doll.BaseEntity;
 import me.autobot.playerdoll.api.doll.Doll;
 import me.autobot.playerdoll.api.wrapper.builtin.*;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Boat;
@@ -18,13 +19,14 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class ActionPack {
 
     public final BaseEntity baseEntity;
     public final AbsPackPlayer packPlayer;
     private final Map<AbsActionType, Action> actions = new HashMap<>();
-
+    public UUID lookingAtEntity;
     public WBlockPos<?> currentBlock;
     public int blockHitDelay;
     private boolean isHittingBlock;
@@ -123,7 +125,11 @@ public class ActionPack {
     public ActionPack lookAt(WVec3<?> position)
     {
         packPlayer.lookAt(position);
-        //baseEntity.lookAt(EntityAnchorArgument.Anchor.EYES, position);
+        return this;
+    }
+    public ActionPack lookAt(double x, double y, double z)
+    {
+        packPlayer.lookAt(x, y, z);
         return this;
     }
 
@@ -222,6 +228,12 @@ public class ActionPack {
                     using.retry(this, ActionTypeHelper.Defaults.USE.get());
                 }
             }
+            if (type == ActionTypeHelper.Defaults.LOOK_AT.get()) {
+                if (lookingAtEntity == null || Bukkit.getEntity(lookingAtEntity) == null) {
+                    lookingAtEntity = null;
+                    action.done = true;
+                }
+            }
         }
         float vel = sneaking?0.3F:1.0F;
         // The != 0.0F checks are needed given else real players can't control minecarts, however it works with fakes and else they don't stop immediately
@@ -272,5 +284,9 @@ public class ActionPack {
 
     public static boolean isEmpty(ItemStack itemStack) {
         return itemStack == null || itemStack.getType().isAir();
+    }
+
+    public void setLookingAtEntity(UUID uuid) {
+        lookingAtEntity = uuid;
     }
 }

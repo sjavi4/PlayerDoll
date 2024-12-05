@@ -47,6 +47,7 @@ Message:
   dupe-name: '&cDuplicated Doll name'
   max-create: '&cReached creation limit'
   success-create: '&aDoll created successfully'
+  skin-name: '&cPlayer name must in range of 3 to 16 characters'
 # Give cmd
   player-offline: '&cPlayer is offline'
   self-give: '&cCannot give yourself'

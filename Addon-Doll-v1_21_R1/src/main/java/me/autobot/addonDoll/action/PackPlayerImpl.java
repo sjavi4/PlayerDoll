@@ -71,6 +71,11 @@ public class PackPlayerImpl extends AbsPackPlayer {
     }
 
     @Override
+    public void lookAt(double x, double y, double z) {
+        serverPlayer.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(x, y, z));
+    }
+
+    @Override
     public Enum<?>[] getInteractionHandEnums() {
         return InteractionHand.values();
     }

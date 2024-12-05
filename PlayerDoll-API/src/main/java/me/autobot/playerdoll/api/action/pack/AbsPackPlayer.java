@@ -18,7 +18,7 @@ public abstract class AbsPackPlayer {
     public abstract void releaseUsingItem();
     public abstract void look(float yaw, float pitch);
     public abstract void lookAt(WVec3<?> vec3);
-
+    public abstract void lookAt(double x, double y, double z);
     public abstract Enum<?>[] getInteractionHandEnums();
 
     public abstract ItemStack getItemInHand(Enum<?> hand);

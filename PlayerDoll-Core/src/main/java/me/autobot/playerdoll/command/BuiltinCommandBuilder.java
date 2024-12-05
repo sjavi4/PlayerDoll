@@ -98,10 +98,10 @@ public class BuiltinCommandBuilder implements CommandBuilderAPI {
                 .then(builder.complexAction(ActionTypeHelper.Defaults.DROP_STACK, PersonalFlagButton.DROP))
                 .build();
 
-//        LiteralCommandNode<Object> lookAt = literal("lookAt")
-//                .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.command.look")))
-//                .then(builder.complexAction(ActionTypeHelper.Defaults.LOOK_AT, PersonalFlagButton.LOOK))
-//                .build();
+        LiteralCommandNode<Object> lookAt = literal("lookAt")
+                .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.command.look")))
+                .then(builder.complexAction(ActionTypeHelper.Defaults.LOOK_AT, PersonalFlagButton.LOOK))
+                .build();
 
         LiteralCommandNode<Object> swap = literal("swapHands")
                 .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.command.swap")))
@@ -141,7 +141,7 @@ public class BuiltinCommandBuilder implements CommandBuilderAPI {
         root.addChild(jump);
         root.addChild(drop);
         root.addChild(dropStack);
-        //root.addChild(lookAt);
+        root.addChild(lookAt);
         root.addChild(swap);
         root.addChild(use);
     }
