@@ -31,7 +31,6 @@ public final class DollConfig extends AbstractConfig {
     public final ConfigKey<DollConfig,String> dollUUID;
     public final ConfigKey<DollConfig,String> ownerName;
     public final ConfigKey<DollConfig,String> ownerUUID;
-
     public final ConfigKey<DollConfig, String> skinProperty;
     public final ConfigKey<DollConfig, String> skinSignature;
     // cached these 4
@@ -99,7 +98,6 @@ public final class DollConfig extends AbstractConfig {
         this.ownerUUID = new ConfigKey<> (this,"Owner-UUID", NULL_UUID);
         this.skinProperty = new ConfigKey<>(this, "skin-property", "");
         this.skinSignature = new ConfigKey<>(this, "skin-signature", "");
-
 
         DollSetting.SETTINGS.forEach(s -> {
             ConfigKey<DollConfig, Boolean> configKey = new ConfigKey<>(this, s.getPath(), s.defaultSetting());

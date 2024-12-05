@@ -83,7 +83,6 @@ public class Spawn extends SubCommand implements DollCommandExecutor {
 
         BasicConfig basicConfig = PlayerDollAPI.getConfigLoader().getBasicConfig();
 
-
         profile = new GameProfile(targetUUID, basicConfig.dollIdentifier.getValue() + targetString);
         profile.getProperties().clear();
         profile.getProperties().put("textures", new Property("textures", offlineConfig.skinProperty.getValue(), offlineConfig.skinSignature.getValue()));
