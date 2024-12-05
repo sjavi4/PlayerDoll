@@ -103,6 +103,10 @@ public class Create extends SubCommand implements DollCommandExecutor {
         String[] splitInput = context.getInput().split(" ");
 
         if (externalName != null) {
+            if (externalName.length() < 2 || externalName.length() > 16) {
+                sender.sendMessage(LangFormatter.YAMLReplaceMessage("skin-name"));
+                return 0;
+            }
             fetchProfile = SkinFactory.getProfileFromName(externalName);
         }
 
