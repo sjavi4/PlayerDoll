@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import me.autobot.playerdoll.api.FileUtil;
 import me.autobot.playerdoll.api.LangFormatter;
 import me.autobot.playerdoll.api.PlayerDollAPI;
+import me.autobot.playerdoll.api.SkinFactory;
 import me.autobot.playerdoll.api.command.DollCommandExecutor;
 import me.autobot.playerdoll.api.command.subcommand.SubCommand;
 import me.autobot.playerdoll.api.config.impl.PermConfig;
@@ -23,16 +24,25 @@ import java.util.UUID;
 public class Create extends SubCommand implements DollCommandExecutor {
     private Player sender;
     private final GameProfile profile;
+    private final String externalName;
+
+    private GameProfile fetchProfile;
     private DollConfig dollConfig;
     public Create(String targetString) {
         super(targetString);
         profile = null;
+        externalName = null;
     }
     public Create(String targetString, Collection<GameProfile> gameProfiles) {
         super(targetString);
         profile = gameProfiles.stream().findFirst().orElseThrow();
+        externalName = null;
     }
-
+    public Create(String targetString, String external) {
+        super(targetString);
+        profile = null;
+        externalName = external;
+    }
 
     @Override
     public void execute() {
@@ -46,6 +56,10 @@ public class Create extends SubCommand implements DollCommandExecutor {
                 dollConfig.skinProperty.setNewValue(property.value());
                 dollConfig.skinSignature.setNewValue(property.signature());
             }
+        } else if (fetchProfile != null) {
+            Property property = fetchProfile.getProperties().get("textures").iterator().next();
+            dollConfig.skinProperty.setNewValue(property.value());
+            dollConfig.skinSignature.setNewValue(property.signature());
         }
         dollConfig.saveConfig();
         sender.sendMessage(LangFormatter.YAMLReplaceMessage("success-create"));
@@ -87,6 +101,10 @@ public class Create extends SubCommand implements DollCommandExecutor {
         }
 
         String[] splitInput = context.getInput().split(" ");
+
+        if (externalName != null) {
+            fetchProfile = SkinFactory.getProfileFromName(externalName);
+        }
 
         if (fromManageCommand(context.getInput())) {
             dollConfig = DollConfig.getTemporaryConfig(fileUtil.getOrCreateFile(fileUtil.getDollDir(), dollConfigFile));
