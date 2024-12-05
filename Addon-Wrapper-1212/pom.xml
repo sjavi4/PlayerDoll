@@ -17,6 +17,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <craftbukkit.version>1.21.2-R0.1-SNAPSHOT</craftbukkit.version>
+        <support.version>1212_1214</support.version>
     </properties>
 
     <dependencies>
@@ -90,8 +91,8 @@
                         </goals>
                         <configuration>
                             <target>
-                                <move file="${project.build.directory}/${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/../../Output_Addons/Spigot/${artifactId}-Spigot-Mapping.jar"/>
-                                <move file="${project.build.directory}/original-${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/../../Output_Addons/Mojang/${artifactId}-Mojang-Mapping.jar"/>
+                                <move file="${project.build.directory}/${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/../../Output_Addons/Spigot/Addon-Wrapper-${support.version}-Spigot.jar"/>
+                                <move file="${project.build.directory}/original-${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/../../Output_Addons/Mojang/Addon-Wrapper-${support.version}-Mojang.jar"/>
                             </target>
                         </configuration>
                     </execution>
