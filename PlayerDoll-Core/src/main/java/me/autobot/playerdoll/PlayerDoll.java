@@ -246,8 +246,8 @@ public final class PlayerDoll extends JavaPlugin implements PlayerDollPlugin {
     }
 
     private void checkUpdate() {
-        getLogger().info("You are using Dev version of PlayerDoll");
-        getLogger().info("Please report Bugs and Suggestions on https://github.com/sjavi4/PlayerDoll/issues");
+//        getLogger().info("You are using Dev version of PlayerDoll");
+//        getLogger().info("Please report Bugs and Suggestions on https://github.com/sjavi4/PlayerDoll/issues");
         
 
         if (!configLoader.getBasicConfig().checkUpdate.getValue()) {
