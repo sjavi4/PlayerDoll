@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 public abstract class AbstractConfig {
-    public static final int VERSION = 29;
+    public static final int VERSION = 30;
     private final boolean checkUpdate;
     private final File yamlFile;
     private YamlConfiguration yamlConfiguration;

@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 29
+version: 30
 
 # Custom Server Mod
 # If plugin has detected the Mod wrongly,
