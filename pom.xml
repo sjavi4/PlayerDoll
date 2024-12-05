@@ -21,11 +21,11 @@
         <module>Addon-Doll-v1_20_R4</module>
 
         <module>Addon-Doll-v1_21_R1</module>
-        <module>Addon-Doll-v1_21_R2</module>
-        <module>Addon-Doll-v1_21_R3</module>
+        <module>Addon-Doll-v1_21_R2_3</module>
+        <module>Addon-Doll-v1_21_R4</module>
 
         <module>Addon-Wrapper-1202_1211</module>
-        <module>Addon-Wrapper-1212</module>
+        <module>Addon-Wrapper-1212_1214</module>
 
         <module>Output</module>
     </modules>
