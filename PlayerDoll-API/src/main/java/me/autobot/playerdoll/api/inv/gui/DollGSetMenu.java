@@ -44,7 +44,7 @@ public class DollGSetMenu extends AbstractMenu {
 
     @Override
     public void onClickOutside(Player player) {
-
+        player.openInventory(dollMenuHolder.inventoryStorage.get(DollInfoMenu.class).get(0).inventory);
     }
 
     @Override

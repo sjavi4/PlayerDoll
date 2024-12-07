@@ -52,16 +52,20 @@ public class DollBackpackMenu extends AbstractMenu {
 
     @Override
     public void click(InventoryClickEvent event) {
+        super.click(event);
         if (event.getClickedInventory() == event.getView().getBottomInventory()) {
             event.setCancelled(true);
             return;
         }
         event.setCancelled(true);
-        //if (event.getCurrentItem() == null) return;
         if (event.getCurrentItem() == EMPTY_ITEM) {
             return;
         }
         Player whoClicked = (Player) event.getWhoClicked();
+        if (event.getClickedInventory() == null) {
+            onClickOutside(whoClicked);
+            return;
+        }
         if (event.getSlot() == 8) {
             // Real backpack
             whoClicked.openInventory(dollInventory);
