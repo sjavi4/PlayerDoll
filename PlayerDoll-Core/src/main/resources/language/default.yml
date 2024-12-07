@@ -1,5 +1,5 @@
 # Auto Updates if version is not equal to plugin hardcoded value
-version: 30
+version: 31
 
 ###
 # &0 black
@@ -74,8 +74,8 @@ Message:
   ver-query: '&7Plugin is running in version %a%'
 # Reloaded plugin
   reloaded: '&eReloaded'
-
-
+# Exp
+  exp-overflow: '&cExp reached integer limit, aborted'
 
 
 control-button:
@@ -247,7 +247,7 @@ inv-menu:
   level: '&eEXP Point'
 
   level-display: '&eLevel:%a%'
-  level-get: "&aClick to retrieve EXP points of 1 Level"
+  level-get: "&aClick to get EXP points$nLeft click: Add directly$nRight click: As Orb$nNot-Shift: 1 level$nShift: All level"
 
 
 info-cmd:
