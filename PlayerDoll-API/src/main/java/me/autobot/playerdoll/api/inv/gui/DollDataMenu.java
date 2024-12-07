@@ -9,6 +9,7 @@ import me.autobot.playerdoll.api.inv.button.ActionButton;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -58,12 +59,26 @@ public class DollDataMenu extends AbstractMenu {
 
         ItemStack slot6 = updateLevel();
         inventory.setItem(6,slot6);
-        buttonMap.put(getPDC(slot6), (player)-> {
-            String commandEXP = String.format("/playerdoll:doll exp %s", DollNameUtil.dollShortName(dollPlayer.getName()));
-            player.chat(commandEXP);
-            inventory.setItem(6, updateLevel());
-        });
+        // Further in click event
+        buttonMap.put(getPDC(slot6), (player -> {}));
     }
+
+    @Override
+    public void click(InventoryClickEvent event) {
+        super.click(event);
+        if (getPDC(event.getCurrentItem()) instanceof ActionButton actionButton) {
+            if (actionButton != ActionButton.GET_EXP) {
+                return;
+            }
+            String commandEXP = String.format("/playerdoll:doll exp %s %s", DollNameUtil.dollShortName(dollPlayer.getName()), event.isShiftClick() ? "all" : 1);
+            if (event.isRightClick()) {
+                commandEXP = commandEXP.concat(" asOrb");
+            }
+            ((Player) event.getWhoClicked()).chat(commandEXP);
+            updateGUIContent();
+        }
+    }
+
     private ItemStack updateLevel() {
         return ItemSetter.setItem(Material.EXPERIENCE_BOTTLE,
                 ActionButton.GET_EXP,

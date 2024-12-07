@@ -9,19 +9,27 @@ import me.autobot.playerdoll.api.doll.DollConfig;
 import me.autobot.playerdoll.api.doll.DollStorage;
 import me.autobot.playerdoll.api.inv.button.PersonalFlagButton;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 
 public class Exp extends SubCommand implements DollCommandExecutor {
     private final int level;
     private Player sender;
-    public Exp(Player target, int level) {
+    private final boolean asExpOrb;
+
+    public Exp(Player target, int level, boolean asExpOrb) {
         super(target);
         this.level = level;
+        this.asExpOrb = asExpOrb;
     }
-
     @Override
     public void execute() {
-        getExp(level);
+        if (asExpOrb) {
+            spawnExp(level);
+        } else {
+            getExp(level);
+        }
     }
 
     @Override
@@ -57,9 +65,36 @@ public class Exp extends SubCommand implements DollCommandExecutor {
         if (target.getLevel() <= 0) {
             return;
         }
-        
+
         if (level == -1) {
             level = target.getLevel();
+
+            // Should improve performance
+            if (target.getLevel() > sender.getLevel()) {
+                Player less = sender;
+                Player more = target;
+
+                int lessPlayerSum = Math.round(less.getExp() * less.getExpToLevel());
+                for (int i = less.getLevel(); i > 0; --i) {
+                    less.setLevel(less.getLevel() - 1);
+                    int expToLevel = less.getExpToLevel();
+                    lessPlayerSum += expToLevel;
+                }
+
+                less.setLevel(more.getLevel());
+                less.setExp(more.getExp());
+                more.setLevel(0);
+                more.setExp(0);
+
+                while (lessPlayerSum >= less.getExpToLevel()) {
+                    lessPlayerSum -= less.getExpToLevel();
+                    less.setLevel(less.getLevel() + 1);
+                }
+                if (lessPlayerSum > 0) {
+                    less.setExp((float) lessPlayerSum / less.getExpToLevel());
+                }
+                return;
+            }
         }
 
         int sumPoints = Math.round(target.getExp() * target.getExpToLevel() + sender.getExp() * sender.getExpToLevel());
@@ -83,5 +118,32 @@ public class Exp extends SubCommand implements DollCommandExecutor {
         if (sumPoints > 0) {
             sender.setExp((float) sumPoints / sender.getExpToLevel());
         }
+    }
+
+    private void spawnExp(int level) {
+        if (target.getLevel() <= 0) {
+            return;
+        }
+
+        if (level == -1) {
+            level = target.getLevel();
+        }
+
+        int sumPoints = Math.round(target.getExp() * target.getExpToLevel());
+        target.setExp(0);
+
+        for (int i = 0; i < level; ++i) {
+            target.setLevel(target.getLevel() - 1);
+            int expToLevel = target.getExpToLevel();
+            if (sumPoints + expToLevel < sumPoints) {
+                // INT Overflow
+                target.setLevel(target.getLevel() + 1);
+                sender.sendMessage(LangFormatter.YAMLReplaceMessage("exp-overflow"));
+                break;
+            }
+            sumPoints += expToLevel;
+        }
+        ExperienceOrb orb = (ExperienceOrb) sender.getWorld().spawnEntity(sender.getLocation(), EntityType.EXPERIENCE_ORB);
+        orb.setExperience(sumPoints);
     }
 }
