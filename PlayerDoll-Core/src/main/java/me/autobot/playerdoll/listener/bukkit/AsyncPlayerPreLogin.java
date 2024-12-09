@@ -21,8 +21,7 @@ public class AsyncPlayerPreLogin implements Listener {
     //private static final Class<?> playerLoginListenerClass = ReflectionUtil.getPluginNMSClass("connection.login.PlayerLoginListener");
     // Must be set
     public static Function<Object, Boolean> checkProtocol;
-
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         // Try disable op
 //        if (Connection.DOLL_CONNECTIONS.containsKey(event.getUniqueId())) {

@@ -16,14 +16,16 @@ public class PlayerConvertInjector extends ChannelDuplexHandler {
 
     // Just trigger the static block
     //private static final Class<?> playerLoginListenerClass = ReflectionUtil.getPluginNMSClass("connection.login.PlayerLoginListener");
-    private final Object connection;
+
     private final Channel channel;
+    private final Object packetListener;
     public static Consumer<Object> swapListenerFunc;
     private boolean suspend = false;
+
     public PlayerConvertInjector(Object connection, Channel channel) {
-        this.connection = connection;
         this.channel = channel;
         channel.pipeline().addBefore("packet_handler", "player_convert_injector", this);
+        packetListener = ConnectionFetcher.getPacketListener(connection);
     }
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -33,7 +35,6 @@ public class PlayerConvertInjector extends ChannelDuplexHandler {
         if (loginAckPacketClass.isInstance(msg)) {
             suspend = true;
             PlayerDollAPI.getLogger().info("Found Acknowledged Packet for Player");
-            Object packetListener = ConnectionFetcher.getPacketListener(connection);
             if (Connections.dollCustomLoginListenerClass.equals(packetListener.getClass())) {
                 // Doll Connection
                 channel.pipeline().remove("player_convert_injector");

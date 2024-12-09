@@ -22,6 +22,7 @@ import java.util.Arrays;
 public class PlayerLoginListener extends ServerLoginPacketListenerImpl {
     private final MinecraftServer server;
     private final ServerPlayer player;
+    private final TransPlayer transPlayer;
     private static final Field serverPlayerField;
 
     static {
@@ -41,6 +42,7 @@ public class PlayerLoginListener extends ServerLoginPacketListenerImpl {
         super(minecraftserver, networkmanager, transfer);
         this.server = minecraftserver;
         this.player = player;
+        transPlayer = new TransPlayer(player);
     }
 
     @Override
@@ -50,8 +52,7 @@ public class PlayerLoginListener extends ServerLoginPacketListenerImpl {
         }
         this.connection.setupOutboundProtocol(ConfigurationProtocols.CLIENTBOUND);
         CommonListenerCookie commonlistenercookie = CommonListenerCookie.createInitial(player.getGameProfile(), false);
-        TransPlayer serverPlayer = new TransPlayer(player);
-        ServerConfigurationPacketListenerImpl serverconfigurationpacketlistenerimpl = new ServerConfigurationPacketListenerImpl(this.server, this.connection, commonlistenercookie, serverPlayer);
+        ServerConfigurationPacketListenerImpl serverconfigurationpacketlistenerimpl = new ServerConfigurationPacketListenerImpl(this.server, this.connection, commonlistenercookie, transPlayer);
         this.connection.setupInboundProtocol(ConfigurationProtocols.SERVERBOUND, serverconfigurationpacketlistenerimpl);
         serverconfigurationpacketlistenerimpl.startConfiguration();
     }

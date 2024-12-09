@@ -26,6 +26,7 @@ public abstract class ReflectionUtil {
 
     private static Method getBukkitPlayerMethod;
     private static final Method nmsToBukkitItemStackMethod;
+    private static final Field craftHumanPermissiableBaseField;
 
     static {
         try {
@@ -55,6 +56,11 @@ public abstract class ReflectionUtil {
                     .filter(method -> method.getName().equals("asBukkitCopy"))
                     .findAny().orElseThrow();
             nmsToBukkitItemStackMethod.setAccessible(true);
+
+            craftHumanPermissiableBaseField = Arrays.stream(getCBClass("entity.CraftHumanEntity").getDeclaredFields())
+                    .filter(field -> field.getName().equals("perm"))
+                    .findAny().orElseThrow();
+            craftHumanPermissiableBaseField.setAccessible(true);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -207,7 +213,10 @@ public abstract class ReflectionUtil {
             throw new RuntimeException(e);
         }
     }
-
+    // Fix desync permissions when convertPlayer
+    public static void setConvertPlayerPermBase(Player old, Player convert) {
+        setField(craftHumanPermissiableBaseField, convert, getField(craftHumanPermissiableBaseField, old));
+    }
 //    public static Class<?> getPluginNMSClass(String className) {
 //        return getClass("me.autobot.playerdoll." + PlayerDollAPI.getServerVersion().getName() + "." + className);
 //    }
