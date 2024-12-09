@@ -154,17 +154,18 @@ public class BuiltinCommandBuilder implements CommandBuilderAPI {
                             String target = StringArgumentType.getString(commandContext, "name");
                             return DollCommandSource.execute(commandContext, new Create(target));
                         })
-                        .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.argument.create.skin")))
-                        .then(literal("extern").then(argument("skin", StringArgumentType.word())
-
+                        .then(literal("extern")
+                                .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.argument.create.skin")))
+                                .then(argument("skin", StringArgumentType.word())
                                 .executes(commandContext -> {
                                     String target = StringArgumentType.getString(commandContext, "name");
                                     String extern = StringArgumentType.getString(commandContext, "skin");
                                     return DollCommandSource.execute(commandContext, new Create(target, extern));
                                 }))
                         )
-                        .then(literal("local").then(argument("skin", argGameProfile.getGameProfileArgument())
-                                .suggests(builder.suggestOnlinePlayer())
+                        .then(literal("local")
+                                .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.argument.create.skin")))
+                                .then(argument("skin", argGameProfile.getGameProfileArgument())
                                 .executes(commandContext -> {
                                     String target = StringArgumentType.getString(commandContext, "name");
                                     Collection<GameProfile> profiles = argGameProfile.getGameProfiles(commandContext, "skin");
