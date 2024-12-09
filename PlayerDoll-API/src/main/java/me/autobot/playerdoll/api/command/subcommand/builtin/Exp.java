@@ -74,50 +74,24 @@ public class Exp extends SubCommand implements DollCommandExecutor {
                 Player less = sender;
                 Player more = target;
 
-                int lessPlayerSum = Math.round(less.getExp() * less.getExpToLevel());
-                for (int i = less.getLevel(); i > 0; --i) {
-                    less.setLevel(less.getLevel() - 1);
-                    int expToLevel = less.getExpToLevel();
-                    lessPlayerSum += expToLevel;
-                }
+                int sum = sumExpFromLevel(less, level);
 
                 less.setLevel(more.getLevel());
                 less.setExp(more.getExp());
                 more.setLevel(0);
                 more.setExp(0);
 
-                while (lessPlayerSum >= less.getExpToLevel()) {
-                    lessPlayerSum -= less.getExpToLevel();
-                    less.setLevel(less.getLevel() + 1);
-                }
-                if (lessPlayerSum > 0) {
-                    less.setExp((float) lessPlayerSum / less.getExpToLevel());
-                }
+                loadExp(less, sum);
                 return;
             }
         }
+        int sum = sumExpFromLevel(target, level);
 
-        int sumPoints = Math.round(target.getExp() * target.getExpToLevel() + sender.getExp() * sender.getExpToLevel());
-        target.setExp(0);
+        int playerProgress = Math.round(sender.getExp() * sender.getExpToLevel());
         sender.setExp(0);
 
-        for (int i = 0; i < level; ++i) {
-            target.setLevel(target.getLevel() - 1);
-            int expToLevel = target.getExpToLevel();
-            while (expToLevel >= sender.getExpToLevel()) {
-                expToLevel -= sender.getExpToLevel();
-                sender.setLevel(sender.getLevel() + 1);
-            }
-            sumPoints += expToLevel;
-        }
-
-        while (sumPoints >= sender.getExpToLevel()) {
-            sumPoints -= sender.getExpToLevel();
-            sender.setLevel(sender.getLevel() + 1);
-        }
-        if (sumPoints > 0) {
-            sender.setExp((float) sumPoints / sender.getExpToLevel());
-        }
+        loadExp(sender, sum);
+        loadExp(sender, playerProgress);
     }
 
     private void spawnExp(int level) {
@@ -129,21 +103,36 @@ public class Exp extends SubCommand implements DollCommandExecutor {
             level = target.getLevel();
         }
 
-        int sumPoints = Math.round(target.getExp() * target.getExpToLevel());
-        target.setExp(0);
+        int sum = sumExpFromLevel(target, level);
+        ExperienceOrb orb = (ExperienceOrb) sender.getWorld().spawnEntity(sender.getLocation(), EntityType.EXPERIENCE_ORB);
+        orb.setExperience(sum);
+    }
 
-        for (int i = 0; i < level; ++i) {
-            target.setLevel(target.getLevel() - 1);
-            int expToLevel = target.getExpToLevel();
-            if (sumPoints + expToLevel < sumPoints) {
+    private int sumExpFromLevel(Player who, int levels) {
+        int lv = Math.min(levels, who.getLevel());
+        int sum = Math.round(who.getExp() * who.getExpToLevel());
+        who.setExp(0);
+        for (int i = lv; i > 0; --i) {
+            who.setLevel(who.getLevel() - 1);
+            int expToLevel = who.getExpToLevel();
+            if (sum + expToLevel <= sum) {
                 // INT Overflow
-                target.setLevel(target.getLevel() + 1);
+                who.setLevel(who.getLevel() + 1);
                 sender.sendMessage(LangFormatter.YAMLReplaceMessage("exp-overflow"));
                 break;
             }
-            sumPoints += expToLevel;
+            sum += expToLevel;
         }
-        ExperienceOrb orb = (ExperienceOrb) sender.getWorld().spawnEntity(sender.getLocation(), EntityType.EXPERIENCE_ORB);
-        orb.setExperience(sumPoints);
+        return sum;
+    }
+
+    private void loadExp(Player who, int exp) {
+        while (exp >= who.getExpToLevel()) {
+            exp -= who.getExpToLevel();
+            who.setLevel(who.getLevel() + 1);
+        }
+        if (exp > 0) {
+            who.setExp((float) exp / who.getExpToLevel());
+        }
     }
 }
