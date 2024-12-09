@@ -2,6 +2,7 @@ package me.autobot.addonDoll.connection;
 
 import com.mojang.authlib.GameProfile;
 import me.autobot.addonDoll.player.ServerDoll;
+import me.autobot.playerdoll.api.PlayerDollAPI;
 import me.autobot.playerdoll.api.ReflectionUtil;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketUtils;
@@ -13,13 +14,16 @@ import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 
-public class DollLoginListener extends ServerLoginPacketListenerImpl {
+public class DollLoginListener extends ServerLoginPacketListenerImpl implements Listener {
     private final GameProfile profile;
     private final Player caller;
     private static final Method startClientVerificationMethod;
@@ -51,6 +55,13 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl {
             Bukkit.getPluginManager().callEvent(preLoginEvent);
         });
         preLogin.start();
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (event.getUniqueId() == profile.getId()) {
+            PlayerDollAPI.getScheduler().globalTaskDelayed(() -> ReflectionUtil.invokeMethod(startClientVerificationMethod, this, profile), 5);
+            AsyncPlayerPreLoginEvent.getHandlerList().unregister(this);
+        }
     }
 
     @Override
