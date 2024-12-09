@@ -154,8 +154,9 @@ public class BuiltinCommandBuilder implements CommandBuilderAPI {
                             String target = StringArgumentType.getString(commandContext, "name");
                             return DollCommandSource.execute(commandContext, new Create(target));
                         })
+                        .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.argument.create.skin")))
                         .then(literal("extern").then(argument("skin", StringArgumentType.word())
-                                .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.argument.create.skin")))
+
                                 .executes(commandContext -> {
                                     String target = StringArgumentType.getString(commandContext, "name");
                                     String extern = StringArgumentType.getString(commandContext, "skin");
@@ -163,7 +164,6 @@ public class BuiltinCommandBuilder implements CommandBuilderAPI {
                                 }))
                         )
                         .then(literal("local").then(argument("skin", argGameProfile.getGameProfileArgument())
-                                .requires(o -> builder.testStaticPermission(o, player -> player.hasPermission("playerdoll.argument.create.skin")))
                                 .suggests(builder.suggestOnlinePlayer())
                                 .executes(commandContext -> {
                                     String target = StringArgumentType.getString(commandContext, "name");
