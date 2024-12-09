@@ -30,10 +30,12 @@ public class PlayerJoin implements Listener {
                 event.setJoinMessage(null);
             }
             Doll doll = (Doll) ReflectionUtil.bukkitToNMSPlayer(player);
+
+            // Delay TP to avoid teleport fail
             if (PlayerDollAPI.getServerBranch() == AbsServerBranch.FOLIA) {
                 PlayerDollAPI.getScheduler().foliaTeleportAync(player, doll.getCaller().getLocation());
             } else {
-                player.teleport(doll.getCaller());
+                PlayerDollAPI.getScheduler().entityTaskDelayed(() -> player.teleport(doll.getCaller()), player, 5);
             }
         }
 
