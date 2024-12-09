@@ -3,10 +3,8 @@ package me.autobot.playerdoll.listener.bukkit;
 import io.netty.channel.Channel;
 import me.autobot.playerdoll.api.PlayerDollAPI;
 import me.autobot.playerdoll.api.ReflectionUtil;
-import me.autobot.playerdoll.api.connection.Connection;
 import me.autobot.playerdoll.api.connection.ConnectionFetcher;
 import me.autobot.playerdoll.api.doll.PlayerConvertInjector;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,10 +24,11 @@ public class AsyncPlayerPreLogin implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        if (Connection.DOLL_CONNECTIONS.containsKey(event.getUniqueId())) {
-            PlayerDollAPI.getScheduler().globalTask(() -> Bukkit.getOfflinePlayer(event.getUniqueId()).setOp(true));
-            return;
-        }
+        // Try disable op
+//        if (Connection.DOLL_CONNECTIONS.containsKey(event.getUniqueId())) {
+//            PlayerDollAPI.getScheduler().globalTask(() -> Bukkit.getOfflinePlayer(event.getUniqueId()).setOp(true));
+//            return;
+//        }
         if (!PlayerDollAPI.getConfigLoader().getBasicConfig().convertPlayer.getValue()) {
             return;
         }

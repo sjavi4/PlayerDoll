@@ -36,7 +36,8 @@ public class DollJoin implements Listener {
         // Remove temporary OP
         if (player.isOp()) {
             Runnable runnable = () -> {
-                player.setOp(false);
+                // Try disable op
+                //player.setOp(false);
                 player.setGameMode(GameMode.SURVIVAL);
             };
             PlayerDollAPI.getScheduler().entityTask(runnable, player);
