@@ -94,7 +94,7 @@ public class DollSetMenu extends AbstractMenu {
             String name = getToggle(toggleState) + LangFormatter.YAMLReplace("set-menu." + flagButton.registerName().toLowerCase() + ".name");
 
             List<String> lure = new ArrayList<>(Arrays.asList(desc));
-            lure.add(LangFormatter.YAMLReplace("set-menu." + flagButton.registerName().toLowerCase() + ".desc"));
+            lure.addAll(Arrays.asList(LangFormatter.splitter(LangFormatter.YAMLReplace("set-menu." + flagButton.registerName().toLowerCase() + ".desc"))));
 
             ItemStack itemStack = ItemSetter.setItem(flagButton.getMaterial(), flagButton, 1, name, lure);
 

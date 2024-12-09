@@ -12,7 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DollDataMenu extends AbstractMenu {
     private final Player dollPlayer;
@@ -80,14 +82,14 @@ public class DollDataMenu extends AbstractMenu {
     }
 
     private ItemStack updateLevel() {
+        List<String> s = new ArrayList<>();
+        s.add(LangFormatter.YAMLReplace("inv-menu.level-display", dollPlayer.getLevel()));
+        s.addAll(Arrays.asList(LangFormatter.splitter(LangFormatter.YAMLReplace("inv-menu.level-get"))));
         return ItemSetter.setItem(Material.EXPERIENCE_BOTTLE,
                 ActionButton.GET_EXP,
                 1,
                 LangFormatter.YAMLReplace("inv-menu.level"),
-                Arrays.asList(
-                        LangFormatter.YAMLReplace("inv-menu.level-display", dollPlayer.getLevel()),
-                        LangFormatter.YAMLReplace("inv-menu.level-get")
-                )
+                s
         );
     }
 }
