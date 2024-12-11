@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.network.protocol.login.ServerboundLoginAcknowledgedPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 import org.bukkit.Bukkit;
@@ -73,7 +74,8 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl implements 
             // Avoid IllegalStateException "Asynchronous Chunk getEntities call!"
             PacketUtils.ensureRunningOnSameThread(serverboundloginacknowledgedpacket, this, (MinecraftServer) ReflectionUtil.getDedicatedServerInstance());
         }
-        ServerDoll player = ServerDoll.callSpawn(profile);
+        ServerPlayer oldPlayer = PlayerLoginListener.getPlayer(this);
+        ServerDoll player = ServerDoll.callSpawn(profile, oldPlayer);
         player.setup(caller);
         ServerConfigurationPacketListenerImpl serverconfigurationpacketlistenerimpl = new ServerConfigurationListener(player.server, this.connection, player);
         this.connection.setListener(serverconfigurationpacketlistenerimpl);

@@ -15,8 +15,9 @@ public abstract class ExtServerPlayer extends ServerPlayer implements BaseEntity
 
     protected final ActionPack actionPack = new ActionPack(this, new PackPlayerImpl(this));
 
-    public ExtServerPlayer(MinecraftServer server, ServerLevel level, GameProfile profile) {
+    public ExtServerPlayer(MinecraftServer server, ServerLevel level, GameProfile profile, ServerPlayer serverPlayer) {
         super(server, level, profile, ClientInformation.createDefault());
+        ReflectionUtil.setConvertPlayerPermBase(ReflectionUtil.NMSToBukkitPlayer(serverPlayer), getBukkitPlayer());
     }
 
     @Override

@@ -11,6 +11,7 @@ import me.autobot.playerdoll.api.event.doll.DollJoinEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -23,12 +24,12 @@ public class ServerDoll extends ExtServerPlayer implements Doll {
     private long dollTickCount = 0L;
     public final DollConfig dollConfig = DollConfig.getOnlineConfig(this);
 
-    public static ServerDoll callSpawn(GameProfile profile) {
+    public static ServerDoll callSpawn(GameProfile profile, ServerPlayer serverPlayer) {
         MinecraftServer server = (MinecraftServer) ReflectionUtil.getDedicatedServerInstance();
-        return new ServerDoll(server,server.overworld(),profile);
+        return new ServerDoll(server,server.overworld(), profile, serverPlayer);
     }
-    public ServerDoll(MinecraftServer server, ServerLevel level, GameProfile profile) {
-        super(server, level, profile);
+    public ServerDoll(MinecraftServer server, ServerLevel level, GameProfile profile, ServerPlayer serverPlayer) {
+        super(server, level, profile, serverPlayer);
     }
 
     public void setup(org.bukkit.entity.Player caller) {
