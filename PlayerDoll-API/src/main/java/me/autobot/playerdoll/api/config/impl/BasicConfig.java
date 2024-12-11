@@ -24,6 +24,7 @@ public final class BasicConfig extends AbstractConfig {
     public final ConfigKey<BasicConfig,Boolean> opCanSeeHiddenDoll;
 
     public final ConfigKey<BasicConfig,List<String>> dollPermission;
+    public final ConfigKey<BasicConfig,List<String>> dollMetadata;
     public final ConfigKey<BasicConfig,Integer> dollChatWhenJoinInterval;
     public final ConfigKey<BasicConfig,List<String>> dollChatWhenJoin;
     public final ConfigKey<BasicConfig,Boolean> convertPlayer;
@@ -53,6 +54,7 @@ public final class BasicConfig extends AbstractConfig {
         this.displayDollWhenPing = new ConfigKey<>(this, "display-doll-when-ping", false);
         this.opCanSeeHiddenDoll = new ConfigKey<>(this, "op-can-see-hidden-doll", true);
         this.dollPermission = new ConfigKey<>(this,"doll-permission",emptyStrList);
+        this.dollMetadata = new ConfigKey<>(this, "doll-metadata", emptyStrList);
         this.dollChatWhenJoinInterval = new ConfigKey<>(this, "chat-when-join-interval", 10);
         this.dollChatWhenJoin = new ConfigKey<>(this,"chat-when-join", emptyStrList);
         this.convertPlayer = new ConfigKey<>(this, "convert-player", false);
