@@ -41,6 +41,7 @@ public class DollLoginListener extends ServerLoginPacketListenerImpl implements 
         super(minecraftserver, networkmanager, false);
         this.profile = profile;
         this.caller = caller;
+        Bukkit.getPluginManager().registerEvents(this, PlayerDollAPI.getInstance());
         handleHello(new ServerboundHelloPacket(profile.getName(), profile.getId()));
     }
     @Override
