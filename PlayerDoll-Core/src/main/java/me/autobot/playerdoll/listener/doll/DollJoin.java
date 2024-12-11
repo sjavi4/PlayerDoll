@@ -73,6 +73,9 @@ public class DollJoin implements Listener {
         PermissionAttachment attachment = player.addAttachment(plugin);
 
         for (String perm : basicConfig.dollPermission.getValue()) {
+            if (perm.isEmpty()) {
+                continue;
+            }
             attachment.setPermission(perm,true);
         }
 
